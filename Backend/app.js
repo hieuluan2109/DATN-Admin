@@ -5,8 +5,9 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const port = process.env.PORT || 8000;
-const AdminSchema = require('./model/adminSchema');
+const flash = require('connect-flash');
 require('./config/passport')(passport);
+
 app.set('views', './views');
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use( session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(flash());
 app.use( passport.initialize() );
 app.use( passport.session() );
 
@@ -29,7 +31,7 @@ db.once('open', function(){
     console.log('Kết nối thành công !!');
 });
 
-app.use('/', require('./routers/admin_login'));
+app.use('/admin', require('./routers/admin_login'));
 
 app.listen( port , (error) => {
     error

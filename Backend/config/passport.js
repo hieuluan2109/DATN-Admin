@@ -1,7 +1,6 @@
 const passport = require('passport');
 const localStategy = require('passport-local').Strategy;
 const Admin = require('../model/adminSchema');
-require('dotenv').config()
 module.exports = function (passport) {
     passport.use(new localStategy({
         usernameField: 'email',
@@ -12,7 +11,7 @@ module.exports = function (passport) {
             .then(user => {
                 if (!user) 
                     return done(null, false, {message: 'Email không đúng'})
-                if (user.password == password) 
+                if (user.mat_khau == password) 
                     return done(null, user)
                 else 
                     return done(null, false, {message: 'Mật khẩu không đúng'})
@@ -21,9 +20,9 @@ module.exports = function (passport) {
     passport.serializeUser((user, done) => {
         done(null, user)
     })
-    passport.deserializeUser((name, done) => {
+    passport.deserializeUser((user, done) => {
         Admin
-            .findOne({email: name.email})
-            .then(email => done(null, name))
+            .findOne({email: user.email})
+            .then(email => done(null, user))
     })
 }

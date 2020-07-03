@@ -33,12 +33,8 @@ app.use(flash());
 app.use( passport.initialize() );
 app.use( passport.session() );
 
-mongoose.connect(process.env.MONGODB_CONNECTION,{ useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function(){
-    console.log('Kết nối thành công !!');
-});
+require('./config/connectDB')(mongoose,process.env.MONGODB_CONNECTION);
+
 app.use( require('./config/setHeader') );
 app.use('/admin', require('./routers/admin_router'));
 

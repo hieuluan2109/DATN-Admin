@@ -22,6 +22,7 @@ const AdminSchema = new Schema({
         required: true,
         type: String
     },
+});
 
 // AdminSchema
 //     .virtual('ho_ten')

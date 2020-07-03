@@ -36,9 +36,14 @@ module.exports = {
         })(req, res);
     },
     admin_logout: function (req, res) {
-        req.logout()
-        res
-            .status(200)
-            .json({'msg': 'Đăng xuất thành công'})
+        if (req.user) {
+            req.logout()
+            res
+                .status(200)
+                .json({'success': true, 'msg': 'Đăng xuất thành công'});
+        } else 
+            res
+                .status(400)
+                .json({'success': false, 'msg': 'Bạn chưa đang nhập'});
+        }
     }
-}

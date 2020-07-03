@@ -17,7 +17,6 @@ form div{
 	margin-top: 30px;
 }
 form{
-	margin-top:30px ;
     background-color: rgba(0,0,0,0.7);
 	margin-right: 10%;
     width: 90%;
@@ -31,7 +30,7 @@ a{
 	color: white;
 	position: absolute;
 	padding-top: 30px;
-	left:83%
+	left:50%
 }
 
 input{
@@ -53,9 +52,6 @@ input{
 input::-webkit-input-placeholder { 
 	color: rgb(255, 255, 255,0.5);
 	}
-form .row:last-child{
-	text-align: center;
-}
 
 
 input[type=submit]{
@@ -72,9 +68,6 @@ input[type=checkbox]{
 #remember{
     margin-left: 5px;
     padding-bottom: 50px;
-}
-form{
-	margin-bottom: 20px;
 }
 
 input[type=email],input[type=password]{
@@ -119,14 +112,11 @@ label{
 	color: white;
 }
 
-.mySlides{
-	width: 100%;
-	height: 500px;
-	display: none;
-}
-.fa-circle{
-	cursor: pointer;
-}
-.fa-circle-white{
-	color:white
+
+form{
+	width: 400px;
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
 }

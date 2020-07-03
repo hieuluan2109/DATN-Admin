@@ -11,7 +11,7 @@ class LoginForm extends Component {
                     <div><input type="password" placeholder="********" id="password" ></input></div>
                     <div> <input type="checkbox"></input><label id="remember">Remember me</label> </div>
                     <div><input type="submit" className="btn" value="Login" /> </div>
-                    <a href="??">Forget Password? </a>
+                    <a href="/">Forget Password? </a>
                 </form>
             </div>
         );

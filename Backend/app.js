@@ -31,7 +31,7 @@ db.once('open', function(){
     console.log('Kết nối thành công !!');
 });
 
-app.use('/admin', require('./routers/admin_login'));
+app.use('/admin', require('./routers/admin_router'));
 
 app.listen( port , (error) => {
     error

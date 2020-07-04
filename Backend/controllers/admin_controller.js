@@ -29,8 +29,8 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         passport.authenticate('local', {
-            successRedirect: '/admin/login',
-            failureRedirect: '/admin/login',
+            successRedirect: '/admin/login/result',
+            failureRedirect: '/admin/login/result',
             failureFlash: true,
             successFlash: 'Đăng nhập thành công !!'
         })(req, res);
@@ -45,5 +45,10 @@ module.exports = {
             res
                 .status(400)
                 .json({'success': false, 'msg': 'Bạn chưa đang nhập'});
-        }
+        },
+    get_profile_admin: function(req, res, next){
+        AdminSchema.find()
+            .then(profile => res.status(200).json({ 'success': true, 'profile' : profile }))
+            .catch(err => res.status(400).json({ 'success': false,'errors' : err}) )
+    }
     }

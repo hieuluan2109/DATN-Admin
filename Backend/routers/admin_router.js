@@ -6,7 +6,7 @@ const {validate} = require('../controllers/admin_validator');
 //     res.send("Hello world");
 // })
 
-router.get('/login/result', AdminController.admin_login_post_result);
+// router.get('/login/result', AdminController.admin_login_post_result);
 router.post('/login', validate.validateLogin() ,AdminController.admin_login_post);
 
 router.get('/logout', AdminController.admin_logout);

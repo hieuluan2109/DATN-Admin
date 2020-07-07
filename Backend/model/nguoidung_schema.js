@@ -20,7 +20,7 @@ const AdminSchema = new Schema({
     },
     loai: {
         required: true,
-        type: String
+        type: Boolean
     },
 });
 

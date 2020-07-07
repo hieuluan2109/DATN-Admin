@@ -1,17 +1,37 @@
-const passport = require('passport');
 const localStategy = require('passport-local').Strategy;
-const Admin = require('../model/adminSchema');
+const NguoidungSchema = require('../model/nguoidung_schema');
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
 module.exports = function (passport) {
+    passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() 
+        // || ExtractJWT.fromHeader() || ExtractJWT.fromBodyFiel
+         ,
+        secretOrKey: process.env.ACCESS_TOKEN_SECRET
+    }, function (token, done) {
+        // find the user in db if needed. This functionality may be omitted if you store
+        // everything you'll need in JWT payload.
+        return NguoidungSchema
+            .findOne({ _id: token._id })
+            .then(user => {
+                return done(null, user);
+            })
+            .catch(err => {
+                return done(err);
+            });
+    }));
     passport.use(new localStategy({
         usernameField: 'email',
         passwordField: 'password'
     }, async function (email, password, done) {
-        await Admin
-            .findOne({email: email})
+        await NguoidungSchema
+            .findOne({email: email, loai: true})
             .then(user => {
                 if (!user) 
                     return done(null, false, {message: 'Email không đúng'})
-                if (user.mat_khau == password) 
+                else if (user.mat_khau == password) 
                     return done(null, user)
                 else 
                     return done(null, false, {message: 'Mật khẩu không đúng'})
@@ -21,7 +41,7 @@ module.exports = function (passport) {
         done(null, user)
     })
     passport.deserializeUser((user, done) => {
-        Admin
+        NguoidungSchema
             .findOne({email: user.email})
             .then(email => done(null, user))
     })

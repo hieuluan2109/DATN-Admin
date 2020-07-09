@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');

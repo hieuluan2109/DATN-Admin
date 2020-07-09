@@ -41,8 +41,9 @@ module.exports = function (passport) {
         done(null, user)
     })
     passport.deserializeUser((user, done) => {
-        NguoidungSchema
-            .findOne({email: user.email})
-            .then(email => done(null, user))
+        // NguoidungSchema
+        //     .findOne({email: user.email})
+        //     .then(email => done(null, user))
+        done(null, user)
     })
 }

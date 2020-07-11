@@ -15,16 +15,25 @@ router.get(
     AdminController.admin_logout
 );
 router.post(
-    '/nguoidung/them',
+    '/qlnguoidung/them/gv',
     passport.authenticate('jwt', {session: false}),
     validate.validateSignUpTecher(),
-    AdminController.admin_them_nguoidung
+    AdminController.admin_add_teacher
 );
+
+router.post(
+    '/qlnguoidung/them/sv',
+    passport.authenticate('jwt', {session: false}),
+    validate.validateSignUpStudent(),
+    AdminController.admin_add_student
+);
+
 router.post(
     '/changepassword',
     validate.validateChangePassword(),
     AdminController.admin_change_password
 );
+
 
 router.get(
     '/profile',

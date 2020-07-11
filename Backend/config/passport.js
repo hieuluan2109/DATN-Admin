@@ -3,6 +3,7 @@ const NguoidungSchema = require('../model/nguoidung_schema');
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+const bcrypt = require("bcrypt");
 
 module.exports = function (passport) {
     passport.use(new JWTStrategy({
@@ -31,10 +32,9 @@ module.exports = function (passport) {
             .then(user => {
                 if (!user) 
                     return done(null, false, {message: 'Email không đúng'})
-                else if (user.mat_khau == password) 
-                    return done(null, user)
-                else 
-                    return done(null, false, {message: 'Mật khẩu không đúng'})
+                if (  bcrypt.compareSync(password, user.mat_khau) ) 
+                    return done(null, user) 
+                return done(null, false, {message: 'Mật khẩu không đúng'})
             })
     }))
     passport.serializeUser((user, done) => {

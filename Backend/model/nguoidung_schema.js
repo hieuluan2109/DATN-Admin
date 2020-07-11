@@ -16,30 +16,24 @@ const AdminSchema = new Schema({
     },
     anh_dai_dien: {
         type: String,
-        default: '',
+        default: ''
     },
     ngay_sinh: {
         required: true,
-        type: String,
+        type: Date
     },
     mat_khau: {
         required: true,
-        type: String
+        type: String,
     },
     loai: {
         required: true,
         type: Boolean,
-        default: false,
+        default: false
     },
     nguoi_tao: {
-        type: Schema.Types.ObjectId, ref: 'NguoiDung'
+        type: Schema.Types.ObjectId,
+        ref: 'NguoiDung'
     }
-});
-
-// AdminSchema
-//     .virtual('ho_ten')
-//     .get(function () {
-//         return this.ho + ' ' + this.ten ;
-//     })
-
+}, {timestamps: true});
 module.exports = mongoose.model('NguoiDung', AdminSchema, 'nguoi_dung');

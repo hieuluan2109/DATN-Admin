@@ -1,0 +1,15 @@
+.admin{
+    background-color: #f5f6f8;
+    height: 100vh;
+
+}
+.profile{
+    background-color: #f5f6f8;
+    height: 110vh;
+   position: relative;
+}
+.users{
+    background-color: #f5f6f8;
+    height: 135vh;
+   position: relative;
+}

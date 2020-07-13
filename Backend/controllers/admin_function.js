@@ -38,5 +38,8 @@ module.exports = {
         str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
         str = str.replace(/đ/g, "d");
         return str;
-      }
+      },
+    checkPassword: function(password, password2) {
+        return bcrypt.compareSync(password, password2);
+    }
 } 

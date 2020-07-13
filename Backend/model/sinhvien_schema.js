@@ -32,7 +32,7 @@ const AdminSchema = new Schema({
         type: Array,
         default: {},
     },
-    nguoi_tao: {
+    nguoi_tao_id: {
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
     },

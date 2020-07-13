@@ -1,5 +1,5 @@
-const {check, validateResult} = require('express-validator');
-const {regex, removeAscent} = require('./admin_function');
+const {check} = require('express-validator');
+const {regex} = require('./admin_function');
 let validateLogin = () => {
     return [
         check('email', 'email không được bỏ trống')
@@ -13,7 +13,7 @@ let validateLogin = () => {
     ];
 };
 let validateSignUpTecher = () => {
-    
+
     return [
         check('ten', 'Tên không được bỏ trống')
             .not()
@@ -50,7 +50,7 @@ let validateSignUpStudent = () => {
         check('ho', 'Họ không được để trống')
             .not()
             .isEmpty(),
-            check('ho', 'Họ không hợp lệ').matches(regex.ho_ten),
+        check('ho', 'Họ không hợp lệ').matches(regex.ho_ten),
         check('email', 'email không hợp lệ').isEmail(),
         check('email', 'email không được bỏ trống')
             .not()
@@ -65,9 +65,9 @@ let validateSignUpStudent = () => {
         check('password', ' password phải từ 6-24 kí tự').isLength({min: 6, max: 24})
     ];
 };
-let validateChangePassword = () => {
+let validateChangePassword = (req, res, next) => {
     return [
-        check('password', 'password củ không được bỏ trống')
+        check('password', 'password cũ không được bỏ trống')
             .not()
             .isEmpty(),
         check('password1', 'password mới không được bỏ trống')
@@ -76,7 +76,22 @@ let validateChangePassword = () => {
         check('password1', 'password mới phải từ 6-24 kí tự').isLength(
             {min: 6, max: 24}
         ),
-        check('password2', 'Nhập lại mật khẩu mới không đúng').equals('password1')
+        check('password1').custom((value, {req, loc, path}) => {
+            if (value == req.body.password) {
+                // trow error if passwords do not match
+                throw new Error('Mật khẩu mới không được giống mật khẩu cũ');
+            } else {
+                return value;
+            }
+        }),
+        check('password2').custom((value, {req, loc, path}) => {
+            if (value !== req.body.password1) {
+                // trow error if passwords do not match
+                throw new Error('Nhập lại mật khẩu mới không chính xác');
+            } else {
+                return value;
+            }
+        })
     ];
 };
 
@@ -84,7 +99,7 @@ let validate = {
     validateLogin: validateLogin,
     validateSignUpTecher: validateSignUpTecher,
     validateChangePassword: validateChangePassword,
-    validateSignUpStudent: validateSignUpStudent,
+    validateSignUpStudent: validateSignUpStudent
 };
 module.exports = {
     validate

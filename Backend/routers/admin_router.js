@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const AdminController = require('../controllers/admin_controller');
 const {validate} = require('../controllers/admin_validator');
+const {verifyPasswordMath} = require('../config/validate');
+const {check} = require('express-validator');
 
 router.post(
     '/login',
@@ -30,6 +32,7 @@ router.post(
 
 router.post(
     '/changepassword',
+    passport.authenticate('jwt', {session: false}),
     validate.validateChangePassword(),
     AdminController.admin_change_password
 );

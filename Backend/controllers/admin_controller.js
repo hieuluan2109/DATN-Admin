@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const {sign_token, capitalizeFirstLetter, hashPassWord} = require(
+const {sign_token, capitalizeFirstLetter, hashPassWord, checkPassword} = require(
     './admin_function'
 );
 const NguoidungSchema = require('../model/nguoidung_schema');
@@ -51,9 +51,10 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
-        let check = await NguoidungSchema
+        const check = await NguoidungSchema
             .findOne({email: data.email})
             .count((count) => count)
+            .catch(err => 0);
         if (check) 
             return res
                 .status(400)
@@ -86,11 +87,18 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
-        let check = await SinhvienSchema
+        const check = await SinhvienSchema
             .find({
-                $or:[{ email: data.email }, { ma_sv: data.ma_sv }]
+                $or: [
+                    {
+                        email: data.email
+                    }, {
+                        ma_sv: data.ma_sv
+                    }
+                ]
             })
             .count((count) => count)
+            .catch(err => 0);
         if (check) 
             return res
                 .status(400)
@@ -123,14 +131,42 @@ module.exports = {
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
         }
-        const data = req.body
-        return console.log(data)
+        const [id, password, password1, option] = [
+            req.user._id,
+            req.body.password,
+            req.body.password1,
+            {
+                new: true,
+                useFindAndModify: false,
+            },
+        ];
+        const check = await NguoidungSchema
+            .findOne(id)
+            .then( user => checkPassword(password, user.mat_khau) )
+            .catch(err => false ); // Focus on here
+        if ( !check ) {
+            return res
+                .status(400)
+                .json({'success': false, 'errors': 'Mật khẩu cũ không đúng'})
+        } else {
+            const update = {mat_khau: await hashPassWord(password1)};
+            NguoidungSchema.findByIdAndUpdate(id, {$set : update }, option, function (err, updated) { // need some attention
+                if (err) 
+                    return res
+                        .status(400)
+                        .json({'success': false, 'errors': 'Lỗi không xác định'})
+                // console.log(updated.mat_khau)
+                return res
+                    .status(200)
+                    .json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
+            })
+        }
     },
 
     get_profile_admin: async function (req, res) {
         await NguoidungSchema
             .findOne({_id: req.user._id})
-            .exec( (err, user) => {
+            .exec((err, user) => {
                 if (err) 
                     return res
                         .status(200)
@@ -143,5 +179,5 @@ module.exports = {
                         .json({'success': true, 'data': data})
                 }
             });
-        },
+    }
 };

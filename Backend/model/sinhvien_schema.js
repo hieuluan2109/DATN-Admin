@@ -33,6 +33,7 @@ const AdminSchema = new Schema({
         default: {},
     },
     nguoi_tao_id: {
+        required: true,
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
     },

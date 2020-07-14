@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 const {sign_token, capitalizeFirstLetter, hashPassWord, checkPassword} = require(
     './admin_function'
 );
-const NguoidungSchema = require('../model/nguoidung_schema');
-const SinhvienSchema = require('../model/sinhvien_schema');
+const {NguoidungSchema, SinhvienSchema, DanhMucSchema, CauHoiSchema} = require(
+    '../model/Schema'
+);
 const {validationResult} = require('express-validator');
 module.exports = {
     admin_login_post: async function (req, res, next) {
@@ -134,28 +135,30 @@ module.exports = {
         const [id, password, password1, option] = [
             req.user._id,
             req.body.password,
-            req.body.password1,
-            {
+            req.body.password1, {
                 new: true,
-                useFindAndModify: false,
-            },
+                useFindAndModify: false
+            }
         ];
         const check = await NguoidungSchema
             .findOne(id)
-            .then( user => checkPassword(password, user.mat_khau) )
-            .catch(err => false ); // Focus on here
-        if ( !check ) {
+            .then(user => checkPassword(password, user.mat_khau))
+            .catch(err => false); // Focus on here
+        if (!check) {
             return res
                 .status(400)
                 .json({'success': false, 'errors': 'Mật khẩu cũ không đúng'})
         } else {
-            const update = {mat_khau: await hashPassWord(password1)};
-            NguoidungSchema.findByIdAndUpdate(id, {$set : update }, option, function (err, updated) { // need some attention
+            const update = {
+                mat_khau: await hashPassWord(password1)
+            };
+            NguoidungSchema.findByIdAndUpdate(id, {
+                $set: update
+            }, option, function (err, updated) { // need some attention
                 if (err) 
                     return res
                         .status(400)
                         .json({'success': false, 'errors': 'Lỗi không xác định'})
-                // console.log(updated.mat_khau)
                 return res
                     .status(200)
                     .json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
@@ -179,5 +182,120 @@ module.exports = {
                         .json({'success': true, 'data': data})
                 }
             });
-    }
+    },
+    admin_get_teacher_list: async function (req, res) {
+        //should add telephone number and more info about user
+        await NguoidungSchema
+            .find({
+                loai: false
+            }, ['ho', 'ten', '_id', 'email'])
+            .exec((err, result) => {
+                if (err) 
+                    res
+                        .status(400)
+                        .json({'success': false, 'errors': err})
+                res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_student_list: async function (req, res) {
+        await SinhvienSchema
+            .find({}, ['ho', 'ten', '_id', 'email'])
+            .exec((err, result) => {
+                if (err) 
+                    res
+                        .status(400)
+                        .json({'success': false, 'errors': err})
+                res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_category_list: async (req, res) => {
+        await DanhMucSchema
+            .find({})
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .exec((err, result) => {
+                if (err) 
+                    res
+                        .status(400)
+                        .json({'success': false, 'errors': err})
+                res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_question_list: async function (req, res) {
+        await CauHoiSchema
+            .find({})
+            .populate('danh_muc_id', ['_id', 'tieu_de'])
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .exec((err, result) => {
+                if (err) 
+                    res
+                        .status(400)
+                        .json({'success': false, 'errors': err})
+                res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_detail_teacher: async function (req, res, next) {
+        const id = req.params.id;
+        await SinhvienSchema
+            .find({
+                '_id': id
+            }
+            // , [
+            //     'ho',
+            //     'ten',
+            //     '_id',
+            //     'email',
+            //     'anh_dai_dien',
+            //     'createdAt',
+            //     'updatedAt'
+            // ]
+            )
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .exec((err, result) => {
+                if (err) 
+                    next(err);
+                if (!result) 
+                    return res
+                        .status(400)
+                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+                return res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_detail_student: async function (req, res, next) {
+        const id = req.params.id;
+        await SinhvienSchema
+            .find({
+                'loai': false,
+                '_id': id
+            }, [
+                'ho',
+                'ten',
+                '_id',
+                'email',
+                'anh_dai_dien',
+                'nguoi_tao_id',
+                'createdAt',
+                'updatedAt'
+            ])
+            .exec((err, result) => {
+                if (err) 
+                    next(err);
+                if (!result) 
+                    return res
+                        .status(400)
+                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+                return res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
 };

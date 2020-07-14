@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 const AdminController = require('../controllers/admin_controller');
 const {validate} = require('../controllers/admin_validator');
-const {verifyPasswordMath} = require('../config/validate');
 const {check} = require('express-validator');
 
 router.post(
@@ -22,25 +21,45 @@ router.post(
     validate.validateSignUpTecher(),
     AdminController.admin_add_teacher
 );
-
 router.post(
     '/qlnguoidung/them/sv',
     passport.authenticate('jwt', {session: false}),
     validate.validateSignUpStudent(),
     AdminController.admin_add_student
 );
-
 router.post(
     '/changepassword',
     passport.authenticate('jwt', {session: false}),
     validate.validateChangePassword(),
     AdminController.admin_change_password
 );
-
-
 router.get(
     '/profile',
     passport.authenticate('jwt', {session: false}),
     AdminController.get_profile_admin
+);
+router.get(
+    '/user/list/teacher',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_teacher_list
+);
+router.get(
+    '/user/list/student',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_student_list
+);
+router.get(
+    '/category/list',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_category_list
+);
+router.get(
+    '/question/list',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_question_list
+);
+router.get(
+    '/user/detail/:id',
+    AdminController.admin_get_detail_teacher
 );
 module.exports = router;

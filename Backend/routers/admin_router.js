@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 const AdminController = require('../controllers/admin_controller');
 const {validate} = require('../controllers/admin_validator');
-const {check} = require('express-validator');
 
 router.post(
     '/login',
@@ -59,7 +58,13 @@ router.get(
     AdminController.admin_get_question_list
 );
 router.get(
-    '/user/detail/:id',
-    AdminController.admin_get_detail_teacher
+    '/user/detail/:user&:id',
+    passport.authenticate('jwt', {session: false}),
+    (req, res, next) => {
+        const {user, id} = req.params;
+        user == 'teacher'
+            ? AdminController.admin_get_detail_teacher(res, next, id)
+            : AdminController.admin_get_detail_student(res, next, id)
+    },
 );
 module.exports = router;

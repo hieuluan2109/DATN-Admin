@@ -67,7 +67,7 @@ module.exports = {
                 'email': data.email,
                 'ngay_sinh': new Date(data.ngay_sinh),
                 'mat_khau': await hashPassWord(data.password),
-                'nguoi_tao': req.user._id
+                'nguoi_tao_id': req.user._id
             })
             gv.save(function (err, doc) {
                 if (err) 
@@ -112,7 +112,7 @@ module.exports = {
                 'email': data.email,
                 'ngay_sinh': new Date(data.ngay_sinh),
                 'mat_khau': await hashPassWord(data.password),
-                'nguoi_tao': req.user._id
+                'nguoi_tao_id': req.user._id
             })
             sv.save(function (err, doc) {
                 if (err) 
@@ -241,41 +241,11 @@ module.exports = {
                     .json({'success': true, 'data': result})
             })
     },
-    admin_get_detail_teacher: async function (req, res, next) {
-        const id = req.params.id;
-        await SinhvienSchema
-            .find({
-                '_id': id
-            }
-            // , [
-            //     'ho',
-            //     'ten',
-            //     '_id',
-            //     'email',
-            //     'anh_dai_dien',
-            //     'createdAt',
-            //     'updatedAt'
-            // ]
-            )
-            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
-            .exec((err, result) => {
-                if (err) 
-                    next(err);
-                if (!result) 
-                    return res
-                        .status(400)
-                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
-                return res
-                    .status(200)
-                    .json({'success': true, 'data': result})
-            })
-    },
-    admin_get_detail_student: async function (req, res, next) {
-        const id = req.params.id;
-        await SinhvienSchema
-            .find({
-                'loai': false,
-                '_id': id
+    admin_get_detail_teacher: async function (res, next, id) {
+        await NguoidungSchema
+            .findOne({
+                '_id': id,
+                'loai': false
             }, [
                 'ho',
                 'ten',
@@ -286,10 +256,11 @@ module.exports = {
                 'createdAt',
                 'updatedAt'
             ])
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
                 if (err) 
                     next(err);
-                if (!result) 
+                if (!result || result.length < 1) 
                     return res
                         .status(400)
                         .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
@@ -298,4 +269,33 @@ module.exports = {
                     .json({'success': true, 'data': result})
             })
     },
+    admin_get_detail_student: async function (res, next, id) {
+        await SinhvienSchema
+            .findOne({
+                '_id': id
+            }, [
+                'ma_sv',
+                'ds_lop_hoc',
+                'ho',
+                'ten',
+                '_id',
+                'email',
+                'anh_dai_dien',
+                'nguoi_tao_id',
+                'createdAt',
+                'updatedAt'
+            ])
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .exec((err, result) => {
+                if (err) 
+                    next(err);
+                if (!result || result.length < 1) 
+                    return res
+                        .status(400)
+                        .json({'success': false, 'erros': 'Lỗi không tìm thấy!'})
+                return res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    }
 };

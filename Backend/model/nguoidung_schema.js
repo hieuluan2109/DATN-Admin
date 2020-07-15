@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const AdminSchema = new Schema({
+const NguoidungSchema = new Schema({
     ho: {
         required: true,
         type: String
@@ -37,4 +37,4 @@ const AdminSchema = new Schema({
         ref: 'NguoiDung'
     }
 }, {timestamps: true});
-module.exports = mongoose.model('NguoiDung', AdminSchema, 'nguoi_dung');
+module.exports = mongoose.model('NguoiDung', NguoidungSchema, 'nguoi_dung');

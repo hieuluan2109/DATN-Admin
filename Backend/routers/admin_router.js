@@ -52,11 +52,8 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_category_list
 );
-router.get(
-    '/question/list',
-    passport.authenticate('jwt', {session: false}),
-    AdminController.admin_get_question_list
-);
+// router.get(     '/question/list',     passport.authenticate('jwt', {session:
+// false}),     AdminController.admin_get_question_list );
 router.get(
     '/user/detail/:user&:id',
     passport.authenticate('jwt', {session: false}),
@@ -66,5 +63,10 @@ router.get(
             ? AdminController.admin_get_detail_teacher(res, next, id)
             : AdminController.admin_get_detail_student(res, next, id)
     },
+);
+router.post(
+    '/question/create',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_create_question
 );
 module.exports = router;

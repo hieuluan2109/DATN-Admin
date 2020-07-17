@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const AdminSchema = new Schema({
+const SinhVienSchema = new Schema({
     ma_sv: {
         required: true,
         unique: true,
@@ -38,4 +38,4 @@ const AdminSchema = new Schema({
         ref: 'NguoiDung'
     },
 }, {timestamps: true});
-module.exports = mongoose.model('SinhVien', AdminSchema, 'sinh_vien');
+module.exports = mongoose.model('SinhVien', SinhVienSchema, 'sinh_vien');

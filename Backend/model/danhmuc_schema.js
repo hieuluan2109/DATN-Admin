@@ -14,6 +14,6 @@ const DanhMucSchema = new Schema({
         required: true,
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
-    }
+    },
 }, {timestamps: true});
 module.exports = mongoose.model('DanhMuc', DanhMucSchema, 'danh_muc');

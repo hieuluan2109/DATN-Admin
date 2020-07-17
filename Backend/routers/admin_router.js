@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 const AdminController = require('../controllers/admin_controller');
 const {validate} = require('../controllers/admin_validator');
-
 router.post(
     '/login',
     validate.validateLogin(),
@@ -13,7 +12,8 @@ router.get(
     '/logout',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_logout
-);
+); 
+// users
 router.post(
     '/qlnguoidung/them/gv',
     passport.authenticate('jwt', {session: false}),
@@ -26,16 +26,15 @@ router.post(
     validate.validateSignUpStudent(),
     AdminController.admin_add_student
 );
-router.post(
-    '/changepassword',
-    passport.authenticate('jwt', {session: false}),
-    validate.validateChangePassword(),
-    AdminController.admin_change_password
-);
 router.get(
-    '/profile',
+    '/user/detail/:user&:id',
     passport.authenticate('jwt', {session: false}),
-    AdminController.get_profile_admin
+    (req, res, next) => {
+        const {user, id} = req.params;
+        user == 'teacher'
+            ? AdminController.admin_get_teacher_detail(res, next, id)
+            : AdminController.admin_get_student_detail(res, next, id)
+    },
 );
 router.get(
     '/user/list/teacher',
@@ -47,26 +46,49 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_student_list
 );
+//admin info
+router.post(
+    '/changepassword',
+    passport.authenticate('jwt', {session: false}),
+    validate.validateChangePassword(),
+    AdminController.admin_change_password
+);
+router.get(
+    '/profile',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.get_profile_admin
+);
+//category
 router.get(
     '/category/list',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_category_list
 );
-// router.get(     '/question/list',     passport.authenticate('jwt', {session:
-// false}),     AdminController.admin_get_question_list );
+//question
 router.get(
-    '/user/detail/:user&:id',
+    '/question/list',
     passport.authenticate('jwt', {session: false}),
-    (req, res, next) => {
-        const {user, id} = req.params;
-        user == 'teacher'
-            ? AdminController.admin_get_detail_teacher(res, next, id)
-            : AdminController.admin_get_detail_student(res, next, id)
-    },
+    AdminController.admin_get_question_list
 );
+router.get(
+    '/question/detail/:id',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_question_detail
+)
 router.post(
     '/question/create',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_create_question
+);
+//class
+router.get(
+    '/class/list',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_class_list
+);
+router.get(
+    '/class/detail/:id',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_question_detail
 );
 module.exports = router;

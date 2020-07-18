@@ -87,8 +87,7 @@ module.exports = {
                 .json({'success': false, 'errors': errors.array()})
         }
         const data = req.body;
-        const check = await Schema
-            .SinhvienSchema
+        const check = await Schema.SinhvienSchema
             .find({
                 $or: [
                     {
@@ -127,8 +126,7 @@ module.exports = {
     },
     admin_get_teacher_list: async function (req, res) {
         //should add telephone number and more info about user
-        await Schema
-            .NguoidungSchema
+        await Schema.NguoidungSchema
             .find({
                 loai: false
             }, ['ho', 'ten', '_id', 'email'])
@@ -143,8 +141,7 @@ module.exports = {
             })
     },
     admin_get_student_list: async function (req, res) {
-        await Schema
-            .SinhvienSchema
+        await Schema.SinhvienSchema
             .find({}, ['ho', 'ten', '_id', 'email'])
             .exec((err, result) => {
                 if (err) 
@@ -157,8 +154,7 @@ module.exports = {
             })
     },
     admin_get_teacher_detail: async function (res, next, id) {
-        await Schema
-            .NguoidungSchema
+        await Schema.NguoidungSchema
             .findOne({
                 '_id': id,
                 'loai': false
@@ -186,8 +182,7 @@ module.exports = {
             })
     },
     admin_get_student_detail: async function (res, next, id) {
-        await Schema
-            .SinhvienSchema
+        await Schema.SinhvienSchema
             .findOne({
                 '_id': id
             }, [
@@ -203,6 +198,10 @@ module.exports = {
                 'updatedAt'
             ])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .populate({
+                path: 'ds_lop_hoc',
+                model: 'LopHoc',
+            })
             .exec((err, result) => {
                 if (err) 
                     next(err);
@@ -223,17 +222,9 @@ module.exports = {
                 .status(400)
                 .json({'success': false, 'errors': errors.array()})
         }
-        const [id, password, password1, option] = [
-            req.user._id,
-            req.body.password,
-            req.body.password1, {
-                new: true,
-                useFindAndModify: false
-            }
-        ];
-        const check = await Schema
-            .NguoidungSchema
-            .findOne(id)
+        const [ {_id, password, password1}, option ] = [ req.body, { new: true, useFindAndModify: false } ]
+        const check = await Schema.NguoidungSchema
+            .findOne(_id)
             .then(user => checkPassword(password, user.mat_khau))
             .catch(err => false); // Focus on here
         if (!check) {
@@ -244,9 +235,8 @@ module.exports = {
             const update = {
                 mat_khau: await hashPassWord(password1)
             };
-            Schema
-                .NguoidungSchema
-                .findByIdAndUpdate(id, {
+            Schema.NguoidungSchema
+                .findByIdAndUpdate(_id, {
                     $set: update
                 }, option, function (err, updated) { // need some attention
                     if (err) 
@@ -259,10 +249,32 @@ module.exports = {
                 })
         }
     },
-
-    get_profile_admin: async function (req, res) {
-        await Schema
-            .NguoidungSchema
+    admin_update_profile: async function (req, res) {
+        const errors = await validationResult(req);
+        if (!errors.isEmpty()) {
+            return res
+                .status(400)
+                .json({'success': false, 'errors': errors.array()})
+        };
+        const [ {_id}, option ] = [ req.body, { new: true, useFindAndModify: false } ];
+        const update = {
+            mat_khau: 1
+        };
+        Schema.NguoidungSchema
+            .findByIdAndUpdate(_id, {
+                $set: update
+            }, option, function (err, updated) {
+                if (err) 
+                    return res
+                        .status(400)
+                        .json({'success': false, 'errors': 'Lỗi không xác định'})
+                return res
+                    .status(200)
+                    .json({'success': true, 'msg': 'Cập nhật thành công'})
+            })
+    },
+    admin_get_profile: async function (req, res) {
+        await Schema.NguoidungSchema
             .findOne({_id: req.user._id})
             .exec((err, user) => {
                 if (err) 
@@ -279,10 +291,23 @@ module.exports = {
             });
     },
     //category
-    admin_get_category_list: async (req, res) => {
-        await Schema
-            .DanhMucSchema
+    admin_get_category_list: async function (req, res) {
+        await Schema.DanhMucSchema
             .find({})
+            .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
+            .exec((err, result) => {
+                if (err) 
+                    res
+                        .status(400)
+                        .json({'success': false, 'errors': err})
+                res
+                    .status(200)
+                    .json({'success': true, 'data': result})
+            })
+    },
+    admin_get_detail_category: async function (req, res) {
+        await Schema.DanhMucSchema
+            .findOne({'_id': req.params.id})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
                 if (err) 
@@ -296,8 +321,7 @@ module.exports = {
     },
     //question
     admin_get_question_list: async function (req, res) {
-        await Schema
-            .CauHoiSchema
+        await Schema.CauHoiSchema
             .find({})
             .populate('danh_muc_id', ['_id', 'tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
@@ -312,9 +336,8 @@ module.exports = {
             })
     },
     admin_get_question_detail: async function (req, res) {
-        await Schema
-            .CauHoiSchema
-            .findOne({ _id: req.params.id })
+        await Schema.CauHoiSchema
+            .findOne({_id: req.params.id})
             .populate('danh_muc_id', ['_id', 'tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, result) => {
@@ -328,6 +351,12 @@ module.exports = {
             })
     },
     admin_create_question: async function (req, res, next) {
+        const errors = await validationResult(req);
+        if (!errors.isEmpty()) {
+            return res
+                .status(400)
+                .json({'success': false, 'errors': errors.array()})
+        }
         const data = req.body;
         const question = new Schema.CauHoiSchema(
             {'noi_dung': data.noi_dung, 'dap_an': data.dap_an, 'nguoi_tao_id': req.user._id, 'dap_an_dung': data.dap_an_dung, 'danh_muc_id': data.danh_muc_id}
@@ -344,8 +373,7 @@ module.exports = {
     },
     //class
     admin_get_class_list: async function (req, res) {
-        await Schema
-            .LopHocSchema
+        await Schema.LopHocSchema
             .find({})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({
@@ -374,8 +402,7 @@ module.exports = {
             })
     },
     admin_get_class_detail: async function (req, res) {
-        await Schema
-            .LopHocSchema
+        await Schema.LopHocSchema
             .findOne({_id: req.params.id})
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .populate({

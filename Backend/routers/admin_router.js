@@ -12,7 +12,7 @@ router.get(
     '/logout',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_logout
-); 
+);
 // users
 router.post(
     '/qlnguoidung/them/gv',
@@ -53,16 +53,26 @@ router.post(
     validate.validateChangePassword(),
     AdminController.admin_change_password
 );
+// router.post(
+//     '/profile/edit',
+//     passport.authenticate('jwt', {session: false}),
+//     AdminController.get_profile_admin
+// );
 router.get(
     '/profile',
     passport.authenticate('jwt', {session: false}),
-    AdminController.get_profile_admin
+    AdminController.admin_get_profile
 );
 //category
 router.get(
     '/category/list',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_category_list
+);
+router.get(
+    '/category/detail/:id',
+    passport.authenticate('jwt', {session: false}),
+    AdminController.admin_get_detail_category
 );
 //question
 router.get(
@@ -74,10 +84,11 @@ router.get(
     '/question/detail/:id',
     passport.authenticate('jwt', {session: false}),
     AdminController.admin_get_question_detail
-)
+);
 router.post(
     '/question/create',
     passport.authenticate('jwt', {session: false}),
+    validate.validateCreateQuestion(),
     AdminController.admin_create_question
 );
 //class

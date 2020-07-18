@@ -28,10 +28,10 @@ const SinhVienSchema = new Schema({
         required: true,
         type: String
     },
-    ds_lop_hoc: {
-        type: Array,
-        default: {},
-    },
+    ds_lop_hoc: [{
+        type: Schema.Types.ObjectId,
+        ref: 'LopHoc',
+    }],
     nguoi_tao_id: {
         required: true,
         type: Schema.Types.ObjectId,

@@ -28,9 +28,9 @@ const BaiTapSchema = new Schema({
         type: Boolean,
         default: true,
     },
-    ds_sinh_vien_tham_gia: {
-        type: Array,
+    ds_sinh_vien_tham_gia: [{
+        type: Schema.Types.ObjectId,
         ref: 'SinhVien',
-    },
+    }],
 }, {timestamps: true});
 module.exports = mongoose.model('BaiTap', BaiTapSchema, 'bai_tap');

@@ -28,10 +28,10 @@ const BaiThiSchema = new Schema({
         type: Boolean,
         default: true,
     },
-    cau_hoi_id: {
+    cau_hoi_id: [{
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'CauHoi',
-    },
+    }],
 }, {timestamps: true});
 module.exports = mongoose.model('BaiThi', BaiThiSchema, 'bai_thi');

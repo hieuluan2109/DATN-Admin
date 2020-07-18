@@ -11,20 +11,19 @@ const LopHocSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
     },
-    ds_sinh_vien: {
-        type: Array,
+    ds_sinh_vien: [{
+        type: Schema.Types.ObjectId,
         ref: 'SinhVien',
         default: {}
-    },
-    ds_bai_tap: {
-        type: Array,
-        default: {},
+    }],
+    ds_bai_tap: [{
+        type: Schema.Types.ObjectId,
         ref: 'BaiTap',
-    },
-    ds_bai_thi: {
-        type: Array,
+    }],
+    ds_bai_thi: [{
+        type: Schema.Types.ObjectId,
         ref: 'BaiThi',
         default: {}
-    }
+    }],
 }, {timestamps: true});
 module.exports = mongoose.model('LopHoc', LopHocSchema, 'lop_hoc');

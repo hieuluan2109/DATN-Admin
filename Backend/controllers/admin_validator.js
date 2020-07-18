@@ -94,12 +94,26 @@ let validateChangePassword = (req, res, next) => {
         })
     ];
 };
-
+let validateCreateQuestion = () => {
+    return [
+        check('noi_dung')
+            .not()
+            .isEmpty()
+            .withMessage('Nội dung không được để trống')
+            .isLength({min: 5})
+            .withMessage('Nội dung câu hỏi quá ngắn'),
+        check('dap_an_dung')
+            .not()
+            .isEmpty()
+            .withMessage('Đáp án đúng không được để trống'),
+    ];
+};
 let validate = {
     validateLogin: validateLogin,
     validateSignUpTecher: validateSignUpTecher,
     validateChangePassword: validateChangePassword,
-    validateSignUpStudent: validateSignUpStudent
+    validateSignUpStudent: validateSignUpStudent,
+    validateCreateQuestion: validateCreateQuestion,
 };
 module.exports = {
     validate

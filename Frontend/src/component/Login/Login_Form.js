@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Popup from "reactjs-popup";
 import ForgotPassword from './ForgotPassword';
+
 class LoginForm extends Component {
     constructor(props) {
         super(props)
@@ -20,6 +21,7 @@ class LoginForm extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+      
     }
     //   handleChanges = (event) => {
     //     this.setState({ password: event.target.value           
@@ -74,8 +76,8 @@ class LoginForm extends Component {
         return (
             <div>
 
-                <form onSubmit={this.handleSubmit}>
-                    <h2> Login </h2>
+                <form onSubmit={this.handleSubmit} className="form">
+                    <h2 className="login"> Login </h2>
                     <div id="error">{this.state.Error}</div>
                     <div>
                         <i id="user" className="fas fa-user"></i>
@@ -99,7 +101,7 @@ class LoginForm extends Component {
                             onChange={this.handleChange} >
                         </input>
                     </div>
-                    <div className="checkb"> <input type="checkbox"></input><label id="remember">Remember me</label> </div>
+                    <div className="checkb"> <input id="checkbox" type="checkbox"></input><label id="remember">Remember me</label> </div>
                     <div>
                         <input type="submit"
                             className="btn"
@@ -108,10 +110,10 @@ class LoginForm extends Component {
 
                 </form>
 
-                <Popup trigger={<span>Forget Password</span>} modal>
+                <Popup trigger={<span id="forgot">Forgot Password</span>} modal>
                     {close => <ForgotPassword close={close} />}
                 </Popup>
-
+                
             </div>
         );
     }

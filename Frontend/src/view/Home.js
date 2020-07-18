@@ -2,7 +2,7 @@ import React from 'react'
 import Appbar from '../component/Dashboard/Appbar'
 
 
-    function Dashboard() {
+    function HomePage() {
         return (
             <div>
             <Appbar/>
@@ -11,4 +11,4 @@ import Appbar from '../component/Dashboard/Appbar'
         );
       }
       
-      export default Dashboard;
+      export default HomePage;

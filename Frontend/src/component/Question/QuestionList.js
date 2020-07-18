@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
     marginRight: "6%",
 
-    height: "100vh",
+    height: "160vh",
     background: "white",
     borderRadius: 10,
   },
@@ -57,12 +57,12 @@ const useStyles = makeStyles((theme) => ({
   containerNext: {
     position: "absolute",
     left: "90%",
-    top: "87%",
+    top: "86.5%",
   },
   containerBack: {
     position: "absolute",
     left: "79%",
-    top: "87%",
+    top: "86.5%",
   },
   next: {
     fontSize: "1rem",
@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "1rem",
   },
   buttonPageNumber: {
+      position:'relative',
     display: "inline",
     padding: ".2rem .41rem",
     borderRadius: "30px!important",
@@ -98,24 +99,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(firstname, lastname, email, DoB) {
-  return { firstname, lastname, email, DoB };
+function createData(CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO) {
+  return {CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO};
 }
 const rows = [
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
+  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
 ];
-export default function InfoUsers(props) {
+export default function QuestionList(props) {
   const classes = useStyles();
-  const {title,stt,firstname,lastname,email,DoB}=props
+  const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
  
   
@@ -128,23 +129,24 @@ export default function InfoUsers(props) {
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-      
-        <div className={classes.titleformInfo}> {title} </div>
+     
+        <div className={classes.titleformInfo}> {TITLE} </div>
         
         <form>
         <SearchButton /> 
-        <SelectSort 
+       
+         <SelectSort 
           title='Phân loại'
-          GV='Giáo viên'
-          SV='Sinh viên'
+          GV='Trắc nghiệm'
+          SV='Tự Luận'
         />
-         
+        
         <DialogThem >
-        <SelectSort 
-          title='Phân loại'
-          GV='Giáo viên'
-          SV='Sinh viên'
-        />
+            <SelectSort 
+            title='Phân loại'
+            GV='Trắc nghiệm'
+            SV='Tự Luận'
+            />
         </DialogThem>
 
           <div className={classes.formInfo}>
@@ -154,22 +156,38 @@ export default function InfoUsers(props) {
                 size="small"
                 aria-label="a dense table"
               >
+             
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {stt}
+                      {STT}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                       {firstname}
+                       {CAUHOI}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {lastname}
+                      {DAPANA}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {email}
+                      {DAPANB}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DoB}
+                      {DAPANC}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {DAPAND}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {DAPANDUNG}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {DIEM}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {NGUOITAO}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {NGAYTAO}
                     </TableCell>
                     
                     <TableCell align="center">
@@ -180,10 +198,15 @@ export default function InfoUsers(props) {
                   {rows.map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.firstname}</TableCell>
-                      <TableCell align="center">{row.lastname}</TableCell>
-                      <TableCell align="center">{row.email}</TableCell>
-                      <TableCell align="center">{row.DoB}</TableCell>
+                      <TableCell align="center">{row.CAUHOI}</TableCell>
+                      <TableCell align="center">{row.DAPANA}</TableCell>
+                      <TableCell align="center">{row.DAPANB}</TableCell>
+                      <TableCell align="center">{row.DAPANC}</TableCell>
+                      <TableCell align="center">{row.DAPAND}</TableCell>
+                      <TableCell align="center">{row.DAPANDUNG}</TableCell>
+                      <TableCell align="center">{row.DIEM}</TableCell>
+                      <TableCell align="center">{row.NGUOITAO}</TableCell>
+                      <TableCell align="center">{row.NGAYTAO}</TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />
@@ -196,7 +219,7 @@ export default function InfoUsers(props) {
                   ))}
                 </TableBody>
               </Table>
-           
+         
 
             <IconButton size="small" className={classes.containerNext}>
               <ArrowForwardIosIcon className={classes.next} />
@@ -256,7 +279,6 @@ export default function InfoUsers(props) {
             <IconButton size="small" className={classes.containerBack}>
               <ArrowBackIosIcon className={classes.back} />
             </IconButton>
-            
             </TableContainer>
           </div>
         </form>

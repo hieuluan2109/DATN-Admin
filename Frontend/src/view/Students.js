@@ -1,15 +1,16 @@
 import React from 'react'
-import InfoUser from '../component/Users/InfoUsers'
-import HomePage from '../view/Home'
-    function InfoUsers() {
+import Student from '../component/Students/StudentsList'
+import HomePage from './Home'
+    function StudentsList() {
         return (
             <div>
                 <HomePage />
-                <InfoUser 
-                title="Danh Sách Người Dùng"
+                <Student
+                title="Danh Sách Sinh Viên"
                 stt="Số thứ tự"
                 firstname="Họ"
                 lastname="Tên"
+                MSSV="MSSV"
                 email="Email"
                 DoB="Ngày sinh"
                 />
@@ -18,4 +19,4 @@ import HomePage from '../view/Home'
         );
       }
       
-      export default InfoUsers;
+      export default StudentsList;

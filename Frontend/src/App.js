@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-// import './css/login.css'; //kh đc bỏ
+ import './css/login.scss'; //kh đc bỏ
 import Routers from './route'
 
 

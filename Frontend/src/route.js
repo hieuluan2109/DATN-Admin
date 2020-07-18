@@ -9,9 +9,12 @@ import {
     // useParams
 } from "react-router-dom";
 import LoginForm from './component/Login/Login_Form'
-import Dashboard from './view/Dashboard'
+import HomePage from './view/Home'
 import Profile from './view/Profile'
 import Users from './view/Users'
+import StudentList from './view/Students'
+import QuestionsList from './view/Question'
+import Threads from './view/Thread'
 import './css/appbar.css'
 function Routers() {
     return (
@@ -33,21 +36,35 @@ function Routers() {
                     </Route>
                     <Route exact path="/admin">
                         <div className="admin">
-                            <Dashboard />
+                            <HomePage />
                         </div>
                     </Route>
                     <Route exact path="/profile">
                         <div className="profile">
-                            <Dashboard  />  
                             <Profile />
                         </div>
                     </Route>
                     <Route exact path="/users">
                         <div className="users">
-                            <Dashboard  />  
                             <Users />
                         </div>
                     </Route>
+                    <Route exact path="/students">
+                        <div className="students">
+                            <StudentList />
+                        </div>
+                    </Route>
+                    <Route exact path="/questions">
+                        <div className="questions">
+                            <QuestionsList />
+                        </div>
+                    </Route>
+                    <Route exact path="/threads">
+                        <div className="threads">
+                            <Threads />
+                        </div>
+                    </Route>
+                 
                 </Switch>
             </div>
         </Router>

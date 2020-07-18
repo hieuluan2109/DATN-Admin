@@ -98,24 +98,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(firstname, lastname, email, DoB) {
-  return { firstname, lastname, email, DoB };
+function createData(name,description, createdby) {
+  return { name,description, createdby};
 }
 const rows = [
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
+  createData("Toán Học","No description", "Luân mập địt "),
 ];
-export default function InfoUsers(props) {
+export default function Threadlist(props) {
   const classes = useStyles();
-  const {title,stt,firstname,lastname,email,DoB}=props
+  const {title,stt,name,description, createdby}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
  
   
@@ -133,19 +133,14 @@ export default function InfoUsers(props) {
         
         <form>
         <SearchButton /> 
-        <SelectSort 
+       
+         {/* <SelectSort 
           title='Phân loại'
-          GV='Giáo viên'
           SV='Sinh viên'
-        />
+          GV='Giáo viên'
+        /> */}
          
-        <DialogThem >
-        <SelectSort 
-          title='Phân loại'
-          GV='Giáo viên'
-          SV='Sinh viên'
-        />
-        </DialogThem>
+        <DialogThem />
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -160,17 +155,16 @@ export default function InfoUsers(props) {
                       {stt}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                       {firstname}
+                       {name}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {lastname}
+                      {description}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {email}
+                      {createdby}
                     </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DoB}
-                    </TableCell>
+                   
+                   
                     
                     <TableCell align="center">
                     </TableCell>
@@ -180,10 +174,9 @@ export default function InfoUsers(props) {
                   {rows.map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.firstname}</TableCell>
-                      <TableCell align="center">{row.lastname}</TableCell>
-                      <TableCell align="center">{row.email}</TableCell>
-                      <TableCell align="center">{row.DoB}</TableCell>
+                      <TableCell align="center">{row.name}</TableCell>
+                      <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">{row.createdby}</TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />
@@ -196,7 +189,7 @@ export default function InfoUsers(props) {
                   ))}
                 </TableBody>
               </Table>
-           
+            </TableContainer>
 
             <IconButton size="small" className={classes.containerNext}>
               <ArrowForwardIosIcon className={classes.next} />
@@ -256,8 +249,6 @@ export default function InfoUsers(props) {
             <IconButton size="small" className={classes.containerBack}>
               <ArrowBackIosIcon className={classes.back} />
             </IconButton>
-            
-            </TableContainer>
           </div>
         </form>
       </div>

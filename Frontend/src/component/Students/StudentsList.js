@@ -98,24 +98,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(firstname, lastname, email, DoB) {
-  return { firstname, lastname, email, DoB };
+function createData(firstname, lastname,MSSV, email, DoB) {
+  return { firstname, lastname,MSSV, email, DoB };
 }
 const rows = [
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
+  createData("Nguyễn", "Hiếu Luân ","0306171163","NguyenHieuLuan@gmail.com", "11/1/1999"),
 ];
-export default function InfoUsers(props) {
+export default function StudentsList(props) {
   const classes = useStyles();
-  const {title,stt,firstname,lastname,email,DoB}=props
+  const {title,stt,firstname,lastname,MSSV,email,DoB}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
  
   
@@ -133,19 +133,14 @@ export default function InfoUsers(props) {
         
         <form>
         <SearchButton /> 
-        <SelectSort 
+       
+         <SelectSort 
           title='Phân loại'
-          GV='Giáo viên'
           SV='Sinh viên'
+          GV='Giáo viên'
         />
          
-        <DialogThem >
-        <SelectSort 
-          title='Phân loại'
-          GV='Giáo viên'
-          SV='Sinh viên'
-        />
-        </DialogThem>
+        <DialogThem />
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -166,6 +161,9 @@ export default function InfoUsers(props) {
                       {lastname}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
+                      {MSSV}
+                    </TableCell>
+                    <TableCell align="center" style={{ color: "#ffffff" }}>
                       {email}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
@@ -182,6 +180,7 @@ export default function InfoUsers(props) {
                       <TableCell align="center">{index + 1}</TableCell>
                       <TableCell align="center">{row.firstname}</TableCell>
                       <TableCell align="center">{row.lastname}</TableCell>
+                      <TableCell align="center">{row.MSSV}</TableCell>
                       <TableCell align="center">{row.email}</TableCell>
                       <TableCell align="center">{row.DoB}</TableCell>
                       <TableCell align="center">
@@ -196,7 +195,7 @@ export default function InfoUsers(props) {
                   ))}
                 </TableBody>
               </Table>
-           
+            </TableContainer>
 
             <IconButton size="small" className={classes.containerNext}>
               <ArrowForwardIosIcon className={classes.next} />
@@ -256,8 +255,6 @@ export default function InfoUsers(props) {
             <IconButton size="small" className={classes.containerBack}>
               <ArrowBackIosIcon className={classes.back} />
             </IconButton>
-            
-            </TableContainer>
           </div>
         </form>
       </div>

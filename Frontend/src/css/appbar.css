@@ -1,15 +1,21 @@
 .admin{
-    background-color: #f5f6f8;
+    background-color: #ececec;
     height: 100vh;
-
+    /* #f5f6f8 */
 }
 .profile{
-    background-color: #f5f6f8;
+    background-color: #ececec;
     height: 110vh;
    position: relative;
 }
-.users{
-    background-color: #f5f6f8;
+.users,.students,.threads{
+    background-color: #ececec;
     height: 135vh;
+   position: relative;
+}
+.questions{
+    background-color: #ececec;
+    height: 200vh;
+    max-height: 300vh;
    position: relative;
 }

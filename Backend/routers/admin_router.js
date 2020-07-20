@@ -77,6 +77,7 @@ router.get(
 router.post(
     '/category/create',
     passport.authenticate('jwt', {session: false}),
+    validate.validateCreateCategory(),
     Controller.CategoryController.admin_create_category
 )
 //question

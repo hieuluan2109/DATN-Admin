@@ -3,14 +3,22 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Popup from "reactjs-popup";
 import ForgotPassword from './ForgotPassword';
-
+import { Redirect } from 'react-router'
+import Cookies from 'js-cookie'
 class LoginForm extends Component {
     constructor(props) {
         super(props)
+        // const token=localStorage.getItem('token');
+        // if(token!=null){
+        //     this.setState({loggedIn:true})
+        // }
+        let loggedIn=false
         this.state = {
             email: "",
             password: "",
             Error: "",
+            loggedIn ,
+            isCookies:false
             // validEmail:"/^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$\/"
         }
         this.handleChange = this.handleChange.bind(this);
@@ -21,28 +29,33 @@ class LoginForm extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
-      
+     
     }
     //   handleChanges = (event) => {
     //     this.setState({ password: event.target.value           
     //     });
     //   }
-
+  
     handleSubmit = event => {
         event.preventDefault();
         const { email, password } = this.state
         // POST #1
         axios({
             method: 'post',
-            url: 'http://localhost:8000/admin/login',
+            url: 'https://navilearn.herokuapp.com/admin/login',
             data: { email, password }
         }).then(res => {
-            console.log(res.data)
-            if (res.data.success === true) {
+            Cookies.set('token',res.data.token)
+            
+            // console.log(res.data.token)
+            // localStorage.setItem('token',res.data.token)
+            // if(res.data.token!=null){
+            //     this.setState({loggedIn:true})
+            // }
+        
                 this.setState({
-                    Error: ""
+                    Error: "",
                 });
-            }
         }).catch((error) => {
             console.log("Lỗi", error.response.data.success)
 
@@ -71,8 +84,24 @@ class LoginForm extends Component {
                 });
             }
         });
+        // const token=localStorage.getItem('token');
+        // console.log(token)
+        // if(token!=null){
+        //     this.setState({loggedIn:true})
+        // }
+      
     }
+  
     render() {
+        // const {loggedIn}=this.state;
+        // if(localStorage.getItem('token')!=null){
+        //     return <Redirect to='/admin' />
+        // }
+      
+            const token=Cookies.get('token');
+            if(token!=null){
+                return <Redirect to='/admin' />
+            }
         return (
             <div>
 

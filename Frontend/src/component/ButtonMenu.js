@@ -15,7 +15,7 @@ import {
   // useRouteMatch,
   // useParams
 } from "react-router-dom";
-
+import Cookies from 'js-cookie'
 export default function MenuAppbar() {
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +33,8 @@ export default function MenuAppbar() {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+ 
+
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const handleClose = () => {
     setAnchorEl(null);
@@ -41,9 +43,9 @@ export default function MenuAppbar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  
-
+ const logout=()=>{
+  Cookies.remove('token');
+ }
   return (
     <div className={classes.menus}>
 
@@ -64,13 +66,18 @@ export default function MenuAppbar() {
           open={isMenuOpen}
           onClose={handleMenuClose}
         >
-          <Link to="/profile">
+        <div>
+          <Link to="/profile"  style={{textDecoration:'none',color:'black'}} >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-          </Link>
+         </Link>
+          
+          <Link to='/' onClick={logout}  style={{textDecoration:'none',color:'black'}}>
           <MenuItem onClick={handleMenuClose}>Sign out</MenuItem>
+          </Link>
           <MenuItem onClick={handleMenuClose}>Change password</MenuItem>
+          </div>
         </Menu>
-    
+      
     </div>
   );
 }

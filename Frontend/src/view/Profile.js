@@ -1,5 +1,5 @@
 import React from 'react'
-import TableData from '../component/Profile/TableData'
+import TableData from '../component/Profile/ProfileAdmin'
 import HomePage from '../view/Home'
     function Profile() {
         return (

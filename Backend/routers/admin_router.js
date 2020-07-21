@@ -22,7 +22,7 @@ router.post(
     Controller.UserController.admin_add_teacher
 );
 router.post(
-    'user/add/student',
+    '/user/add/student',
     passport.authenticate('jwt', {session: false}),
     validate.validateSignUpStudent(),
     Controller.UserController.admin_add_student

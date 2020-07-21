@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -11,6 +11,8 @@ import Avatar from "@material-ui/core/Avatar";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import axios from "axios";
+import Cookies from "js-cookie";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -90,27 +92,17 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuProfile() {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const [state, setState] = React.useState({
+  const [DFstate, setDFState] = React.useState({
     date: "",
     month: "",
     year: "",
-    firstname: "Nguyễn",
-    lastname: "Hiếu Luân",
-    phoneNumber: "0345553332",
-    email: "luanmap102@gmail.com",
   });
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
+  
   function Repeat(props) {
     const items = [];
     for (let i = props.index; i <= props.num; i++) {
@@ -122,6 +114,36 @@ export default function MenuProfile() {
       </option>
     ));
   }
+  const [getDataProfile, setDataProfile] = useState([]);
+  const [date, setDateTime] = useState([]);
+  const token = Cookies.get("token");
+  
+  useEffect(() => {
+    axios
+      .get("https://navilearn.herokuapp.com/admin/profile", 
+      {headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setDataProfile(data); //State để lấy dữ liệu profile admin từ api
+        var splitted = data.ngay_sinh.split("-", 3); //Tách chuỗi để lấy ngày tháng năm
+        var ngay = splitted[2].split("T", 2);
+        const getDay = Number(ngay[0]);
+        const getMonth = Number(splitted[1]);
+        const getYear = Number(splitted[0]);
+        setDateTime({
+          date: getDay,
+          month: getMonth,
+          year: getYear,
+        });
+      });
+  },[]);
+  const handleChange = (event) => {
+    setDataProfile({
+      [event.target.name]: event.target.value,
+    });
+    console.log(event.target.value)
+  };
 
   return (
     <div className="row">
@@ -180,9 +202,9 @@ export default function MenuProfile() {
               <label className={classes.titleFormControl}>Họ</label>
               <input
                 className={classes.contentFormControl}
-                name="firstname"
+                name="ho"
                 type="text"
-                value={state.firstname}
+                value={getDataProfile.ho||getDataProfile.ho}
                 onChange={handleChange}
               />
             </div>
@@ -190,13 +212,13 @@ export default function MenuProfile() {
               <label className={classes.titleFormControl}>Tên</label>
               <input
                 className={classes.contentFormControl}
-                name="lastname"
+                name="ten"
                 type="text"
-                value={state.lastname}
+                value={getDataProfile.ten}
                 onChange={handleChange}
               />
             </div>
-            <div className={classes.formControl}>
+            {/* <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Số điện thoại</label>
               <input
                 className={classes.contentFormControl}
@@ -204,13 +226,14 @@ export default function MenuProfile() {
                 value={state.phoneNumber}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Email</label>
               <input
+                name="email"
                 className={classes.contentFormControl}
                 type="text"
-                value={state.email}
+                value={getDataProfile.email}
                 disabled={true}
               />
             </div>
@@ -240,7 +263,8 @@ export default function MenuProfile() {
                 </InputLabel>
                 <Select
                   native
-                  value={state.date}
+                  name="date"
+                  value={date.date||''}
                   onChange={handleChange}
                   label="Ngày"
                   inputProps={{
@@ -257,11 +281,11 @@ export default function MenuProfile() {
                 </InputLabel>
                 <Select
                   native
-                  value={state.month}
+                  value={date.month||""}
                   onChange={handleChange}
                   label="Tháng"
                   inputProps={{
-                    name: "month",
+                    name: "thang",
                   }}
                 >
                   <option aria-label="None" value="" />
@@ -274,7 +298,7 @@ export default function MenuProfile() {
                 </InputLabel>
                 <Select
                   native
-                  value={state.year}
+                  value={date.year||""}
                   onChange={handleChange}
                   label="Năm"
                   inputProps={{

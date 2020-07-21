@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -16,12 +16,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SearchButton from '../Search'
 import SelectSort from '../SelectSort'
 import DialogThem from '../DialogThem'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
     marginRight: "6%",
 
-    height: "160vh",
+    height: "100vh",
     background: "white",
     borderRadius: 10,
   },
@@ -99,21 +101,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO) {
-  return {CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO};
-}
-const rows = [
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-  createData("Tại sao Luân lại mập?", "Vì nó ăn nhiều","Vì bị nghiệp quật","Vì đó là lẽ tự nhiên","Vì ...", "B",1,"Luân","1/1/2020"),
-];
+
 export default function QuestionList(props) {
   const classes = useStyles();
   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
@@ -123,7 +111,20 @@ export default function QuestionList(props) {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-
+  const [getList,setGetList]=useState([])
+  const token=Cookies.get('token')
+  useEffect(() => {
+        axios.get('https://navilearn.herokuapp.com/admin/question/list',
+        {headers:{"Authorization":`Bearer ${token}`}
+      }).then(res=>{
+        const {data}=res.data
+        console.log(data)
+         setGetList(data)
+      }).catch((error)=>{
+        console.log("Lỗi", error)
+      })
+        
+  },[]);
  
   return (
     <div className="row">
@@ -195,18 +196,18 @@ export default function QuestionList(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
+                  {getList.map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.CAUHOI}</TableCell>
-                      <TableCell align="center">{row.DAPANA}</TableCell>
-                      <TableCell align="center">{row.DAPANB}</TableCell>
-                      <TableCell align="center">{row.DAPANC}</TableCell>
-                      <TableCell align="center">{row.DAPAND}</TableCell>
-                      <TableCell align="center">{row.DAPANDUNG}</TableCell>
-                      <TableCell align="center">{row.DIEM}</TableCell>
-                      <TableCell align="center">{row.NGUOITAO}</TableCell>
-                      <TableCell align="center">{row.NGAYTAO}</TableCell>
+                      <TableCell align="center">{row.noi_dung}</TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center"></TableCell>
+                      <TableCell align="center">{row.createdAt}</TableCell>
+                    
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />

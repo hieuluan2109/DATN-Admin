@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useEffect, useState }  from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -16,6 +16,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SearchButton from '../Search'
 import SelectSort from '../SelectSort'
 import DialogThem from '../DialogThem'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -98,33 +100,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(firstname, lastname, email, DoB) {
-  return { firstname, lastname, email, DoB };
-}
-const rows = [
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-  createData("Nguyễn", "Văn A ", "nguyenvana@gmail.com", "11/1/1999"),
-];
+
 export default function InfoUsers(props) {
   const classes = useStyles();
   const {title,stt,firstname,lastname,email,DoB}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
- 
-  
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-
+  const [getList,setGetList]=useState([])
+  const token=Cookies.get('token')
+  useEffect(() => {
+        axios.get('https://navilearn.herokuapp.com/admin/user/list/teacher',
+        {headers:{"Authorization":`Bearer ${token}`}
+      }).then(res=>{
+        const{data}=res.data
+          console.log(data)
+          setGetList(data)
+      })
+        
+  },[]);
  
   return (
+    
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
@@ -177,13 +175,13 @@ export default function InfoUsers(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
+                  {getList.map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{row.firstname}</TableCell>
-                      <TableCell align="center">{row.lastname}</TableCell>
+                      <TableCell align="center">{row.ho}</TableCell>
+                      <TableCell align="center">{row.ten}</TableCell>
                       <TableCell align="center">{row.email}</TableCell>
-                      <TableCell align="center">{row.DoB}</TableCell>
+                      <TableCell align="center">{row.ngay_sinh}</TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />

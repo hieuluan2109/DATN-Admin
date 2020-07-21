@@ -13,7 +13,7 @@
     background-color: rgba(0, 0, 0, 0.7);
     margin-right: 10%;
     width: 90%;
-    padding: 30px;
+    padding: 30px 30px 30px  30px;
     height: 430px;
     width: 400px;
     position: absolute;
@@ -21,7 +21,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     div {
-        margin-top: 30px;
+        margin-top: 28px;
     }
 }
 .btn {
@@ -50,8 +50,8 @@
     font-size: 100%;
     color: white;
     position: absolute;
-    left: 50%;
-    top: 75%;
+    left: 52%;
+    top: 77%;
 }
 .iput {
     padding-left: 40px;
@@ -104,11 +104,12 @@
     left: 12%;
 }
 #error {
-    margin-top: 10px;
-    margin-bottom: -5px;
+    margin-top: 5px;
+ 
     color: white;
     text-align: center;
     color: red;
+    position: relative;
 }
 #remember {
     position: relative;

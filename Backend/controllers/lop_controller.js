@@ -1,5 +1,5 @@
 const {validationResult} = require('express-validator');
-const {LopHocSchema} = require('../model/Schema');
+const {LopHocSchema} = require('../model/index.schema');
 module.exports = {
     admin_get_class_list: async function (req, res) {
         let perPage = 10;
@@ -27,14 +27,10 @@ module.exports = {
             .exec((err, data) => {
                 LopHocSchema.countDocuments(
                 (err, count) => {
-                    if (err) 
-                        res
-                            .status(400)
-                            .json({'success': false, 'errors': err})
-                    res
-                        .status(200)
-                        .json({
+                    err ? res.status(400).json({'success': false, 'errors': err})
+                        : res.status(200).json({
                             success: true,
+                            count,
                             data,
                             current: page,
                             pages: Math.ceil(count / perPage)

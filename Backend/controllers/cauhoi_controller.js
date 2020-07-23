@@ -1,5 +1,5 @@
 const {validationResult} = require('express-validator');
-const {CauHoiSchema, TracNghiemSchema, TuLuanSchema} = require('../model/Schema');
+const {CauHoiSchema, TracNghiemSchema, TuLuanSchema} = require('../model/index.schema');
 module.exports = {
     admin_get_question_list: async function (req, res) {
         let perPage = 10;

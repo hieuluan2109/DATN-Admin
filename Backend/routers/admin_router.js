@@ -14,6 +14,11 @@ router.get(
     passport.authenticate('jwt', {session: false}),
     Controller.LoginController.admin_logout
 );
+//dashboard
+// router.get(
+//     '/dashboard',
+//     Controller.DashBoard.get_dashboard
+// );
 // users
 router.post(
     '/user/add/teacher',
@@ -62,6 +67,11 @@ router.get(
     '/profile',
     passport.authenticate('jwt', {session: false}),
     Controller.AdminController.admin_get_profile
+);
+router.post(
+    '/profile/update',
+    passport.authenticate('jwt', {session: false}),
+    Controller.AdminController.admin_update_profile
 );
 //category
 router.get(

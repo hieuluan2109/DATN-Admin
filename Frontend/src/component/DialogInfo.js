@@ -84,6 +84,7 @@ class DialogInfo extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
+    this.props.onClickInfor(this.props.id, this.props.age)
   };
   handleClose = () => {
     this.setState({ open: false });
@@ -94,10 +95,8 @@ class DialogInfo extends Component {
   //   };
 
   render() {
-    console.log("aaa", this.state.value);
     const { classes, children } = this.props;
     const { open } = this.state;
-    console.log(this.state.user);
     return (
       <div>
         <IconButton
@@ -107,9 +106,9 @@ class DialogInfo extends Component {
           onClick={this.handleClickOpen}
         >
           <VisibilityIcon
-            onClick={() =>
-              this.props.onClickInfor(this.props.id, this.props.age)
-            }
+            // onClick={() =>
+            //   this.props.onClickInfor(this.props.id, this.props.age)
+            // }
           />
         </IconButton>
 
@@ -225,7 +224,7 @@ class DialogInfo extends Component {
             {/* <Button onClick={this.handleClose} color="primary">
               Hủy bỏ
             </Button> */}
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleClose} color="primary" >
               Xác nhận
             </Button>
           </DialogActions>

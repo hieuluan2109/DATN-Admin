@@ -40,26 +40,18 @@ class LoginForm extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const { email, password } = this.state
-        // POST #1
+
         axios({
             method: 'post',
             url: 'https://navilearn.herokuapp.com/admin/login',
             data: { email, password }
         }).then(res => {
             Cookies.set('token',res.data.token)
-            
-            // console.log(res.data.token)
-            // localStorage.setItem('token',res.data.token)
-            // if(res.data.token!=null){
-            //     this.setState({loggedIn:true})
-            // }
-        
                 this.setState({
                     Error: "",
                 });
         }).catch((error) => {
             console.log("Lỗi", error.response.data.success)
-
             if (email.length === 0) {
                 this.setState({
                     Error: "Vui lòng nhập email"

@@ -10,7 +10,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Icon from "@material-ui/core/Icon";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SelectSort from "./SelectSort";
-
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const styles = (theme) => ({
   btnThem: {
@@ -29,7 +30,49 @@ const styles = (theme) => ({
     top: "10px",
     right: "25px",
   },
-
+  ngaysinh: {
+    position: "relative",
+    marginTop: "30px",
+    marginBottom: "-20px",
+  },
+  textField: {
+    marginLeft: "100px",
+    position: "relative",
+    marginTop: "-28px",
+  },
+  titleformInfo: {
+    position: "absolute",
+    marginTop: "65px",
+    marginLeft: 60,
+    fontSize: 17,
+  },
+  formControl: {
+    maxwidth: "700px",
+  },
+  titleFormControl: {
+    width: "100px",
+    float: "left",
+    paddingTop: "32px",
+  },
+  contentFormControl: {
+    width: "400px",
+    borderRadius: "5px",
+    height: "30px",
+    paddingLeft: "10px",
+    marginTop: "25px",
+    outline: "none",
+    "&:focus": {
+      borderColor: "#3f51b5",
+    },
+  },
+  ngaysinh: {
+    position: "absolute",
+    marginTop: "30px",
+  },
+  contentNgaysinh: {
+    marginTop: "5px",
+    marginLeft: "100px",
+  },
   //    iconbtnThem:{
   //     // background:theme.palette.primary.light,
   //     color:'white',
@@ -46,10 +89,16 @@ class DialogThem extends Component {
     super(props);
     this.state = {
       open: false,
-      value:this.props.value
+      ho: "",
+      ten: "",
+      email: "",
+      ngay_sinh: "",
+      password: "",
+      confirmpassword: "",
+      errors: "",
+      ma_sv:''
     };
   }
- 
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -57,15 +106,41 @@ class DialogThem extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  //   handleChangSelect = (event) => {
-  //     this.setState({role:event.target.value});
-  //   };
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const { ho, ten, email,ma_sv, password, ngay_sinh } = this.state;
+    console.log(this.props.token);
+    var url='';
+    (this.props.value==true)?url='https://navilearn.herokuapp.com/admin/user/add/teacher':url='https://navilearn.herokuapp.com/admin/user/add/student';
+    var params;
+    (this.props.value==true)?params={ ho, ten, email, ngay_sinh, password }:params={ ho, ten, email,ma_sv, ngay_sinh, password }
+    console.log(params)
+    
+    axios
+      .post(
+        url,
+        params,
+        { headers: { Authorization: `Bearer ${this.props.token}` } }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response.data);
+      });
+  };
 
   render() {
-    console.log("aaa",this.state.value)
-    const { classes,children } = this.props;
-    const { open } = this.state;
+    const { classes, children } = this.props;
+    const { open, errors } = this.state;
+    // const { ho, ten, email, password,ngaysinh } = this.state;
     return (
       <div>
         <Button
@@ -84,65 +159,109 @@ class DialogThem extends Component {
         >
           <DialogTitle id="form-dialog-title">
             Thêm mới tài khoản
-            
-            <div className={classes.selectsort}>    
-                  {children} 
-            </div>
-
+            <div className={classes.selectsort}>{children}</div>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Để tạo tài khoản, vui lòng điền đầy đủ các thông tin
             </DialogContentText>
-            
+            {errors}
+            <form onSubmit={this.handleSubmit}>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Họ</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="ho"
+                  type="text"
+                  value={this.state.ho}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Tên</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="ten"
+                  type="text"
+                  value={this.state.ten}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className={classes.formControl} style={{display:this.props.display}}>
+                <label className={classes.titleFormControl}>MSSV</label>
+                <input
+                  className={classes.contentFormControl}
+                  name="ma_sv"
+                  type="text"
+                  value={this.state.ma_sv}
+                  onChange={this.handleChange}
+                />
+              </div>
+              {/* <div className={classes.formControl}>
+              <label className={classes.titleFormControl}>Số điện thoại</label>
+              <input
+                className={classes.contentFormControl}
+                type="text"
+                value={state.phoneNumber}
+                onChange={handleChange}
+              />
+            </div> */}
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Email</label>
+                <input
+                  name="email"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                />
+              </div>
 
-            <TextField
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Địa chỉ Email"
-              type="email"
-              fullWidth
-            />
-            <TextField
-              margin="dense"
-              id="firstname"
-              label="Họ"
-              type="text"
-              fullWidth
-            />
-               <TextField
-              margin="dense"
-              id="lastname"
-              label="Tên"
-              type="text"
-              fullWidth
-            />
+              <span className={classes.ngaysinh}>Ngày sinh</span>
+              <TextField
+                name="ngay_sinh"
+                label="Birthday"
+                type="date"
+                value={this.state.ngay_sinh}
+                className={classes.contentNgaysinh}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={this.handleChange}
+              />
 
-            <TextField
-              margin="dense"
-              id="password"
-              label="Mật khẩu"
-              type="password"
-              fullWidth
-            />
-            <TextField
-              margin="dense"
-              id="repassword"
-              label="Xác nhận mật khẩu"
-              type="password"
-              fullWidth
-            />
-
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Mật khẩu</label>
+                <input
+                  name="password"
+                  className={classes.contentFormControl}
+                  type="password"
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>
+                  Xác nhận mật khẩu
+                </label>
+                <input
+                  name="confirmpassword"
+                  className={classes.contentFormControl}
+                  type="password"
+                  value={this.state.confirmpassword}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Hủy bỏ
+                </Button>
+                <Button type="submit" color="primary">
+                  Xác nhận
+                </Button>
+              </DialogActions>
+            </form>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Hủy bỏ
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Xác nhận
-            </Button>
-          </DialogActions>
         </Dialog>
       </div>
     );

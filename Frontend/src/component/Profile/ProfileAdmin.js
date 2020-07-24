@@ -47,7 +47,12 @@ const useStyles = makeStyles((theme) => ({
     height: "70vh",
     background: "white",
   },
- 
+  titleformInfo: {
+    position: "absolute",
+    marginTop: "65px",
+    marginLeft: 60,
+    fontSize: 17,
+  },
   formControl: {
     paddingTop: "30px",
     paddingLeft: "30px",
@@ -88,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom:'50px'
   },
   textField: {
+    marginTop:'-15px',
     width: 150,
   },
 }));
@@ -127,6 +133,7 @@ export default function MenuProfile() {
       .then((res) => {
         const { data } = res.data;
         setDataProfile(data); //State để lấy dữ liệu profile admin từ api
+        
         // var splitted = data.ngay_sinh.split("-", 3); //Tách chuỗi để lấy ngày tháng năm
         // var ngay = splitted[2].split("T", 2);
         // const getDay = Number(ngay[0]);
@@ -139,6 +146,7 @@ export default function MenuProfile() {
         // });
       });
   }, []);
+  let a=getDataProfile.ngay_sinh
   const handleChange = (event) => {
     setDataProfile({
       [event.target.name]: event.target.value,
@@ -256,11 +264,10 @@ export default function MenuProfile() {
                   <label className={classes.titleFormControl}>Ngày sinh</label>
             
                   <TextField
-                    
                     id="date"
                     label="Birthday"
-                    type="date"
-                    defaultValue={getDataProfile.ngay_sinh}
+                    type="date"                  
+                    value={getDataProfile.ngay_sinh}
                     className={classes.textField}
                     InputLabelProps={{
                       shrink: true,

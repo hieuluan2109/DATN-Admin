@@ -114,7 +114,9 @@ export default function InfoUsers(props) {
   const classes = useStyles();
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(1);
+  const [display,setDisplay]=useState('none')
   const { title, stt, firstname, lastname, email, DoB } = props;
+  
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -122,6 +124,7 @@ export default function InfoUsers(props) {
 
   const handleChangeFormCreateAccount = (event) => {
     setCreate(event.target.value);
+    (create==true)?setDisplay('block'):setDisplay('none');
   };
 
   const handleChange = (event) => {
@@ -133,7 +136,7 @@ export default function InfoUsers(props) {
         })
         .then((res) => {
           const { data } = res.data;
-          console.log(data);
+          console.log(data)
           setGetList(data);
         });
     }
@@ -144,12 +147,11 @@ export default function InfoUsers(props) {
         })
         .then((res) => {
           const { data } = res.data;
-          console.log(data);
           setGetList(data);
         });
     }
   };
-  const [dataUser, setDataUser] = useState([]);
+  const [dataUser, setDataUser] = useState({});
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -160,13 +162,14 @@ export default function InfoUsers(props) {
           }
         )
         .then((res) => {
-          const { data } = res.data;
-          setDataUser(data);
+         const {data}=res.data
+         setDataUser(data)
+        //  console.log(data[0].ho)
         });
     }
+
     if (age === 0) {
-      axios
-        .get(
+      axios.get(
           `https://navilearn.herokuapp.com/admin/user/detail/student&${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -177,6 +180,7 @@ export default function InfoUsers(props) {
           setDataUser(data);
         });
     }
+  
   };
   // console.log("Get",dataUser)
   const [getList, setGetList] = useState([]);
@@ -188,11 +192,12 @@ export default function InfoUsers(props) {
       })
       .then((res) => {
         const { data } = res.data;
-        console.log(data);
         setGetList(data);
-      });
+      }).catch((error) =>{
+        console.log("Lỗi",error);
+      })
   }, []);
-  console.log(dataUser);
+
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -219,7 +224,7 @@ export default function InfoUsers(props) {
             </Select>
           </FormControl>
 
-          <DialogThem>
+          <DialogThem value={create} token={token} display={display}>
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-simple-select-label">Loại</InputLabel>
               <Select

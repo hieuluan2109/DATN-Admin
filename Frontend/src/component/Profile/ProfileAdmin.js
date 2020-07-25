@@ -100,12 +100,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuProfile() {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const [DFstate, setDFState] = React.useState({
-    date: "",
-    month: "",
-    year: "",
-  });
-
+ 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -122,8 +117,10 @@ export default function MenuProfile() {
     ));
   }
   const [getDataProfile, setDataProfile] = useState([]);
-  const [date, setDateTime] = useState([]);
   const token = Cookies.get("token");
+  const [valix,setvalix]=useState({
+    ho:'c',ten:'c',ngay_sinh:'c'
+  })
 
   useEffect(() => {
     axios
@@ -133,29 +130,37 @@ export default function MenuProfile() {
       .then((res) => {
         const { data } = res.data;
         setDataProfile(data); //State để lấy dữ liệu profile admin từ api
-        
-        // var splitted = data.ngay_sinh.split("-", 3); //Tách chuỗi để lấy ngày tháng năm
-        // var ngay = splitted[2].split("T", 2);
-        // const getDay = Number(ngay[0]);
-        // const getMonth = Number(splitted[1]);
-        // const getYear = Number(splitted[0]);
-        // setDateTime({
-        //   date: getDay,
-        //   month: getMonth,
-        //   year: getYear,
-        // });
       });
   }, []);
-  let a=getDataProfile.ngay_sinh
+
+  
   const handleChange = (event) => {
-    setDataProfile({
-      [event.target.name]: event.target.value,
-    });
-    setDateTime({
-      [event.target.name]: event.target.value,
-    });
-    console.log(event.target.value);
+      setDataProfile({
+        [event.target.name]: event.target.value
+      })
+      console.log(getDataProfile)
   };
+ 
+console.log(getDataProfile)
+const onSubmitInfo=(event)=>{
+  event.preventDefault();
+  const { ho, ten, ngay_sinh } = getDataProfile;
+
+        axios
+          .post(
+            "https://navilearn.herokuapp.com/admin/profile",
+            {ho,ten,ngay_sinh},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then((res) => {
+           console.log(res)
+          }).catch((error) => {
+            console.log("Lỗi", error.response);
+          });
+
+}
   return (
     <div className="row">
       <div className="col span-1-of-4">
@@ -207,7 +212,7 @@ export default function MenuProfile() {
       </div>
       <div className="col span-3-of-4">
         <div className={classes.titleformInfo}> Thông tin tài khoản</div>
-        <form>
+        <form onSubmit={onSubmitInfo}>
           <div className={classes.formInfo}>
             <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Họ</label>
@@ -282,7 +287,7 @@ export default function MenuProfile() {
               <div className={classes.formControl}>
                 <input
                   className={classes.btnXacnhan}
-                  type="button"
+                  type="submit"
                   value="Cập Nhật"
                 />
             </div>

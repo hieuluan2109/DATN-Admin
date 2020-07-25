@@ -30,11 +30,7 @@ const styles = (theme) => ({
     top: "10px",
     right: "25px",
   },
-  ngaysinh: {
-    position: "relative",
-    marginTop: "30px",
-    marginBottom: "-20px",
-  },
+
   textField: {
     marginLeft: "100px",
     position: "relative",
@@ -122,7 +118,6 @@ class DialogThem extends Component {
     var params;
     (this.props.value==true)?params={ ho, ten, email, ngay_sinh, password }:params={ ho, ten, email,ma_sv, ngay_sinh, password }
     console.log(params)
-    
     axios
       .post(
         url,
@@ -197,15 +192,6 @@ class DialogThem extends Component {
                   onChange={this.handleChange}
                 />
               </div>
-              {/* <div className={classes.formControl}>
-              <label className={classes.titleFormControl}>Số điện thoại</label>
-              <input
-                className={classes.contentFormControl}
-                type="text"
-                value={state.phoneNumber}
-                onChange={handleChange}
-              />
-            </div> */}
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Email</label>
                 <input

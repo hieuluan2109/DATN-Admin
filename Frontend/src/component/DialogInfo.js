@@ -12,6 +12,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SelectSort from "./SelectSort";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
+import CreateIcon from "@material-ui/icons/Create";
 
 const styles = (theme) => ({
   btnThem: {
@@ -44,34 +45,33 @@ const styles = (theme) => ({
     fontSize: 17,
   },
   formControl: {
-    maxwidth: "600px",
+    maxwidth: "700px",
   },
   titleFormControl: {
-    width: "30px",
+    width: "100px",
     float: "left",
-    marginTop:'25px',
-    marginRight:'35px',
+    paddingTop: "32px",
   },
   contentFormControl: {
     width: "400px",
     borderRadius: "5px",
     height: "30px",
     paddingLeft: "10px",
-    marginTop:'20px',
+    marginTop: "25px",
     outline: "none",
     "&:focus": {
       borderColor: "#3f51b5",
     },
   },
-  //    iconbtnThem:{
-  //     // background:theme.palette.primary.light,
-  //     color:'white',
-  //     '&:hover':{
-  //         color:theme.palette.primary.light,
-  //         background:'white',
-  //         fontWeight:500
-  //     }
-  // }
+  ngaysinh: {
+    position: "absolute",
+    marginTop: "30px",
+  },
+  contentNgaysinh: {
+    marginTop: "5px",
+    marginLeft: "100px",
+  },
+ 
 });
 
 class DialogInfo extends Component {
@@ -84,15 +84,12 @@ class DialogInfo extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.onClickInfor(this.props.id, this.props.age)
+    this.props.onClickInfor(this.props.id, this.props.age);
   };
   handleClose = () => {
     this.setState({ open: false });
   };
 
-  //   handleChangSelect = (event) => {
-  //     this.setState({role:event.target.value});
-  //   };
 
   render() {
     const { classes, children } = this.props;
@@ -105,22 +102,20 @@ class DialogInfo extends Component {
           variant="outlined"
           onClick={this.handleClickOpen}
         >
-          <VisibilityIcon
-            // onClick={() =>
-            //   this.props.onClickInfor(this.props.id, this.props.age)
-            // }
-          />
+          {this.props.icon}
         </IconButton>
 
+      
+       
         <Dialog
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Thông tin tài khoản</DialogTitle>
-      
+          <DialogTitle id="form-dialog-title">Thông Tin {this.props.title}</DialogTitle>
+            
           <DialogContent>
-          <form>
+            <form>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
                 <input
@@ -128,7 +123,8 @@ class DialogInfo extends Component {
                   name="ho"
                   type="text"
                   value={this.props.Data.ho}
-                  disabled={true}
+                  disabled={this.props.status}
+                  onChange={this.props.handleChange}
                 />
               </div>
               <div className={classes.formControl}>
@@ -138,18 +134,10 @@ class DialogInfo extends Component {
                   name="ten"
                   type="text"
                   value={this.props.Data.ten}
-                  disabled={true}
+                  disabled={this.props.status}
+                  onChange={this.props.handleChange}
                 />
               </div>
-              {/* <div className={classes.formControl}>
-              <label className={classes.titleFormControl}>Số điện thoại</label>
-              <input
-                className={classes.contentFormControl}
-                type="text"
-                value={state.phoneNumber}
-                onChange={handleChange}
-              />
-            </div> */}
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Email</label>
                 <input
@@ -157,79 +145,48 @@ class DialogInfo extends Component {
                   className={classes.contentFormControl}
                   type="text"
                   value={this.props.Data.email}
-                  disabled={true}
+                  disabled={this.props.status}
+                  onChange={this.props.handleChange}
                 />
               </div>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Ngày sinh</label>
-                <input
-                  name="ngaysinh"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value=""
-                  disabled={true}
-                />
-              </div>
-            
-              <div className={classes.formControl}>
+              <span className={classes.ngaysinh}>Ngày sinh</span>
+              <TextField
+                name="ngay_sinh"
+                label="Birthday"
+                type="date"
+                value={this.props.Data.ngay_sinh}
+                className={classes.contentNgaysinh}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                disabled={this.props.status}
+                onChange={this.props.handleChange}
+              />
+
+              <div className={classes.formControl}  style={{display:this.props.display}}>
                 <label className={classes.titleFormControl}>Người tạo</label>
                 <input
-                  name="nguoitao"
+                  name="nguoi_tao_id"
                   className={classes.contentFormControl}
                   type="text"
-                  value=""
-                  disabled={true}
+                  value=''
+                  disabled={this.props.status}
+                 
                 />
               </div>
-           
-            {/* Đia chỉ Email
-            <TextField
-              autoFocus
-              margin="dense"
-              id="email"
-              value={this.props.Data.email}
-              type="email"
-              fullWidth
-            />
-            Họ{" "}
-            <TextField
-              margin="dense"
-              id="firstname"
-              type="text"
-              value={this.props.Data.ho}
-              fullWidth
-            />
-            Tên
-            <TextField
-              margin="dense"
-              id="lastname"
-              value={this.props.Data.ten}
-              type="text"
-              fullWidth
-            />
-            Ngày sinh
-            <TextField margin="dense" id="ngaysinh" type="text" fullWidth />
-            Người Tạo
-            <TextField
-              margin="dense"
-              id="password"
-              value={this.props.Data.nguoi_tao_id}
-              type="text"
-              fullWidth
-            /> */}
-            </form>
-          </DialogContent>
-       
-          <DialogActions>
+              <DialogActions>
             {/* <Button onClick={this.handleClose} color="primary">
               Hủy bỏ
             </Button> */}
-            <Button onClick={this.handleClose} color="primary" >
+            <Button type='submit' onClick={this.handleClose} color="primary">
               Xác nhận
             </Button>
           </DialogActions>
+            </form>
+          </DialogContent>
+
+        
         </Dialog>
-      
       </div>
     );
   }

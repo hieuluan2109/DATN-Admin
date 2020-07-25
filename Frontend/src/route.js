@@ -15,7 +15,7 @@ import Profile from "./view/Profile";
 import Users from "./view/Users";
 import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
-import Threads from "./view/Thread";
+import Topic from "./view/Topic";
 import Cookies from 'js-cookie'
 import "./css/appbar.css";
 class Routers extends Component {
@@ -79,7 +79,7 @@ class Routers extends Component {
             </Route>
             <Route exact path="/threads">
               <div className="threads">
-                <Threads />
+                <Topic />
               </div>
             </Route>
           </Switch>

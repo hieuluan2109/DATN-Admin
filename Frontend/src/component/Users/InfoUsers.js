@@ -129,29 +129,8 @@ export default function InfoUsers(props) {
 
   const handleChange = (event) => {
     setAge(event.target.value);
-    if (age === 1) {
-      axios
-        .get("https://navilearn.herokuapp.com/admin/user/list/student", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          const { data } = res.data;
-          console.log(data)
-          setGetList(data);
-        });
-    }
-    if (age === 0) {
-      axios
-        .get("https://navilearn.herokuapp.com/admin/user/list/teacher", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          const { data } = res.data;
-          setGetList(data);
-        });
-    }
   };
-  const [dataUser, setDataUser] = useState({});
+  const [dataUser, setDataUser] = useState([]);
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -163,6 +142,7 @@ export default function InfoUsers(props) {
         )
         .then((res) => {
          const {data}=res.data
+         console.log(res.data)
          setDataUser(data)
         //  console.log(data[0].ho)
         });
@@ -182,7 +162,39 @@ export default function InfoUsers(props) {
     }
   
   };
+  // Chỉnh sửa thông tin user
+  // const onSubmitInforUser = (event) => {
+  //     event.preventDefault();
+  //     const {_id, ho, ten, email, ngay_sinh } = dataUser;
+  //     console.log(age)
+  //   if (age ==true) {
+  //     axios
+  //       .post(
+  //         `https://navilearn.herokuapp.com/admin/user/detail/teacher&${_id}`,
+  //         {ho,ten,email,ngay_sinh},
+  //         {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       )
+  //       .then((res) => {
+  //       console.log(res)
+  //       }).catch((error) => {
+  //         console.log("Lỗi", error.response.data);
+  //       });
+  //   }  
+  // };
+
+  const handleChangeInfoUser = (event) => {
+    setDataUser({
+      [event.target.name]:[event.target.value]
+    });
+    console.log(dataUser.ho)
+    console.log(dataUser.ten)
+    console.log(dataUser.email)
+  }
+
   // console.log("Get",dataUser)
+  const [getListSV,setListSV]=useState([]);
   const [getList, setGetList] = useState([]);
 
   useEffect(() => {
@@ -191,11 +203,22 @@ export default function InfoUsers(props) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log(res.data)
         const { data } = res.data;
         setGetList(data);
       }).catch((error) =>{
         console.log("Lỗi",error);
       })
+
+      axios
+        .get("https://navilearn.herokuapp.com/admin/user/list/student", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          const { data } = res.data;
+          console.log(data)
+          setListSV(data);
+        })
   }, []);
 
   return (
@@ -212,10 +235,8 @@ export default function InfoUsers(props) {
           SV='Sinh viên'
         /> */}
           <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Loại</InputLabel>
+            <InputLabel >Loại</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
               value={age}
               onChange={handleChange}
             >
@@ -269,7 +290,7 @@ export default function InfoUsers(props) {
                 </TableHead>
 
                 <TableBody>
-                  {getList.map((row, index) => (
+                {(age==true?getList:getListSV).map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
                       <TableCell align="center">{row.ho}</TableCell>
@@ -279,14 +300,30 @@ export default function InfoUsers(props) {
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <DialogInfor
+                          title="Giáo Viên"
+                            id={row._id}
+                            onClickInfor={onclickInfor}
+                            Data={dataUser}
+                            icon={<VisibilityIcon />}
+                            age={age}
+                            status={true}
+                           
+                          />
+                        </IconButton>
+                        
+                        <IconButton size="small" className={classes.eyes}>
+                            <DialogInfor
+                            title="Sinh Viên"
                             id={row._id}
                             onClickInfor={onclickInfor}
                             Data={dataUser}
                             age={age}
+                            icon={<CreateIcon />}
+                            status={false}
+                            display={'none'}
+                            handleChange={handleChangeInfoUser}
+                            // submitForm={onSubmitInforUser}
                           />
-                        </IconButton>
-                        <IconButton size="small" className={classes.eyes}>
-                          <CreateIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>

@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import ForgotPassword from "./ForgotPassword";
 import { Redirect } from "react-router";
 import Cookies from "js-cookie";
+import '../../css/login.scss' 
 
 class LoginForm extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class LoginForm extends Component {
       password: "",
       Error: "",
       loggedIn,
-      isCookies: false,
+      cookie:null
       // validEmail:"/^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$\/"
     };
     this.handleChange = this.handleChange.bind(this);
@@ -42,13 +43,14 @@ class LoginForm extends Component {
 
     axios({
       method: "post",
-      url: "https://navilearn.herokuapp.com/admin/login",
+      url: "https://navilearn.herokuapp.com/login",
       data: { email, password },
     })
       .then((res) => {
-        Cookies.set("token", res.data.token);
+        const token=Cookies.set("token", res.data.token);
         this.setState({
           Error: "",
+          cookie:token
         });
       })
       .catch((error) => {
@@ -88,6 +90,7 @@ class LoginForm extends Component {
     if (token != null) {
       return <Redirect to="/admin" />;
     }
+   
 
     return (
       <div>

@@ -8,12 +8,10 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import LockIcon from "@material-ui/icons/Lock";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Avatar from "@material-ui/core/Avatar";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import TextField from '@material-ui/core/TextField';
 import axios from "axios";
 import Cookies from "js-cookie";
+import Profile from './changePassword'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -97,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
   },
 }));
+
 export default function MenuProfile() {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -104,63 +103,55 @@ export default function MenuProfile() {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-
-  function Repeat(props) {
-    const items = [];
-    for (let i = props.index; i <= props.num; i++) {
-      items.push(i);
-    }
-    return items.map((x, i) => (
-      <option key={i} value={x}>
-        {x}
-      </option>
-    ));
-  }
-  const [getDataProfile, setDataProfile] = useState([]);
-  const token = Cookies.get("token");
-  const [valix,setvalix]=useState({
-    ho:'c',ten:'c',ngay_sinh:'c'
-  })
-
-  useEffect(() => {
-    axios
-      .get("https://navilearn.herokuapp.com/admin/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const { data } = res.data;
-        setDataProfile(data); //State để lấy dữ liệu profile admin từ api
-      });
-  }, []);
-
-  
-  const handleChange = (event) => {
-      setDataProfile({
-        [event.target.name]: event.target.value
-      })
-      console.log(getDataProfile)
-  };
+//   const [getDataProfile, setDataProfile] = useState([]);
+//   const token = Cookies.get("token");
  
-console.log(getDataProfile)
-const onSubmitInfo=(event)=>{
-  event.preventDefault();
-  const { ho, ten, ngay_sinh } = getDataProfile;
+//   useEffect(() => {
+//     axios
+//       .get("https://navilearn.herokuapp.com/admin/profile", {
+//         headers: { Authorization: `Bearer ${token}` },
+//       })
+//       .then((res) => {
+//         const { data } = res.data;
+//         setDataDefault(data)
+//         setDataProfile(data); //State để lấy dữ liệu profile admin từ api
+//       });
+//   }, []);
 
-        axios
-          .post(
-            "https://navilearn.herokuapp.com/admin/profile",
-            {ho,ten,ngay_sinh},
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-           console.log(res)
-          }).catch((error) => {
-            console.log("Lỗi", error.response);
-          });
+//   const [dataDefault,setDataDefault]=useState([])
+  
+//   const handleChange = (event) => {
+//       setDataProfile({
+//         [event.target.name]: event.target.value
+//       })
+      
+//   };
 
-}
+// const onSubmitInfo=(event)=>{
+//   event.preventDefault();
+ 
+//   // const { ho, ten, ngay_sinh } = getDataProfile;
+
+//     var {ho=dataDefault.ho,ten=dataDefault.ten,ngay_sinh=dataDefault.ngay_sinh}=getDataProfile
+//     // setDataProfile(getDataProfile)
+//     console.log(getDataProfile)
+//         axios
+//           .post(
+//             "https://navilearn.herokuapp.com/admin/profile/update",
+//             {ho,ten,ngay_sinh},
+//             {
+//               headers: { Authorization: `Bearer ${token}` },
+//             }
+//           )
+//           .then((res) => {
+//            console.log(res)
+//           }).catch((error) => {
+//             console.log("Lỗi", error.response);
+//           });
+
+// }
+// console.log("DataDefault",dataDefault)
+// console.log("DataOnchange",getDataProfile)
   return (
     <div className="row">
       <div className="col span-1-of-4">
@@ -206,12 +197,12 @@ const onSubmitInfo=(event)=>{
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
-            <ListItemText primary="Trash" />
+            <ListItemText primary="......" />
           </ListItem>
         </div>
       </div>
       <div className="col span-3-of-4">
-        <div className={classes.titleformInfo}> Thông tin tài khoản</div>
+        {/* <div className={classes.titleformInfo}> Thông tin tài khoản</div>
         <form onSubmit={onSubmitInfo}>
           <div className={classes.formInfo}>
             <div className={classes.formControl}>
@@ -234,15 +225,7 @@ const onSubmitInfo=(event)=>{
                 onChange={handleChange}
               />
             </div>
-            {/* <div className={classes.formControl}>
-              <label className={classes.titleFormControl}>Số điện thoại</label>
-              <input
-                className={classes.contentFormControl}
-                type="text"
-                value={state.phoneNumber}
-                onChange={handleChange}
-              />
-            </div> */}
+           
             <div className={classes.formControl}>
               <label className={classes.titleFormControl}>Email</label>
               <input
@@ -253,25 +236,14 @@ const onSubmitInfo=(event)=>{
                 disabled={true}
               />
             </div>
-            {/* <div className={classes.formControl}>
-                    <label
-                        className={classes.titleFormControl}
-                        style={{ marginTop: "0px" }}
-                    >
-                        Giới tính
-                    </label>
-                    <input type="radio" name="gender" defaultChecked />
-                    Nam
-                    <input type="radio" name="gender" />
-                    Nữ
-                    </div> */}
                     <div className={classes.formControl}>
                   <label className={classes.titleFormControl}>Ngày sinh</label>
             
                   <TextField
                     id="date"
                     label="Birthday"
-                    type="date"                  
+                    type="date"  
+                    name="ngay_sinh"                
                     value={getDataProfile.ngay_sinh}
                     className={classes.textField}
                     InputLabelProps={{
@@ -281,9 +253,6 @@ const onSubmitInfo=(event)=>{
                   />
                 
             </div>
-              {/* <input className={classes.contentFormControl} type="text" value="Nguyễn Hiếu Luân" /> */}
-
-
               <div className={classes.formControl}>
                 <input
                   className={classes.btnXacnhan}
@@ -292,7 +261,13 @@ const onSubmitInfo=(event)=>{
                 />
             </div>
           </div>
-        </form>
+        </form> */}
+        <Profile title="Thông tin tài khoản" 
+        firstname='Họ'
+        lastname='Tên'
+        birthday='Ngày sinh'
+        email='Email'
+        />
       </div>
     </div>
   );

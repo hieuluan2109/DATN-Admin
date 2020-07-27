@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const SinhVienSchema = new Schema({
-    ma_sv: {
-        required: true,
-        unique: true,
-        type: String
-    },
+const NguoidungSchema = new Schema({
     ho: {
         required: true,
         type: String
@@ -19,23 +14,27 @@ const SinhVienSchema = new Schema({
         unique: true,
         type: String
     },
-    anh_dai_dien: String,
+    anh_dai_dien: {
+        type: String,
+        default: ''
+    },
     ngay_sinh: {
         required: true,
-        type: Date
+        type: Date,
     },
     mat_khau: {
         required: true,
-        type: String
+        type: String,
     },
-    ds_lop_hoc: [{
-        type: Schema.Types.ObjectId,
-        ref: 'LopHoc',
-    }],
+    loai: {
+        required: true,
+        type: Boolean,
+        default: false
+    },
     nguoi_tao_id: {
         required: true,
         type: Schema.Types.ObjectId,
         ref: 'NguoiDung'
-    },
+    }
 }, {timestamps: true});
-module.exports = mongoose.model('SinhVien', SinhVienSchema, 'sinh_vien');
+module.exports = mongoose.model('NguoiDung', NguoidungSchema, 'nguoi_dung');

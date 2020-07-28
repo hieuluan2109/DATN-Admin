@@ -129,30 +129,32 @@ export default function QuestionAllList(props) {
   };
 
 
-  const url=['https://navilearn.herokuapp.com/admin/question/list?loai=[TracNghiem]',
-             'https://navilearn.herokuapp.com/admin/question/list?loai=[TuLuan]']
-  const [getListTN,setGetListTN]=useState([''])
-  const [getListTL,setGetListTL]=useState([''])
+  const url=['https://navilearn.herokuapp.com/admin/question/list/?loai=choice',
+             'https://navilearn.herokuapp.com/admin/question/list/?loai=assay']
+          
+  const [getListTN,setGetListTN]=useState([])
+  const [getListTL,setGetListTL]=useState([])
   const token=Cookies.get('token')
     useEffect(() => {
-        axios.get(url,{headers:{"Authorization":`Bearer ${token}`}
+        axios.get(url[0],{headers:{"Authorization":`Bearer ${token}`}
       }).then(res=>{
-        const {data}=res.data
-        console.log(res.data.data)
-        setGetListTN(data)
+        // const {data}=res.data
+        setGetListTN(res.data.data)
+        console.log("TN",res.data)
       }).catch((error)=>{
         console.log("Lỗi", error)
       })
       axios.get(url[1],{headers:{"Authorization":`Bearer ${token}`}
     }).then(res=>{
-      const {data}=res.data
-        setGetListTL(data);
+      // const {data}=res.data
+        setGetListTL(res.data.data);
+        console.log("TL",res.data)
     }).catch((error)=>{
       console.log("Lỗi", error)
     })
         
   },[]);
- 
+ console.log(valueQuestion)
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -178,10 +180,10 @@ export default function QuestionAllList(props) {
 
           <div className={classes.formInfo}>
             <TableContainer>
-            {(valueQuestion===true)?
+            {(valueQuestion==true)?
             <GetQuestionTN getList={getListTN} />
                 :
-            <GetQuestionTL getList={getListTN} />
+            <GetQuestionTL getList={getListTL} />
             }
 
             <IconButton size="small" className={classes.containerNext}>

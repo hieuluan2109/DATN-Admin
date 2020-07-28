@@ -131,6 +131,7 @@ export default function InfoUsers(props) {
     setAge(event.target.value);
   };
   const [dataUser, setDataUser] = useState([]);
+  const [name, setName] = useState('');
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -142,10 +143,13 @@ export default function InfoUsers(props) {
         )
         .then((res) => {
          const {data}=res.data
-         console.log(res.data)
          setDataUser(data)
+         setName(res.data.data.nguoi_tao_id.ten)
+         console.log("GV",res.data)
         //  console.log(data[0].ho)
-        });
+        }).catch((error)=>{
+          console.log("Lỗi", error)
+        })
     }
 
     if (age === 0) {
@@ -158,7 +162,14 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-        });
+          if (typeof res.data.data.nguoi_tao_id.ten == null)
+          setName('')
+          else
+          setName(res.data.data.nguoi_tao_id.ten)
+          console.log("SV",res.data)
+        }).catch((error)=>{
+          console.log("Lỗi", error)
+        })
     }
   
   };
@@ -216,11 +227,12 @@ export default function InfoUsers(props) {
         })
         .then((res) => {
           const { data } = res.data;
-          console.log(data)
           setListSV(data);
+        }).catch((error)=>{
+          console.log("Lỗi", error)
         })
   }, []);
-
+  console.log(age)
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -290,7 +302,7 @@ export default function InfoUsers(props) {
                 </TableHead>
 
                 <TableBody>
-                {(age==true?getList:getListSV).map((row, index) => (
+                {(age==1?getList:getListSV).map((row, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{index + 1}</TableCell>
                       <TableCell align="center">{row.ho}</TableCell>
@@ -307,13 +319,13 @@ export default function InfoUsers(props) {
                             icon={<VisibilityIcon />}
                             age={age}
                             status={true}
-                           
+                           name={name}
                           />
                         </IconButton>
                         
                         <IconButton size="small" className={classes.eyes}>
                             <DialogInfor
-                            title="Sinh Viên"
+                            title="Giáo viên"
                             id={row._id}
                             onClickInfor={onclickInfor}
                             Data={dataUser}
@@ -322,6 +334,7 @@ export default function InfoUsers(props) {
                             status={false}
                             display={'none'}
                             handleChange={handleChangeInfoUser}
+                            type='submit'
                             // submitForm={onSubmitInforUser}
                           />
                         </IconButton>

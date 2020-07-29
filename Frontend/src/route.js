@@ -17,7 +17,7 @@ import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
 import Topic from "./view/Topic";
 import Cookies from "js-cookie";
-
+import ChangePassword from './view/ChangPasswordAdmin'
 import LoginV from "./view/Login";
 import "./css/appbar.css";
 import "./css/login.scss";
@@ -25,8 +25,7 @@ import "./css/login.scss";
 class Routers extends Component {
   render() {
     const token = Cookies.get("token");
-
-    if (token != null) {
+    if (token!='undefined') {
       return (
         <BrowserRouter>
           {/* <Route exac path="/" render={() => <Redirect to="/admin" />} /> */}
@@ -35,6 +34,7 @@ class Routers extends Component {
               <LoginV />
             </div>
           </Route>
+          <Switch>
           <Route exact path="/admin">
             <div className="admin">
               <HomePage />
@@ -65,23 +65,32 @@ class Routers extends Component {
               <Topic />
             </div>
           </Route>
+          <Route exact path="/changepassword">
+            <div className="changepassword">
+              <ChangePassword />
+            </div>
+          </Route>
+          </Switch>
         </BrowserRouter>
       )
     } else {
       return (
-        <BrowserRouter>
         
+        <BrowserRouter>
+        <Switch>
           <Route  path="*" render={() => <Redirect to="/" />} />
           <Route exact path="/">
             <div className="Login">
               <LoginV />
             </div>
           </Route>
+          </Switch>
           <Route exact path="/admin">
             <div className="admin">
               <HomePage />
             </div>
           </Route>
+
         </BrowserRouter>
       );
     }

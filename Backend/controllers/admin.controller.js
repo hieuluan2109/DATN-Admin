@@ -1,23 +1,26 @@
-const {hashPassWord, checkPassword, customDatetime} = require('./admin_function');
-const {NguoidungSchema} = require('../model/index.schema');
+const {hashPassWord, checkPassword, customDatetime, sendForgotPasswordMail, makeCode} = require('./admin_function');
+const {NguoidungSchema, QuenMatKhau} = require('../model/index.schema');
 const {validationResult} = require('express-validator');
 const nodemailer = require('nodemailer');
 module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return resstatus(400).json({'success': false, 'errors': errors.array()})
+            return res.status(400).json({'success': false, 'errors': errors.array()})
         };
         const [_id,{password, password1 }, option ] = [ req.user ,req.body, { new: true, useFindAndModify: false }]
         await NguoidungSchema
             .findOne(_id)
             .exec( async (err, data) =>{
-                if( checkPassword(password, data.mat_khau)) { 
+                if( !checkPassword(password, data.mat_khau) ) { 
                     res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
+                else {
                 const update = { mat_khau: await hashPassWord(password1) };
                 NguoidungSchema.findByIdAndUpdate(_id, { $set: update }, option, function (err, updated) { // need some attention
-                    err ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công'})
-                });
+                    (err || !updated)
+                        ? res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) 
+                        : res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công', 'data': updated})
+                });}
             })
     },
     admin_update_profile: async function (req, res) {
@@ -49,35 +52,23 @@ module.exports = {
                 }
             });
     },
-    test: {
-        
-    },
     admin_forgot_password: async function(req, res, next) {
-        var transporter =  nodemailer.createTransport({ // config mail server
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: 'hieuluan.2109@gmail.com',
-                pass: 'Cookcie00999'
-            }
-        });
-        let content = `
-        <div style="padding: 10px; background-color: #003375">
-            <div style="padding: 10px; background-color: white;">
-                <h4 style="color: #0085ff">Gửi mail với nodemailer và express</h4>
-                <span style="color: black">Đây là mail test</span>
-            </div>
-        </div> `; let info;
-        transporter.sendMail({
-            from: 'Navilear',
-            to: 'kesanbauvat99@gmail.com',
-            subject: 'Quên mật khẩu',
-            html: content
-        }, function (err, info){
-            if (err) console.log(err)
-            else 
-                console.log(info) 
-        })
+        const {email} = req.body;
+        await NguoidungSchema
+            .findOne({'email': email},)
+            .exec( async (err, data)=>{
+                if (err || !data)
+                    return res.status(400).json({'success': false, 'msg': 'Không tồn tại email '+email})
+                else {
+                    const code = await makeCode();
+                    sendForgotPasswordMail(email, code, data.ho+' ' + data.ten)
+                    const newRC = new QuenMatKhau({
+                        code: code,
+                        email: email
+                    });
+                    newRC.save().then(s=> console.log(s)).catch(err => console.log(err));
+                    res.status(200).json({'success': true})
+                };
+            })
     },
 };

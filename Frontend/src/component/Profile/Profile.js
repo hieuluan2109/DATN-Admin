@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Profile from './MenuProfile'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -73,14 +74,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Inforprofile(props) {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
-  const [getDataProfile, setDataProfile] = useState([]);
+  const [getDataProfile, setDataProfile] = useState({ho:'',ten:'',ngay_sinh:''});
+  const [getTen,setGetTen]=useState('')
   const token = Cookies.get("token");
-
   useEffect(() => {
     axios
       .get("https://navilearn.herokuapp.com/admin/profile", {
@@ -88,31 +85,20 @@ export default function Inforprofile(props) {
       })
       .then((res) => {
         const { data } = res.data;
-        setDataDefault(data);
+        setGetTen(data.ten)
         setDataProfile(data); //State để lấy dữ liệu profile admin từ api
       });
   }, []);
 
-  const [dataDefault, setDataDefault] = useState([]);
-
   const handleChange = (event) => {
     setDataProfile({
-      [event.target.name]: event.target.value,
-    });
+      ...getDataProfile,[event.target.name]: event.target.value,
+    })
   };
 
   const onSubmitInfo = (event) => {
     event.preventDefault();
-
-    // const { ho, ten, ngay_sinh } = getDataProfile;
-
-    var {
-      ho = dataDefault.ho,
-      ten = dataDefault.ten,
-      ngay_sinh = dataDefault.ngay_sinh,
-    } = getDataProfile;
-    // setDataProfile(getDataProfile)
-    console.log(getDataProfile);
+    const {ho,ten,ngay_sinh}=getDataProfile
     axios
       .post(
         "https://navilearn.herokuapp.com/admin/profile/update",
@@ -128,11 +114,15 @@ export default function Inforprofile(props) {
         console.log("Lỗi", error.response);
       });
   };
-  console.log("DataDefault", dataDefault);
-  console.log("DataOnchange", getDataProfile);
   const { title, firstname, lastname, birthday, email } = props;
+  console.log(getTen)
   return (
     <div>
+  <div className="row">
+    <div className="col span-1-of-4">
+       <Profile ten={getTen}/>
+      </div>
+      <div className="col span-3-of-4">
       <div className={classes.titleformInfo}>{title}</div>
       <form onSubmit={onSubmitInfo}>
         <div className={classes.formInfo}>
@@ -183,8 +173,6 @@ export default function Inforprofile(props) {
               onChange={handleChange}
             />
           </div>
-          {/* <input className={classes.contentFormControl} type="text" value="Nguyễn Hiếu Luân" /> */}
-
           <div className={classes.formControl}>
             <input
               className={classes.btnXacnhan}
@@ -194,6 +182,8 @@ export default function Inforprofile(props) {
           </div>
         </div>
       </form>
+      </div>
+    </div>
     </div>
   );
 }

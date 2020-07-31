@@ -94,7 +94,6 @@ class DialogInfo extends Component {
   render() {
     const { classes, children } = this.props;
     const { open } = this.state;
-    // console.log("HHH",this.props.Data.nguoi_tao_id.ten)
     return (
       <div>
         <IconButton

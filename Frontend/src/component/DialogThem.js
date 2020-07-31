@@ -111,6 +111,7 @@ class DialogThem extends Component {
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
+      status: true
     });
   };
   checkvalid = () => {
@@ -167,13 +168,15 @@ class DialogThem extends Component {
         isInputValid: true,
         status: false,
       });
+      return true
     }
+    return false
   };
 
   componentWillReceiveProps (){
   
       this.setState({
-        ho: "",
+      ho: "",
       ten: "",
       email: "",
       ngay_sinh: "",
@@ -181,7 +184,6 @@ class DialogThem extends Component {
       confirmpassword: "",
       errors: "",
       ma_sv: "",
-      isInputValid: false
       })
     
   }

@@ -116,7 +116,7 @@ class DialogThem extends Component {
   checkvalid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
     const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
-
+    const regMSSV=/^\d{10}$/
     let today = new Date();
     let getdate = today.getDate();
     let getmonth = today.getMonth() + 1;
@@ -140,8 +140,8 @@ class DialogThem extends Component {
       this.setState({ errors: "Tên không hợp lệ" });
     } else if (this.props.value == false && this.state.ma_sv == "") {
       this.setState({ errors: "Vui lòng nhập MSSV" });
-    } else if (this.props.value == false && this.state.ma_sv.length < 10) {
-      this.setState({ errors: "Mã số SV phải = 10 kí tự" });
+    } else if (this.props.value == false && !regMSSV.test(this.state.ma_sv)) {
+      this.setState({ errors: "Mã số SV phải = 10 kí tự số" });
     } else if (this.state.email == "") {
       this.setState({ errors: "Vui lòng nhập Email" });
     } else if (!regexE.test(this.state.email)) {
@@ -170,6 +170,21 @@ class DialogThem extends Component {
     }
   };
 
+  componentWillReceiveProps (){
+  
+      this.setState({
+        ho: "",
+      ten: "",
+      email: "",
+      ngay_sinh: "",
+      password: "",
+      confirmpassword: "",
+      errors: "",
+      ma_sv: "",
+      isInputValid: false
+      })
+    
+  }
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.isInputValid) {
@@ -216,6 +231,7 @@ class DialogThem extends Component {
   };
 
   render() {
+  
     console.log(this.state.ngay_sinh);
     const { classes, children } = this.props;
     const { open, errors, success, status } = this.state;

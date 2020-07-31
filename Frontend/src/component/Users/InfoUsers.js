@@ -113,7 +113,7 @@ export default function InfoUsers(props) {
   const token = Cookies.get("token");
   const classes = useStyles();
   const [age, setAge] = useState(1);
-  const [create, setCreate] = useState(1);
+  const [create, setCreate] = useState(true);
   const [display,setDisplay]=useState('none')
   const { title, stt, firstname, lastname, email, DoB } = props;
   
@@ -266,8 +266,8 @@ export default function InfoUsers(props) {
                 value={create}
                 onChange={handleChangeFormCreateAccount}
               >
-                <MenuItem value={1}>Giáo viên</MenuItem>
-                <MenuItem value={0}>Sinh viên</MenuItem>
+                <MenuItem value={true}>Giáo viên</MenuItem>
+                <MenuItem value={false}>Sinh viên</MenuItem>
               </Select>
             </FormControl>
           </DialogThem>

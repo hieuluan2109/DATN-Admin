@@ -115,6 +115,7 @@ export default function InfoUsers(props) {
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(true);
   const [display,setDisplay]=useState('none')
+
   const { title, stt, firstname, lastname, email, DoB } = props;
   
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -130,8 +131,9 @@ export default function InfoUsers(props) {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-  const [dataUser, setDataUser] = useState([]);
+  const [dataUser, setDataUser] = useState({ho:'',ten:'',ngay_sinh:''});
   const [name, setName] = useState('');
+  const [getSuccess,setSuccess]=useState(false)
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -162,10 +164,6 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-          if (typeof res.data.data.nguoi_tao_id.ten == null)
-          setName('')
-          else
-          setName(res.data.data.nguoi_tao_id.ten)
           console.log("SV",res.data)
         }).catch((error)=>{
           console.log("Lỗi", error)
@@ -173,35 +171,36 @@ export default function InfoUsers(props) {
     }
   
   };
+ const setDFres=()=>{
+    setSuccess('')
+  }
   // Chỉnh sửa thông tin user
-  // const onSubmitInforUser = (event) => {
-  //     event.preventDefault();
-  //     const {_id, ho, ten, email, ngay_sinh } = dataUser;
-  //     console.log(age)
-  //   if (age ==true) {
-  //     axios
-  //       .post(
-  //         `https://navilearn.herokuapp.com/admin/user/detail/teacher&${_id}`,
-  //         {ho,ten,email,ngay_sinh},
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //       )
-  //       .then((res) => {
-  //       console.log(res)
-  //       }).catch((error) => {
-  //         console.log("Lỗi", error.response.data);
-  //       });
-  //   }  
-  // };
+  const onSubmitInforUser = (event) => {
+      event.preventDefault();
+      const {_id, ho, ten, email, ngay_sinh } = dataUser;
+  
+      console.log(age)
+    if (age ==true) {
+      axios
+        .post(
+          `https://navilearn.herokuapp.com/admin/user/update?loai=teacher&id=${_id}`,
+          {ho,ten,ngay_sinh},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+         setSuccess(res.data.msg)
+        }).catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }  
+  };
 
-  const handleChangeInfoUser = (event) => {
+  const handleChangeInfoUser = (event,status) => {
     setDataUser({
-      [event.target.name]:[event.target.value]
+      ...dataUser,[event.target.name]:event.target.value,
     });
-    console.log(dataUser.ho)
-    console.log(dataUser.ten)
-    console.log(dataUser.email)
   }
 
   // console.log("Get",dataUser)
@@ -251,6 +250,7 @@ export default function InfoUsers(props) {
             <Select
               value={age}
               onChange={handleChange}
+              
             >
               <MenuItem value={1}>Giáo viên</MenuItem>
               <MenuItem value={0}>Sinh viên</MenuItem>
@@ -320,6 +320,7 @@ export default function InfoUsers(props) {
                             age={age}
                             status={true}
                            name={name}
+                           setError={setDFres}
                           />
                         </IconButton>
                         
@@ -333,8 +334,11 @@ export default function InfoUsers(props) {
                             icon={<CreateIcon />}
                             status={false}
                             display={'none'}
+                            onSubmit={onSubmitInforUser}
                             handleChange={handleChangeInfoUser}
                             type='submit'
+                            success={getSuccess}
+                            setError={setDFres}
                             // submitForm={onSubmitInforUser}
                           />
                         </IconButton>

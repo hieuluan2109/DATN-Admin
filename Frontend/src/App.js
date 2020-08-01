@@ -85,11 +85,11 @@ class App extends Component {
         <BrowserRouter>
            
            <Route  path="/" render={() => <Redirect to="/" />} />
-           <Route exact path="/">
+           {/* <Route exact path="/">
             <div className="Login">
               <LoginV />
             </div>
-          </Route> 
+          </Route>  */}
           <Switch>
      
           <Route exact path="/">

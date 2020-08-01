@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function MenuProfile() {
+export default function MenuProfile(props) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
  
@@ -51,7 +51,7 @@ export default function MenuProfile() {
     <div>
         <Avatar className={classes.avatar} />
         <div className={classes.info}>Tài khoản của</div>
-        <div className={classes.name}>Luân mập địt</div>
+        <div className={classes.name}>{props.ten}</div>
         <div className={classes.root}>
         <Link to="/profile"  style={{textDecoration:'none',color:'black'}}>
           <ListItem

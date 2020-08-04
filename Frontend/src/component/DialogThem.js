@@ -233,8 +233,6 @@ class DialogThem extends Component {
   };
 
   render() {
-  
-    console.log(this.state.ngay_sinh);
     const { classes, children } = this.props;
     const { open, errors, success, status } = this.state;
     // const { ho, ten, email, password,ngaysinh } = this.state;

@@ -90,7 +90,7 @@ class App extends Component {
               <LoginV />
             </div>
           </Route>  */}
-          <Switch>
+          {/* <Switch> */}
      
           <Route exact path="/">
             <div className="Login">
@@ -102,7 +102,7 @@ class App extends Component {
               <HomePage />
             </div>
           </Route>
-          </Switch>
+          {/* </Switch> */}
           
         
          

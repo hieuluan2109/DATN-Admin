@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,7 +19,7 @@ import DialogInfor from "../DialogInfo";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
-import Sear from './Search'
+import Sear from "./Search";
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -57,9 +57,9 @@ const useStyles = makeStyles((theme) => ({
     right: "15%",
     minWidth: 120,
   },
-  pagination:{
-    marginRight:'70px'
-  }
+  pagination: {
+    marginRight: "70px",
+  },
 }));
 
 export default function InfoUsers(props) {
@@ -104,7 +104,6 @@ export default function InfoUsers(props) {
           setDataUser(data);
           setName(res.data.data.nguoi_tao_id.ten);
           console.log("GV", res.data);
-          //  console.log(data[0].ho)
         })
         .catch((error) => {
           console.log("Lỗi", error);
@@ -133,16 +132,11 @@ export default function InfoUsers(props) {
     setSuccess("");
   };
 
-  // const HandleFilter=(newFilter)=>{
-  //   console.log('AAAAAAAA',newFilter)
-  // }
 
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
     const { _id, ho, ten, email, ngay_sinh } = dataUser;
-
-    console.log(age);
     if (age == true) {
       axios
         .post(
@@ -219,27 +213,35 @@ export default function InfoUsers(props) {
   };
 
   const [param, setParam] = useState("");
-
+  const typingTimeoutRef = useRef(null);
   const handleSearch = (e) => {
-    setParam(e.target.value);
-    console.log(param);
-  };
-  const SearchUser = (event) => {
-    axios
-      .get(
-        `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${param}`,
-        {
+    const value = e.target.value;
+    setParam(value);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    typingTimeoutRef.current = setTimeout(() => {
+      const params = {
+        param: value,
+      };
+      const url = age
+        ? `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${params.param}`
+        : `https://navilearn.herokuapp.com/admin/user/list/student?search=${params.param}`;
+      axios
+        .get(url, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        const { data } = res.data;
-        setGetList(data);
-        setPageNumberGV(res.data.pages);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error.response.data);
-      });
+        })
+        .then((res) => {
+          const { data } = res.data;
+          age ? setGetList(data) : setListSV(data);
+          age
+            ? setPageNumberGV(res.data.pages)
+            : setPageNumberSV(res.data.pages);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }, 300);
   };
 
   return (
@@ -249,8 +251,7 @@ export default function InfoUsers(props) {
         <div className={classes.titleformInfo}> {title} </div>
 
         <form>
-      
-          <SearchButton onChange={handleSearch} onSubmit={SearchUser} />
+          <SearchButton onChange={handleSearch} />
 
           <FormControl className={classes.formControl}>
             <InputLabel>Loại</InputLabel>
@@ -374,7 +375,6 @@ export default function InfoUsers(props) {
         />
       </div>
       {/* <Sear onsubmit={HandleFilter}/> */}
-    
     </div>
   );
 }

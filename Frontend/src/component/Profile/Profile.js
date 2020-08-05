@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Profile from './MenuProfile'
+import ButtonMenu from './../ButtonMenu'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -115,12 +116,14 @@ export default function Inforprofile(props) {
       });
   };
   const { title, firstname, lastname, birthday, email } = props;
-  console.log(getTen)
+ 
   return (
     <div>
+
   <div className="row">
     <div className="col span-1-of-4">
        <Profile ten={getTen}/>
+       <ButtonMenu ten={getTen} />
       </div>
       <div className="col span-3-of-4">
       <div className={classes.titleformInfo}>{title}</div>

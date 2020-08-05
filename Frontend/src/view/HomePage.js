@@ -7,6 +7,7 @@ import UserStats from '../component/Dashboard/UserStats'
         return (
             <div>
             <Appbar/>
+            <UserStats />
             </div>
       
         );

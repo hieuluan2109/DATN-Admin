@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+} from "@material-ui/core";
 import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import IconButton from "@material-ui/core/IconButton";
 import SearchButton from "../Search";
-import DialogThem from "../DialogThem";
 import axios from "axios";
 import Cookies from "js-cookie";
-import AddQuestion from "../Question/AddQuestion";
-import AddTopic from './AddTopic';
+import AddTopic from "./AddTopic";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   formInfo: {
@@ -82,36 +83,73 @@ const useStyles = makeStyles((theme) => ({
     left: "80%",
     top: "85%",
   },
+  pagination: {
+    marginRight: "70px",
+  },
 }));
 
-
-const topicTitle = [ "Tên chủ đề", "Mô tả", "Người tạo", ""];
+const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
 
 export default function Threadlist(props) {
   const classes = useStyles();
-  const { title, } = props;
+  const { title } = props;
   const [selectedIndex, setSelectedIndex] = useState(1);
   const token = Cookies.get("token");
-
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
   const [getListTopic, setListTopic] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
 
   useEffect(() => {
     axios
-      .get("https://navilearn.herokuapp.com/admin/category/list", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
+        setPage(res.data.pages);
         const { data } = res.data;
         setListTopic(data);
-    
       })
       .catch((error) => {
         console.log("Lỗi", error);
       });
-  }, []);
+  }, [pageIndex]);
+  const handleChangePage = (e, value) => {
+    setPageIndex(value);
+  };
+
+  const [param, setParam] = useState("");
+  const typingTimeoutRef = useRef(null);
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setParam(value);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    typingTimeoutRef.current = setTimeout(() => {
+      const params = {
+        param: value,
+      };
+      const url =`https://navilearn.herokuapp.com/admin/category/list?search=${params.param}`
+      axios
+        .get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          const { data } = res.data;
+         setListTopic(data)
+         setPage(res.data.pages)
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }, 300);
+  };
 
   return (
     <div className="row">
@@ -120,11 +158,9 @@ export default function Threadlist(props) {
         <div className={classes.titleformInfo}> {title} </div>
 
         <form>
-          <SearchButton />
-        
+          <SearchButton onChange={handleSearch}/>
 
-
-          <AddTopic token={token}/>
+          <AddTopic token={token} />
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -151,7 +187,9 @@ export default function Threadlist(props) {
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{value.tieu_de}</TableCell>
                       <TableCell align="center">{value.mo_ta}</TableCell>
-                      <TableCell align="center">{value.nguoi_tao_id.ten}</TableCell>
+                      <TableCell align="center">
+                        {value.nguoi_tao_id.ten}
+                      </TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
                           <VisibilityIcon />
@@ -165,10 +203,17 @@ export default function Threadlist(props) {
                 </TableBody>
               </Table>
             </TableContainer>
-
-           
           </div>
         </form>
+
+        <Pagination
+          className={classes.pagination}
+          count={page}
+          defaultPage={1}
+          color="primary"
+          onChange={handleChangePage}
+          style={{ float: "right" }}
+        />
       </div>
     </div>
   );

@@ -68,13 +68,8 @@ export default function InfoUsers(props) {
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(true);
   const [display, setDisplay] = useState("none");
-
-  const [pageGV, setPageGV] = useState(1);
-  const [pageSV, setPageSV] = useState(1);
-
   const { title, stt, firstname, lastname, email, DoB } = props;
-
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -132,7 +127,6 @@ export default function InfoUsers(props) {
     setSuccess("");
   };
 
-
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
@@ -165,7 +159,8 @@ export default function InfoUsers(props) {
   // console.log("Get",dataUser)
   const [getListSV, setListSV] = useState([]);
   const [getList, setGetList] = useState([]);
-
+  const [pageGV, setPageGV] = useState(1);
+  const [pageSV, setPageSV] = useState(1);
   const [pageNumbberGV, setPageNumberGV] = useState(1);
   const [pageNumbberSV, setPageNumberSV] = useState(1);
 
@@ -285,9 +280,6 @@ export default function InfoUsers(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                    {/* <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {stt}
-                    </TableCell> */}
                     <TableCell align="center" style={{ color: "#ffffff" }}>
                       {firstname}
                     </TableCell>

@@ -70,7 +70,7 @@ const styles = (theme) => ({
   },
 });
 
-class DialogThem extends Component {
+class AddTopic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -216,4 +216,4 @@ class DialogThem extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(DialogThem);
+export default withStyles(styles, { withTheme: true })(AddTopic);

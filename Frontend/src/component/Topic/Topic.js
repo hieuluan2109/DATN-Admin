@@ -9,16 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ListItem from "@material-ui/core/ListItem";
-import MenuItem from "@material-ui/core/MenuItem";
 import SearchButton from "../Search";
-import SelectSort from "../SelectSort";
 import DialogThem from "../DialogThem";
 import axios from "axios";
 import Cookies from "js-cookie";
 import AddQuestion from "../Question/AddQuestion";
+import AddTopic from './AddTopic';
+
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -42,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
     maxwidth: "600px",
   },
   table: {
-    // marginLeft: 25,
     minWidth: 600,
     maxwidth: 1200,
     width: 1161,
@@ -52,11 +48,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
     color: "bold",
   },
-  // tableRow:{
-  //     '&:nth-of-type(odd)': {
-  //         backgroundColor: theme.palette.action.focus,
-  //       },
-  // }
   containerNext: {
     position: "absolute",
     left: "90%",
@@ -78,20 +69,12 @@ const useStyles = makeStyles((theme) => ({
     padding: ".2rem .41rem",
     borderRadius: "30px!important",
     backgroundColor: "#5089de",
-    // background:'red',
     "&": {
       color: "red",
       margin: "0 3px",
       color: "#fff",
       borderColor: "#5089de",
     },
-
-    // '&:focus':{
-    //     backgroundColor:'red'
-    // }
-    // },'&:hover':{
-    //     backgroundColor:'green'
-    // }
   },
 
   page: {
@@ -102,18 +85,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const topicTitle = ["Số thứ tự", "Tên chủ đề", "Mô tả", "Người tạo", ""];
+const topicTitle = [ "Tên chủ đề", "Mô tả", "Người tạo", ""];
 
 export default function Threadlist(props) {
   const classes = useStyles();
-  const { title, stt, name, description, createdby } = props;
+  const { title, } = props;
   const [selectedIndex, setSelectedIndex] = useState(1);
+  const token = Cookies.get("token");
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
   const [getListTopic, setListTopic] = useState([]);
-  const token = Cookies.get("token");
+
   useEffect(() => {
     axios
       .get("https://navilearn.herokuapp.com/admin/category/list", {
@@ -138,13 +122,9 @@ export default function Threadlist(props) {
         <form>
           <SearchButton />
         
-          {/* <SelectSort 
-          title='Phân loại'
-          SV='Sinh viên'
-          GV='Giáo viên'
-        /> */}
 
-          <DialogThem />
+
+          <AddTopic token={token}/>
 
           <div className={classes.formInfo}>
             <TableContainer>
@@ -169,7 +149,6 @@ export default function Threadlist(props) {
                 <TableBody>
                   {getListTopic.map((value, index) => (
                     <TableRow key={index + 1} hover>
-                      <TableCell align="center">{index + 1}</TableCell>
                       <TableCell align="center">{value.tieu_de}</TableCell>
                       <TableCell align="center">{value.mo_ta}</TableCell>
                       <TableCell align="center">{value.nguoi_tao_id.ten}</TableCell>

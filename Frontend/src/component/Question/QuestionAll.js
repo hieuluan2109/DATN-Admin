@@ -1,21 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import CreateIcon from "@material-ui/icons/Create";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import IconButton from "@material-ui/core/IconButton";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ListItem from "@material-ui/core/ListItem";
+
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchButton from "../Search";
-import SelectSort from "../SelectSort";
-import DialogThem from "../DialogThem";
 import axios from "axios";
 import Cookies from "js-cookie";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -30,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
     marginRight: "6%",
-
     height: "120vh",
     background: "white",
     borderRadius: 10,
@@ -49,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     maxwidth: "600px",
   },
   table: {
-    // marginLeft: 25,
     minWidth: 600,
     maxwidth: 1200,
     width: 1161,
@@ -59,11 +45,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
     color: "bold",
   },
-  // tableRow:{
-  //     '&:nth-of-type(odd)': {
-  //         backgroundColor: theme.palette.action.focus,
-  //       },
-  // }
   containerNext: {
     position: "absolute",
     left: "90%",
@@ -93,13 +74,6 @@ const useStyles = makeStyles((theme) => ({
       color: "#fff",
       borderColor: "#5089de",
     },
-
-    // '&:focus':{
-    //     backgroundColor:'red'
-    // }
-    // },'&:hover':{
-    //     backgroundColor:'green'
-    // }
   },
 
   page: {
@@ -207,9 +181,8 @@ export default function QuestionAllList(props) {
         })
         .then((res) => {
           const { data } = res.data;
-          console.log('pppp',res.data)
           valueQuestion == true ? setGetListTN(data) : setGetListTL(data);
-          // valueQuestion==true?setPageNumberTN(res.data.pages):setGetListTL(res.data.pages)
+          valueQuestion==true?setPageTN(res.data.pages):setPageTL(res.data.pages)
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);

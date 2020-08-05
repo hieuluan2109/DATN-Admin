@@ -65,33 +65,44 @@ const styles = theme => ({
 class SearchButton extends Component {
     constructor(props){
         super(props)
+       
         this.state = {
-            open:false,
+            search:''
       };
     }
+  handleSearchChange=(e)=>{
+    this.setState({search:e.target.value})
+    
+    const Value={
+      a:e.target.value
+    }
    
+    console.log('value',this.state.search)
+    console.log('value',Value.a)
+  }
 
   render() {
-    const { classes } = this.props;
- 
+    const { classes,onsubmit } = this.props;
+    
     return (
       
-        // <div  className={classes.search}  onSubmit={this.props.onSubmit}>
-        <div className={classes.search}>
-        <InputBase 
+        <div>
+        <form className={classes.search} >
+        <InputBase
           placeholder="Tìm kiếm"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          onChange={this.props.onChange}
           inputProps={{ 'aria-label': 'search' }}
+          value={this.state.search}
+          onChange={this.handleSearchChange}
         />
         
         <IconButton className={classes.searchIcon} size="small">
             <SearchIcon />
       </IconButton>
-
+    </form>
       </div>
     );
   }

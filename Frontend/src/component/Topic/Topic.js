@@ -18,6 +18,7 @@ import SelectSort from "../SelectSort";
 import DialogThem from "../DialogThem";
 import axios from "axios";
 import Cookies from "js-cookie";
+import AddQuestion from "../Question/AddQuestion";
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -121,7 +122,7 @@ export default function Threadlist(props) {
       .then((res) => {
         const { data } = res.data;
         setListTopic(data);
-        console.log(res.data)
+    
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -136,7 +137,7 @@ export default function Threadlist(props) {
 
         <form>
           <SearchButton />
-
+        
           {/* <SelectSort 
           title='Phân loại'
           SV='Sinh viên'
@@ -186,64 +187,7 @@ export default function Threadlist(props) {
               </Table>
             </TableContainer>
 
-            <IconButton size="small" className={classes.containerNext}>
-              <ArrowForwardIosIcon className={classes.next} />
-            </IconButton>
-            <ul className={classes.page}>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
-              >
-                1
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
-              >
-                2
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
-              >
-                3
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 4}
-                onClick={(event) => handleListItemClick(event, 4)}
-              >
-                4
-              </ListItem>
-              <ListItem
-                className={classes.buttonPageNumber}
-                button
-                selected={selectedIndex === 5}
-                onClick={(event) => handleListItemClick(event, 5)}
-              >
-                5
-              </ListItem>
-
-              {/* <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 1}
-                        onClick={(event) => handleListItemClick(event, 1)}>1</li>
-                            <li className={classes.buttonPageNumber}  button
-                        selected={selectedIndex === 2}
-                        onClick={(event) => handleListItemClick(event, 2)}>2</li>
-                            <li className={classes.buttonPageNumber}>3</li>
-                            <li className={classes.buttonPageNumber}>4</li>
-                            <li className={classes.buttonPageNumber}>5</li> */}
-            </ul>
-            <IconButton size="small" className={classes.containerBack}>
-              <ArrowBackIosIcon className={classes.back} />
-            </IconButton>
+           
           </div>
         </form>
       </div>

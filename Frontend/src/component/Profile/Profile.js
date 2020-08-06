@@ -123,7 +123,6 @@ export default function Inforprofile(props) {
   <div className="row">
     <div className="col span-1-of-4">
        <Profile ten={getTen}/>
-       <ButtonMenu ten={getTen} />
       </div>
       <div className="col span-3-of-4">
       <div className={classes.titleformInfo}>{title}</div>

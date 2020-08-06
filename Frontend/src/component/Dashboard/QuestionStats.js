@@ -1,10 +1,8 @@
-import axios from 'axios';
 import React, { Component } from 'react';
-
 import CanvasJSReact from '../../canvars/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default class UserStats extends Component {
+export default class QuestionStats extends Component {
     constructor(props) {
         super(props);
     }
@@ -15,7 +13,7 @@ export default class UserStats extends Component {
 			exportEnabled: true,
 			theme: "light1", // "light1", "dark1", "dark2"
 			// title:{
-			// 	text: "Thống kê người dùng",
+			// 	text: "Thống kê câu hỏi",
 			// 	fontSize: 17,
 			// 	fontFamily: 'Roboto',
 			// 	fontWeight: 'Bold'
@@ -25,11 +23,12 @@ export default class UserStats extends Component {
 				legendText: "{label}",
 				indexLabelFontSize: 16,
 				type: "pie",
+				exportEnabled: false,
 				indexLabel: "{label}: {y}%",		
 				startAngle: -90,
 				dataPoints: [
-					{ y: ( data.sinh_vien % total ), label: "Sinh viên" },
-					{ y: ( data.giao_vien % total ), label: "Giáo viên" },
+					{ y: ( data.cau_hoi_tu_luan % total ), label: "Trắc nghiệm" },
+					{ y: ( data.giao_vien % total ), label: "Tự luận" },
 				]
 			}]
 		}

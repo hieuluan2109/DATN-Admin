@@ -20,7 +20,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
+import Loading from './Loading';
 const useStyles = makeStyles((theme) => ({
+  loading: {
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  },
   formInfo: {
     marginTop: "50px",
     marginRight: "6%",
@@ -85,6 +91,10 @@ export default function InfoUsers(props) {
   const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "" });
   const [name, setName] = useState("");
   const [getSuccess, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const HandleLoading =()=>{
+    setLoading(!loading)
+  }
   const onclickInfor = (id, age) => {
     if (age === 1) {
       axios
@@ -173,6 +183,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
+        HandleLoading()
         console.log(res.data);
         const { data } = res.data;
         setGetList(data);
@@ -191,6 +202,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
+        HandleLoading()
         const { data } = res.data;
         setListSV(data);
         setPageNumberSV(res.data.pages);
@@ -244,10 +256,9 @@ export default function InfoUsers(props) {
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
-
+        <div hidden={loading} className={classes.loading}><Loading /></div>
         <form>
           <SearchButton onChange={handleSearch} />
-
           <FormControl className={classes.formControl}>
             <InputLabel>Loại</InputLabel>
             <Select value={age} onChange={handleChange}>
@@ -297,7 +308,7 @@ export default function InfoUsers(props) {
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody hidden={!loading}>
                   {(age == 1 ? getList : getListSV).map((row, index) => (
                     <TableRow key={index + 1} hover>
                       {/* <TableCell align="center">{index + 1}</TableCell> */}

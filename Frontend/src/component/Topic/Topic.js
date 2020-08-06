@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -16,13 +16,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import AddTopic from "./AddTopic";
 import Pagination from "@material-ui/lab/Pagination";
+import TopicInfor from "./TopicInfor";
 
 const useStyles = makeStyles((theme) => ({
-  formInfo: {
+  containerForm: {
     marginTop: "50px",
     marginRight: "6%",
-
-    height: "100vh",
     background: "white",
     borderRadius: 10,
   },
@@ -135,15 +134,16 @@ export default function Threadlist(props) {
       const params = {
         param: value,
       };
-      const url =`https://navilearn.herokuapp.com/admin/category/list?search=${params.param}`
+      const url = `https://navilearn.herokuapp.com/admin/category/list?search=${params.param}`;
       axios
         .get(url, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           const { data } = res.data;
-         setListTopic(data)
-         setPage(res.data.pages)
+          setListTopic(data);
+
+          setPage(res.data.pages);
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
@@ -151,14 +151,74 @@ export default function Threadlist(props) {
     }, 300);
   };
 
+  const [dataTopicInfor, setDataTopicInfor] = useState({
+    _id: "",
+    tieu_de: "",
+    mo_ta: "",
+    nguoi_tao: "",
+    ngay_tao: "",
+  });
+  const [getSuccess, setSuccess] = useState("");
+  const getTopicInfor = (id) => {
+    axios
+      .get(`https://navilearn.herokuapp.com/admin/category/detail/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        setDataTopicInfor({
+          tieu_de: data.tieu_de,
+          mo_ta: data.mo_ta,
+          nguoi_tao: data.nguoi_tao_id.ten,
+          ngay_tao: data.createdAt,
+          _id: data._id,
+        });
+        console.log("GV", dataTopicInfor);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
+  const handleChangeTopic = (event, status) => {
+    setDataTopicInfor({
+      ...dataTopicInfor,
+      [event.target.name]: event.target.value,
+    });
+    console.log(dataTopicInfor._id);
+  };
+
+  const onSubmitChangeTopic = (event) => {
+    event.preventDefault();
+    const { _id, tieu_de, mo_ta } = dataTopicInfor;
+    axios
+      .post(
+        `https://navilearn.herokuapp.com/admin/category/update/${_id}`,
+        { tieu_de, mo_ta },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setSuccess(res.data.msg);
+        console.log(res.data);
+        // setSuccess(res.data.msg);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response);
+      });
+  };
+const clearSuccess=()=>{
+  setSuccess('')
+}
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
 
-        <form>
-          <SearchButton onChange={handleSearch}/>
+        <form className={classes.containerForm}>
+          <SearchButton onChange={handleSearch} />
 
           <AddTopic token={token} />
 
@@ -192,10 +252,30 @@ export default function Threadlist(props) {
                       </TableCell>
                       <TableCell align="center">
                         <IconButton size="small" className={classes.eyes}>
-                          <VisibilityIcon />
+                          <TopicInfor
+                            id={value._id}
+                            getInfor={getTopicInfor}
+                            data={dataTopicInfor}
+                            icon={<VisibilityIcon />}
+                            disable={true}
+                            status={true}
+                          />
                         </IconButton>
                         <IconButton size="small" className={classes.eyes}>
-                          <CreateIcon />
+                          <TopicInfor
+                            id={value._id}
+                            getInfor={getTopicInfor}
+                            data={dataTopicInfor}
+                            icon={<CreateIcon />}
+                            disable={false}
+                            type={"submit"}
+                            change={handleChangeTopic}
+                            onsubmit={onSubmitChangeTopic}
+                            display={"none"}
+                            status={false}
+                            success={getSuccess}
+                            clearForm={clearSuccess}
+                          />
                         </IconButton>
                       </TableCell>
                     </TableRow>

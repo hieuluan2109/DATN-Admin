@@ -21,14 +21,6 @@ import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
 const useStyles = makeStyles((theme) => ({
-  formInfo: {
-    marginTop: "50px",
-    marginRight: "6%",
-
-    height: "105vh",
-    background: "white",
-    borderRadius: 10,
-  },
   titleformInfo: {
     position: "absolute",
     marginTop: "70px",
@@ -60,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     marginRight: "70px",
   },
+  containerForm:{
+    marginTop: "50px",
+    marginRight: "6%",
+    background: "white",
+    borderRadius: 10,
+  }
 }));
 
 export default function InfoUsers(props) {
@@ -245,7 +243,7 @@ export default function InfoUsers(props) {
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
 
-        <form>
+        <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
 
           <FormControl className={classes.formControl}>

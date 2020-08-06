@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { Component } from 'react';
 
 import CanvasJSReact from '../../canvars/canvasjs.react';
-var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class UserStats extends Component {
@@ -32,9 +31,15 @@ export default class UserStats extends Component {
 			exportEnabled: true,
 			theme: "light1", // "light1", "dark1", "dark2"
 			title:{
-				text: "Trip Expenses"
+				// text: "Thống kê người dùng",
+				fontSize: 17,
+				fontFamily: 'Roboto',
+				fontWeight: 'Bold'
 			},
 			data: [{
+				showInLegend: "true",
+				legendText: "{label}",
+				indexLabelFontSize: 16,
 				type: "pie",
 				indexLabel: "{label}: {y}%",		
 				startAngle: -90,

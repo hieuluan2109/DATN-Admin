@@ -88,7 +88,9 @@ class AddTopic extends Component {
   handleClose = () => {
     this.setState({
       open: false,
-   
+      errors:'', 
+      tieu_de:'',
+      mo_ta:'',
     });
   };
   handleChange = (event) => {

@@ -66,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     marginRight: "70px",
   },
+  containerForm:{
+    marginTop: "50px",
+    marginRight: "6%",
+    background: "white",
+    borderRadius: 10,
+  }
 }));
 
 export default function InfoUsers(props) {
@@ -256,8 +262,13 @@ export default function InfoUsers(props) {
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
+<<<<<<< HEAD
         <div hidden={loading} className={classes.loading}><Loading /></div>
         <form>
+=======
+
+        <form className={classes.containerForm}>
+>>>>>>> 7c069a9d10eb2dff41c9a2b8844b847cf532811d
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>
             <InputLabel>Loại</InputLabel>

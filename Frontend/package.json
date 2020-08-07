@@ -28,8 +28,13 @@
   },
   "scripts": {
     "dev": "react-scripts start",
+<<<<<<< HEAD
+    "start": "react-scripts start",
+  
+=======
     "start": "serve -s build",
     "comment": "serve -s build",
+>>>>>>> 66526cf2a918d8f8799ff773a7ba5f3f31f6ba78
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

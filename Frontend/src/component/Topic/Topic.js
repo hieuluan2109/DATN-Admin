@@ -222,7 +222,7 @@ const clearSuccess=()=>{
 
           <AddTopic token={token} />
 
-          <div>
+          <div className={classes.formInfo}>
             <TableContainer>
               <Table
                 className={classes.table}

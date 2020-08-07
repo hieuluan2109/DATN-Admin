@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import "./App.css";
+import React, { Component } from 'react';
+import './App.css';
 import {
   BrowserRouter,
   Switch,
@@ -18,11 +18,12 @@ import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
 import Topic from "./view/Topic";
 import Cookies from "js-cookie";
-import ChangePassword from "./view/ChangPasswordAdmin";
+import ChangePassword from './view/ChangPasswordAdmin'
 import LoginV from "./view/Login";
-import HomePage from "./view/HomePage";
+import HomePage from './view/HomePage'
 import "./css/appbar.css";
 import "./css/login.scss";
+<<<<<<< HEAD
 import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
 import Routers from "./route";
@@ -35,17 +36,22 @@ class App extends Component {
       cookie: this.props.cookie,
     };
   }
+=======
+import Routers from './route'
 
+>>>>>>> 66526cf2a918d8f8799ff773a7ba5f3f31f6ba78
+
+class App extends Component {
+ 
   render() {
-    let token = Cookies.get("token");
-    if (this.props.token == false) {
-      token = Cookies.remove("token");
-    }
-    if (token != null) {
+    const token = Cookies.get("token");
+
+    if (token!=null) {
       return (
         <BrowserRouter>
+     
           <Route exact path="/" render={() => <Redirect to="/admin" />} />
-
+          
           <Switch>
             <Route exact path="/admin">
               <div className="admin">
@@ -95,16 +101,34 @@ class App extends Component {
           </Switch>
           
         </BrowserRouter>
-      );
+      )
     } else {
       return (
+        
         <BrowserRouter>
-          <Route exact path="*" render={() => <Redirect to="/" />} />
+           
+           <Route  path="/" render={() => <Redirect to="/" />} />
+           {/* <Route exact path="/">
+            <div className="Login">
+              <LoginV />
+            </div>
+          </Route>  */}
+          {/* <Switch> */}
+     
           <Route exact path="/">
             <div className="Login">
               <LoginV />
             </div>
+          </Route> 
+          <Route exact path="/admin">
+            <div className="admin">
+              <HomePage />
+            </div>
           </Route>
+          {/* </Switch> */}
+          
+        
+         
         </BrowserRouter>
       );
     }

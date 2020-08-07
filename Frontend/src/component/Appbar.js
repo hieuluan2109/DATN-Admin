@@ -96,7 +96,7 @@ class Appbarnav extends Component {
           </li>
           <li className={classes.Menu}>
           <Link
-              to="/topic"
+              to="/threads"
               style={{ textDecoration: "none", color: "white" }}
             >
             {" "}

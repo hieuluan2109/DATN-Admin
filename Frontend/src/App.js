@@ -24,7 +24,9 @@ import HomePage from "./view/HomePage";
 import "./css/appbar.css";
 import "./css/login.scss";
 import Logout from "./component/Login/Logout";
+import ClassRoom from './view/ClassRoom'
 import Routers from "./route";
+
 
 class App extends Component {
   constructor(props) {
@@ -71,7 +73,7 @@ class App extends Component {
               </div>
             </Route>
             <Route exact path="/topic">
-              <div className="threads">
+              <div className="topic">
                 <Topic />
               </div>
             </Route>
@@ -85,7 +87,13 @@ class App extends Component {
                 <Logout />
               </div>
             </Route>
+            <Route exact path="/classroom">
+              <div className="classroom">
+                <ClassRoom />
+              </div>
+            </Route>
           </Switch>
+          
         </BrowserRouter>
       );
     } else {

@@ -17,7 +17,10 @@ const SinhVienSchema = new Schema({
     sdt: {
         type: Number,
     },
-    gioi_tinh: String,
+    gioi_tinh: {
+        type: Boolean,
+        default: true,
+    },
     email: {
         required: true,
         unique: true,

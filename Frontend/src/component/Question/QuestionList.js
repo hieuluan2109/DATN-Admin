@@ -18,6 +18,7 @@ import SelectSort from '../SelectSort'
 import DialogThem from '../DialogThem'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Loading from '../Loading'
 const useStyles = makeStyles((theme) => ({
   formInfo: {
     marginTop: "50px",
@@ -106,7 +107,7 @@ export default function QuestionList(props) {
   const classes = useStyles();
   const {TITLE,STT,CAUHOI,DAPANA,DAPANB,DAPANC,DAPAND,DAPANDUNG,DIEM,NGUOITAO,NGAYTAO}=props
   const [selectedIndex, setSelectedIndex] = React.useState(1);
- 
+  const [loading, setLoading] = useState(false);
   
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -114,9 +115,11 @@ export default function QuestionList(props) {
   const [getList,setGetList]=useState([])
   const token=Cookies.get('token')
   useEffect(() => {
+    setLoading(false)
         axios.get('https://navilearn.herokuapp.com/admin/question/list',
         {headers:{"Authorization":`Bearer ${token}`}
       }).then(res=>{
+        setLoading(true)
         const {data}=res.data
         console.log(data)
          setGetList(data)

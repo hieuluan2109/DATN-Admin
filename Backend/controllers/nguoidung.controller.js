@@ -64,7 +64,8 @@ module.exports = {
         }
     },
     admin_get_teacher_list: async function (req, res) {
-        let {search} = req.query
+        let {search, sort} = req.query
+        sort = sort ? { [sort]: 1} : {};
         search = search ? {$or: [{"ho": {$regex:'.*'+search+'.*' }}, { "ten": {$regex:'.*'+search+'.*' }}],  loai: false } : {loai: false};
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
@@ -72,6 +73,7 @@ module.exports = {
             .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .exec((err, data) => {
                 if (!err && data){
                     let result = [];
@@ -100,7 +102,8 @@ module.exports = {
             });
     },
     admin_get_student_list: async function (req, res) {
-        let {search} = req.query
+        let {search, sort} = req.query
+        sort = sort ? { [sort]: 'desc'} : {};
         search = search ? {$or: [{"ho": {$regex:'.*'+search+'.*' }}, { "ten": {$regex:'.*'+search+'.*' }}]} : {};
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
@@ -108,6 +111,7 @@ module.exports = {
             .find(search, ['ho', 'ten', '_id', 'email', 'ngay_sinh'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .exec((err, data) => {
                 if (!err && data){
                 let result = [];
@@ -135,7 +139,7 @@ module.exports = {
     },
     admin_get_teacher_detail: async function (res, next, id) {
         await NguoidungSchema
-            .findOne({ '_id':id, 'loai': false}, ['ho', 'ten', '_id', 'email', 'anh_dai_dien', 'nguoi_tao_id', 'ngay_sinh', 'createdAt', 'updatedAt'])
+            .findOne({ '_id':id, 'loai': false}, ['-mat_khau'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {
                 if( !err && data ){

@@ -20,6 +20,8 @@ module.exports = {
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,
+                'gioi_tinh': data.gioi_tinh,
+                'sdt': data.sdt,
                 'ngay_sinh': customDatetime(data.ngay_sinh),
                 'mat_khau': await hashPassWord(data.password),
                 'nguoi_tao_id': req.user._id
@@ -46,6 +48,8 @@ module.exports = {
         else {
             const sv = new SinhvienSchema({
                 'ma_sv': data.ma_sv,
+                'gioi_tinh': data.gioi_tinh,
+                'sdt': data.sdt,
                 'ho': capitalizeFirstLetter(data.ho),
                 'ten': capitalizeFirstLetter(data.ten),
                 'email': data.email,

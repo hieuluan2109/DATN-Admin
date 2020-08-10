@@ -36,12 +36,12 @@ const NguoidungSchema = new Schema({
         ref: 'NguoiDung'
     },
     gioi_tinh: {
+        required: true,
         type: Boolean,
         default: true,
     },
-    email: {
+    sdt: {
         required: true,
-        unique: true,
         type: String
     },
 }, {timestamps: true});

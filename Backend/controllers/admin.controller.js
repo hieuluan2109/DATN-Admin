@@ -90,7 +90,8 @@ module.exports = {
         .catch(err => res.status(400).json({success: false, msg: 'Mã code đã hết hạn'}))
     },
     admin_get_notification: async function(req, res) {
-        await SuaThongTin.find({trang_thai: false})
+        await SuaThongTin.find()
+        .populate('nguoi_dung_id', ['ho', 'ten', 'anh_dai_dien', 'email'])
         .then(data=>{
             res.status(200).json({success: true,data})
         })

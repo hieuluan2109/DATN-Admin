@@ -74,14 +74,15 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Inforprofile() {
+export default function Inforprofile(props) {
   const classes = useStyles();
   let data;
   const [getTen,setGetTen]=useState('');
   const [item, setItem] = useState(false);
   const token = Cookies.get("token");
-  const [titleRight, setTitleRight] = useState('1');
+  const [titleRight, setTitleRight] = useState(1);
   const TitleValue =(title)=>{
+    console.log(props)
     switch(title){
       case 1: return "Thông tin tài khoản";
       case 2: return "Đổi mật khẩu";

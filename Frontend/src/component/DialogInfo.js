@@ -132,13 +132,14 @@ class DialogInfo extends Component {
 
   render() {
    
-    const { classes, children } = this.props;
+    const { classes} = this.props;
     const { open,errors,status} = this.state;
    
 
     return (
       <div>
         <IconButton
+          name='icon'
           size="small"
           className={classes.eyes}
           variant="outlined"
@@ -165,7 +166,7 @@ class DialogInfo extends Component {
                 <label className={classes.titleFormControl}>Họ</label>
                 <input
                   className={classes.contentFormControl}
-                  name="ten"
+                  name="ho"
                   type="text"
                   value={this.props.Data.ho}
                   disabled={this.props.status}
@@ -236,7 +237,7 @@ class DialogInfo extends Component {
                 />
               </div>
 
-              <div className={classes.formControl}  style={{display:this.props.display}}>
+              <div className={classes.formControl}  style={{  display:this.props.display}}>
                 <label className={classes.titleFormControl}>Người tạo</label>
                 <input
                   name="nguoi_tao_id"
@@ -249,10 +250,10 @@ class DialogInfo extends Component {
               </div>
 
               <DialogActions>
-            <Button onClick={this.handleClose} color="primary" style={{display:this.props.display}}>
+            {/* <Button onClick={this.handleClose} color="primary" style={{display:this.props.display}}>
               Hủy bỏ
-            </Button>
-            <Button type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>
+            </Button> */}
+            <Button name='btnXacNhan' type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>
               Xác nhận
             </Button>
           </DialogActions>

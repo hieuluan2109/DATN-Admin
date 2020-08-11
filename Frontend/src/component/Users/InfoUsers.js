@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
     marginRight: "6%",
 
-    height: "105vh",
+   
     background: "white",
     borderRadius: 10,
   },

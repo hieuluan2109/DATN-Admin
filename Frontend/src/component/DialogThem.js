@@ -58,13 +58,9 @@ const styles = (theme) => ({
       borderColor: "#3f51b5",
     },
   },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
-  },
   contentNgaysinh: {
     marginTop: "5px",
-    marginLeft: "100px",
+    marginLeft: "5px",
   },
 });
 
@@ -85,7 +81,7 @@ class DialogThem extends Component {
       success: "",
       status: true,
       gioi_tinh: true,
-      sdt: "",
+      sdt: '',
     };
   }
 
@@ -124,9 +120,11 @@ class DialogThem extends Component {
     console.log(this.state)
   };
   checkvalid = () => {
-    const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+    const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựýỳỵỷỹ]+$/;
     const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
     const regMSSV=/^\d{10}$/
+    const regSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
+    const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     let today = new Date();
     let getdate = today.getDate();
     let getmonth = today.getMonth() + 1;
@@ -160,13 +158,16 @@ class DialogThem extends Component {
       this.setState({ errors: "Vui lòng chọn ngày sinh" });
     } else if (this.state.ngay_sinh >= getToday) {
       this.setState({ errors: "Ngày sinh không hợp lệ" });
-    } else if (this.state.password == "") {
+    }else if (this.state.sdt == "") {
+      this.setState({ errors: "Vui lòng nhập số điện thoại" });
+    } else if (!regSDT.test(this.state.sdt)) {
+      this.setState({ errors: "Số điện thoại không hợp lệ" });
+    } 
+    else if (this.state.password == "") {
       this.setState({ errors: "Vui lòng nhập mật khẩu" });
-    } else if (
-      this.state.password.length < 6 ||
-      this.state.password.length > 24
-    ) {
-      this.setState({ errors: "Password không hợp lệ" });
+    }
+    else if (regpassword.test(this.state.password)==false){
+      this.setState({ errors: "Password phải từ 6-24 kí tự, có ít nhất 1 chữ in hoa" });
     } else if (this.state.confirmpassword == "") {
       this.setState({ errors: "Vui lòng xác nhận mật khẩu" });
     } else if (this.state.password != this.state.confirmpassword) {
@@ -235,15 +236,17 @@ class DialogThem extends Component {
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data.errors);
-          this.setState({
-            errors: error.response.data.errors[0].msg,
-          });
+          // this.setState({
+          //   errors: error.response.data.errors,
+          // });
         });
       return true;
     } else return false;
   };
 
   render() {
+    // const regpassword=/^(?=.*[0-9])(?=.*[a-z]).{6,24}$/
+    // const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     const { classes, children } = this.props;
     const { open, errors, success, status } = this.state;
     // const { ho, ten, email, password,ngaysinh } = this.state;
@@ -328,7 +331,8 @@ class DialogThem extends Component {
                 />
               </div>
 
-              <span className={classes.ngaysinh}>Ngày sinh</span>
+              <div className={classes.formControl}>
+               <label className={classes.titleFormControl}>Ngày sinh</label>
               <TextField
                 name="ngay_sinh"
                 label="Birthday"
@@ -341,6 +345,7 @@ class DialogThem extends Component {
                 onChange={this.handleChange}
                 onBlur={this.checkvalid}
               />
+              </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>SĐT</label>
                 <input

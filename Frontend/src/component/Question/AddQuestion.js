@@ -79,7 +79,9 @@ const styles = (theme) => ({
   DapAn:{
     marginLeft:'110px'
   },
-  formControlDA:{marginTop:'25px'}
+  formControlDA:{marginTop:'25px'},
+  formControlDM:{marginLeft:'10px', maxwidth: "900px",
+  minWidth: "200px",}
 });
 const LUA_CHON = ["Đáp án A", "Đáp án B", "Đáp Án C", "Đáp Án D"];
 
@@ -229,7 +231,7 @@ class AddQuestions extends Component {
                 </div>
               <div className={classes.formControlCD}>
                 <label className={classes.titleFormControl}>Danh mục</label>
-                <FormControl className={classes.formControl}>
+                <FormControl className={classes.formControlDM}>
                   <InputLabel id="demo-simple-select-label">Danh mục</InputLabel>
                   <Select
                     name="danh_muc"

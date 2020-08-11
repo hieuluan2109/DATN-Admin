@@ -255,7 +255,7 @@ export default function InfoUsers(props) {
         });
     }, 300);
   };
-
+  const info=['Họ','Tên','Email','Ngày sinh']
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -296,7 +296,12 @@ export default function InfoUsers(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
+                  {info.map((row,index)=>(
                     <TableCell align="center" style={{ color: "#ffffff" }}>
+                        {row}
+                    </TableCell>
+                  ))}
+                    {/* <TableCell align="center" style={{ color: "#ffffff" }}>
                       {firstname}
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
@@ -307,7 +312,7 @@ export default function InfoUsers(props) {
                     </TableCell>
                     <TableCell align="center" style={{ color: "#ffffff" }}>
                       {DoB}
-                    </TableCell>
+                    </TableCell> */}
 
                     <TableCell align="center"></TableCell>
                   </TableRow>
@@ -333,6 +338,7 @@ export default function InfoUsers(props) {
                             status={true}
                             name={name}
                             setError={setDFres}
+                            display={"none"}
                           />
                         </IconButton>
 

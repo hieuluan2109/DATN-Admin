@@ -13,7 +13,7 @@ module.exports = {
             .findOne({email: data.email, loai: false})
             .countDocuments((count) => count)
             .catch(err => 0);
-        if (check) 
+        if (check ) 
             return res.status(400).json({'success': false, 'errors': 'Email đã tồn tại'})
         else {
             const gv = new NguoidungSchema({

@@ -4,6 +4,11 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SelectSort from "./SelectSort";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import {Button, Icon, TextField, Dialog, Paper, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 const styles = (theme) => ({
   btnThem: {
@@ -79,6 +84,8 @@ class DialogThem extends Component {
       isInputValid: false,
       success: "",
       status: true,
+      gioi_tinh: true,
+      sdt: "",
     };
   }
 
@@ -98,13 +105,23 @@ class DialogThem extends Component {
       ma_sv: "",
       isInputValid: false,
       success: "",
-    });
+      gioi_tinh: true,
+      sdt: "",
+    }); 
   };
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      status: true
-    });
+    if ( event.target.name == "gioi_tinh"){
+      this.setState({ 
+        gioi_tinh: !this.state.gioi_tinh
+      })
+    }
+    else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        status: true
+      });
+    }
+    console.log(this.state)
   };
   checkvalid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
@@ -176,13 +193,15 @@ class DialogThem extends Component {
       confirmpassword: "",
       errors: "",
       ma_sv: "",
+      gioi_tinh: true,
+      sdt: "",
       })
     
   }
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.isInputValid) {
-      const { ho, ten, email, ma_sv, password, ngay_sinh } = this.state;
+      const { ho, ten, email, ma_sv, password, ngay_sinh, sdt, gioi_tinh } = this.state;
       console.log(this.props.token);
       var url = "";
       this.props.value == true
@@ -190,8 +209,8 @@ class DialogThem extends Component {
         : (url = "https://navilearn.herokuapp.com/admin/user/add/student");
       var params;
       this.props.value == true
-        ? (params = { ho, ten, email, ngay_sinh, password })
-        : (params = { ho, ten, email, ma_sv, ngay_sinh, password });
+        ? (params = { ho, ten, email, ngay_sinh, password, sdt, gioi_tinh })
+        : (params = { ho, ten, email, ma_sv, ngay_sinh, password, sdt, gioi_tinh});
       console.log(params);
       axios
         .post(url, params, {
@@ -215,9 +234,9 @@ class DialogThem extends Component {
           }
         })
         .catch((error) => {
-          console.log("Lỗi", error.response.data);
+          console.log("Lỗi", error.response.data.errors);
           this.setState({
-            errors: error.response.data.errors,
+            errors: error.response.data.errors[0].msg,
           });
         });
       return true;
@@ -322,7 +341,26 @@ class DialogThem extends Component {
                 onChange={this.handleChange}
                 onBlur={this.checkvalid}
               />
-
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>SĐT</label>
+                <input
+                  name="sdt"
+                  className={classes.contentFormControl}
+                  type="number"
+                  value={this.state.sdt}
+                  onChange={this.handleChange}
+                  onBlur={this.checkvalid}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Giới tính</label>
+                <FormControl component="fieldset">
+                  <RadioGroup aria-label="gender" name="gioi_tinh" value={this.state.gioi_tinh} onChange={this.handleChange}>
+                    <FormControlLabel value={true} control={<Radio  checked={this.state.gioi_tinh} />} label="Nam" />
+                    <FormControlLabel value={false} control={<Radio checked={!this.state.gioi_tinh} />} label="Nữ" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Mật khẩu</label>
                 <input

@@ -72,6 +72,7 @@ export default function MenuAppbar(props) {
           <KeyboardArrowDownIcon />
         </Button>
         <Menu
+          style={{position: 'absolute'}}
           id="simple-menu"
           anchorEl={anchorEl}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}

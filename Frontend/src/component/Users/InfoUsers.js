@@ -94,7 +94,7 @@ export default function InfoUsers(props) {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "" });
+  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'' });
   const [name, setName] = useState("");
   const [getSuccess, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -143,12 +143,12 @@ export default function InfoUsers(props) {
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
-    const { _id, ho, ten, email, ngay_sinh } = dataUser;
+    const { _id, ho, ten, email, ngay_sinh,sdt } = dataUser;
     if (age == true) {
       axios
         .post(
           `https://navilearn.herokuapp.com/admin/user/update?loai=teacher&id=${_id}`,
-          { ho, ten, ngay_sinh },
+          { ho, ten, ngay_sinh,sdt },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -160,6 +160,24 @@ export default function InfoUsers(props) {
           console.log("Lỗi", error.response.data);
         });
     }
+    if (age == false) {
+      axios
+        .post(
+          `https://navilearn.herokuapp.com/admin/user/update?loai=student&id=${_id}`,
+          { ho, ten, ngay_sinh,sdt },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          setSuccess(res.data.msg);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response.data);
+        });
+    }
+
+
   };
 
   const handleChangeInfoUser = (event, status) => {
@@ -327,7 +345,7 @@ export default function InfoUsers(props) {
                       <TableCell align="center">{row.email}</TableCell>
                       <TableCell align="center">{row.ngay_sinh}</TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
+                        <IconButton size="small" name='icon-eye' className={classes.eyes}>
                           <DialogInfor
                             title="Giáo Viên"
                             id={row._id}
@@ -342,7 +360,7 @@ export default function InfoUsers(props) {
                           />
                         </IconButton>
 
-                        <IconButton size="small" className={classes.eyes}>
+                        <IconButton size="small" name='icon-eye' className={classes.eyes}>
                           <DialogInfor
                             title="Giáo viên"
                             id={row._id}

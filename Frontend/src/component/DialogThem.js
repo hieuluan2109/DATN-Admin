@@ -253,7 +253,8 @@ class DialogThem extends Component {
   
     return (
       <div>
-        <Button
+        <Button 
+          name='icon-addCircle'
           className={classes.btnThem}
           variant="outlined"
           onClick={this.handleClickOpen}
@@ -392,10 +393,10 @@ class DialogThem extends Component {
                 />
               </div>
               <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
+                <Button name='btnHuy' onClick={this.handleClose} color="primary">
                   Hủy bỏ
                 </Button>
-                <Button type="submit" color="primary" disabled={status}>
+                <Button name='btnXNhan' type="submit" color="primary" disabled={status}>
                   Xác nhận
                 </Button>
               </DialogActions>

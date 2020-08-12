@@ -9,7 +9,7 @@ module.exports = {
         }
         const [_id,{tieu_de, mo_ta}, option] = [req.user, req.body,{ new: true, useFindAndModify: false }];
         const update= {tieu_de: tieu_de, mo_ta: mo_ta, nguoi_tao_id: _id};
-        DanhMucSchema.findOne({tieu_de: tieu_de})
+        await DanhMucSchema.findOne({tieu_de: tieu_de})
         .then(result => {
             if ( result)
                 res.status(400).json({ success: false, errors: 'Chủ đề đã tồn tại' })
@@ -80,9 +80,10 @@ module.exports = {
                 if (err)
                     res.status(400).json({'success': false, 'errors': err}) 
                 else {
-                    let result = data.toObject();
-                    result.createdAt = customDatetime(data.createdAt);
-                    res.status(200).json({'success': true, 'data': result})
+                    let data = result.toObject();
+                    data.createdAt = customDatetime(result.createdAt);
+                    data.updatedAt = customDatetime(result.updatedAt);
+                    res.status(200).json({'success': true, 'data': data})
                 }
             })
     },

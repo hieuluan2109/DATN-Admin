@@ -13,7 +13,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-
+import moment from "moment";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -71,7 +71,7 @@ const styles = (theme) => ({
     margin: "20px 10px",
   },
   dialogPaper: {
-    minHeight: "90vh",
+    minHeight: "80vh",
     maxHeight: "90vh",
     minWidth: "170vh",
     // maxWidth: "170vh",
@@ -137,7 +137,6 @@ class DialogThem extends Component {
         status: true,
       });
     }
-    console.log(this.state);
   };
   checkvalid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựýỳỵỷỹ]+$/;
@@ -165,7 +164,7 @@ class DialogThem extends Component {
       this.setState({ errors: "Email không hợp lệ" });
     } else if (this.state.ngay_sinh == "") {
       this.setState({ errors: "Vui lòng chọn ngày sinh" });
-    } else if (this.state.ngay_sinh >= new Date() ) {
+    } else if ( moment(this.state.ngay_sinh).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD') ) {
       this.setState({ errors: "Ngày sinh không hợp lệ" });
     } else if (this.state.sdt == "") {
       this.setState({ errors: "Vui lòng nhập số điện thoại" });
@@ -243,8 +242,8 @@ class DialogThem extends Component {
           headers: { Authorization: `Bearer ${this.props.token}` },
         })
         .then((res) => {
-          console.log("AAA", res.data.errors);
-          if (res.data.success == true) {
+          console.log("AAA", res.data);
+          // if (res.data.success == true) {
             this.setState({
               ho: "",
               ten: "",
@@ -259,21 +258,22 @@ class DialogThem extends Component {
               errors: "Thêm thành công",
               gioi_tinh: true,
             });
-          }
+          // }
         })
         .catch((error) => {
-          console.log("Lỗi", error.response.data.errors);
-          this.setState({
-            errors: error.response.data.errors,
-          });
+          console.log("Lỗi", error.response.data);
+          // this.setState({
+          //   errors: error.response.data,
+          // });
         });
       return true;
     } else return false;
   };
   handleDateChange = (date) => {
     this.setState({
-      ngay_sinh: date,
+      ngay_sinh: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(),
     });
+    console.log(new Date(date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()) < Date.now());
   };
 
   render() {

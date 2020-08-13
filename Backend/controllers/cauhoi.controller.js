@@ -6,13 +6,15 @@ module.exports = {
         let perPage = req.query.limit || 10;
         let page = req.query.page || 1;
         const {loai} = req.query;
-        let {search} = req.query;
+        let {search, sort} = req.query;
+        sort = sort ? { [sort]: 1} : {};
         search = search ? {$or: [{"noi_dung": {$regex:'.*'+search+'.*' }}] } : {};
         (( loai ? loai : 'choice') == 'assay')
         ?   (await TuLuanSchema
             .find(search)
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .populate('danh_muc',['tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {  
@@ -35,6 +37,7 @@ module.exports = {
             .find(search,['trang_thai', 'noi_dung', 'danh_muc', 'diem'])
             .skip((perPage * page) - perPage)
             .limit(perPage)
+            .sort(sort)
             .populate('danh_muc',['tieu_de'])
             .populate('nguoi_tao_id', ['_id', 'ho', 'ten'])
             .exec((err, data) => {

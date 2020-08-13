@@ -55,10 +55,10 @@ class ClassRoomDetail extends Component {
 
 
   render() {
-    const { classes, disable, getData } = this.props;
+    const { classes,  getData,dsBaiTap,dsBaiThi } = this.props;
     const { open } = this.state;
-    console.log("A", this.props.getData.ds_sinh_vien);
-
+    console.log ("1",getData.ds_sinh_vien)
+    console.log("2",dsBaiTap.data)
     return (
       <div>
         <IconButton
@@ -82,19 +82,12 @@ class ClassRoomDetail extends Component {
           </DialogTitle>
 
           <DialogContent className={classes.formsize}>
-            {/* <Grid container>
-              <Grid item xs={12} className={classes.heightgrd}> */}
-
-            {/* <Test data={getData}  />
-                <HomeWorkBtn data={getData}  />
-                <StudentBtn data={getData} /> */}
-            {/* </Grid>
-            </Grid> */}
             <Grid container>
               <Grid item xs={3}>
-                <Paper
+              
+                <Paper aria-label="simple tabs example"
                   square
-             
+                 
                   className={classes.info}
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
@@ -107,8 +100,8 @@ class ClassRoomDetail extends Component {
               </Grid>
               <Grid item xs={9}>
                 <TabPanel data1={getData.ds_sinh_vien}
-                          data2={getData.ds_bai_tap}
-                          data3={getData.ds_bai_thi}   />
+                          data2={dsBaiTap.data}
+                          data3={dsBaiThi.data}   />
               </Grid>
             </Grid>
           </DialogContent>

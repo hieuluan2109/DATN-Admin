@@ -162,7 +162,7 @@ export default function Threadlist(props) {
 
   const TestListInfor = (id) => {
     axios
-      .get(`https://navilearn.herokuapp.com/admin/testlist/detail/${id}`, {
+      .get(`https://navilearn.herokuapp.com/admin/test/detail/?id=${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

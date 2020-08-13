@@ -17,8 +17,17 @@ import Cookies from "js-cookie";
 import AddTopic from "./AddTopic";
 import Pagination from "@material-ui/lab/Pagination";
 import TopicInfor from "./TopicInfor";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    position: "absolute",
+    left: "15%",
+    minWidth: 120,
+  },
   containerForm: {
     marginTop: "50px",
     marginRight: "6%",
@@ -121,7 +130,7 @@ export default function Threadlist(props) {
   const handleChangePage = (e, value) => {
     setPageIndex(value);
   };
-
+  const [sort, setSort] = useState(' ');
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
   const handleSearch = (e) => {
@@ -211,17 +220,20 @@ export default function Threadlist(props) {
 const clearSuccess=()=>{
   setSuccess('')
 }
+const handleSort=(event)=>{
+  setSort(event.target.value)
+}
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
-
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
-
+          <FormControl className={classes.formControl}>
+            Hello
+          </FormControl>
           <AddTopic token={token} />
-
           <div className={classes.formInfo}>
             <TableContainer>
               <Table

@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-// import TabPanel from './Tab'
+import TabTest from "./Tabs";
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
@@ -19,21 +19,20 @@ const styles = (theme) => ({
   info: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    width:'190px'
+    width: "220px",
+    marginBottom:'20px'
   },
- 
 });
 
 class ClassRoomDetail extends Component {
   constructor(props) {
     super(props);
-  
+
     this.state = {
       open: false,
       errors: "",
       status: true,
       value: 0,
-      
     };
   }
 
@@ -52,13 +51,9 @@ class ClassRoomDetail extends Component {
     this.setState({ open: true });
   };
 
-
-
   render() {
-    const { classes, disable, getData } = this.props;
+    const { classes, disable, data } = this.props;
     const { open } = this.state;
-    // console.log("A", this.props.getData.ds_sinh_vien);
-
     return (
       <div>
         <IconButton
@@ -77,38 +72,39 @@ class ClassRoomDetail extends Component {
           aria-labelledby="max-width-dialog-title"
         >
           <DialogTitle id="max-width-dialog-title">
-            {/* {getData.tieu_de} */}
+            {data.tieu_de}
             <Divider />
           </DialogTitle>
 
           <DialogContent className={classes.formsize}>
-            {/* <Grid container>
-              <Grid item xs={12} className={classes.heightgrd}> */}
-
-            {/* <Test data={getData}  />
-                <HomeWorkBtn data={getData}  />
-                <StudentBtn data={getData} /> */}
-            {/* </Grid>
-            </Grid> */}
             <Grid container>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <Paper
                   square
-             
                   className={classes.info}
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
                 >
-                  {/* Người tạo: {getData.nguoi_tao_id.ho}{" "}
-                  {getData.nguoi_tao_id.ten}
+                  Người tạo: {data.nguoi_tao.ho} {data.nguoi_tao.ten}
                   <br />
-                  Cập nhật: {getData.updatedAt} */}
+                  Cập nhật: {data.updatedAt}
+                  <br />
+                  Ngày tạo: {data.ngay_tao}
+                </Paper>
+                <Paper 
+                  square
+                  className={classes.info}
+                  elevation={3}
+                  style={{ marginRight: "50px", padding: "5px" }}
+                >
+                  Ngày Thi: {data.ngay_thi}
+                  <br />
+                  Thời gian thi: {data.thoi_gian_thi}
+                  
                 </Paper>
               </Grid>
-              <Grid item xs={9}>
-                {/* <TabPanel data1={getData.ds_sinh_vien}
-                          data2={getData.ds_bai_tap}
-                          data3={getData.ds_bai_thi}   /> */}
+              <Grid item xs={8}>
+                <TabTest data={data} />
               </Grid>
             </Grid>
           </DialogContent>

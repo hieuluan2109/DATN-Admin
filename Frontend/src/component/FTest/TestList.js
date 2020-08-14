@@ -15,7 +15,7 @@ import SearchButton from "../Search";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
-import TestDetail from './TestDetail'
+import TestDetail from "./TestDetail";
 const useStyles = makeStyles((theme) => ({
   containerForm: {
     marginTop: "50px",
@@ -85,7 +85,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const topicTitle = ["Tên bài thi", "Thời gian thi", "Ngày thi", "Người tạo",''];
+const topicTitle = [
+  "Tên bài thi",
+  "Thời gian thi",
+  "Ngày thi",
+  "Người tạo",
+  "",
+];
 
 export default function Threadlist(props) {
   const classes = useStyles();
@@ -111,7 +117,6 @@ export default function Threadlist(props) {
         setPage(res.data.pages);
         const { data } = res.data;
         setListTest(data);
-        console.log( res.data.data,'testlisssssssssssssssssssssssssst')
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -140,7 +145,6 @@ export default function Threadlist(props) {
         })
         .then((res) => {
           const { data } = res.data;
-          console.log("test",data)
           setListTest(data);
 
           setPage(res.data.pages);
@@ -151,7 +155,19 @@ export default function Threadlist(props) {
     }, 300);
   };
 
-  const [dataTestListInfor, setDataTestListInfor] = useState({
+  const [dataTest, setDataTest] = useState({
+    ds_SV: [],
+    dsSV_dathi: [],
+    dsCauHoi: [],
+    ngay_thi: "",
+    thoi_gian_thi: "",
+    thoi_gian_tre: "",
+    tieu_de: "",
+    nguoi_tao: { _id: "", ho: "", ten: "" },
+    updatedAt: "",
+    diem: "",
+    ngay_tao:''
+
     // ds_bai_tap: [],
     // ds_bai_thi: [],
     // ds_sinh_vien: [],
@@ -167,31 +183,33 @@ export default function Threadlist(props) {
       })
       .then((res) => {
         const { data } = res.data;
-        console.log(data);
-        // setDataClassRoomInfor(data)
-        // setDataClassRoomInfor({
-        //   ds_bai_tap: data.ds_bai_tap,
-        //   ds_bai_thi: data.ds_bai_thi,
-        //   ds_sinh_vien: data.ds_sinh_vien,
-        //   nguoi_tao_id: {
-        //     _id: data.nguoi_tao_id._id,
-        //     ho: data.nguoi_tao_id.ho,
-        //     ten: data.nguoi_tao_id.ten,
-        //   },
-        //   tieu_de: data.tieu_de,
-        //   updatedAt: data.updatedAt,
-        // });
-        // console.log("information classroom detail", dataClassRoomInfor);
+        setDataTest({
+          ds_SV: data.ds_sinh_vien,
+          dsSV_dathi: data.ds_sinh_vien_da_thi,
+          dsCauHoi: data.ds_cau_hoi,
+          ngay_thi: data.ngay_thi,
+          thoi_gian_thi: data.thoi_gian_thi,
+          thoi_gian_tre: data.thoi_gian_tre,
+          tieu_de: data.tieu_de,
+          nguoi_tao: {
+            _id: data.nguoi_tao_id._id,
+            ho: data.nguoi_tao_id.ho,
+            ten: data.nguoi_tao_id.ten,
+          },
+          ngay_tao:data.createdAt,
+          updatedAt: data.updatedAt,
+          diem: data.diem,
+        });
       })
       .catch((error) => {
         console.log("Lỗi", error);
       });
-    }
+  };
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách bài kiểm tra </div>
+        <div className={classes.titleformInfo}> Danh sách bài thi </div>
 
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
@@ -220,21 +238,22 @@ export default function Threadlist(props) {
                   {getListTest.map((value, index) => (
                     <TableRow key={index + 1} hover>
                       <TableCell align="center">{value.tieu_de}</TableCell>
-                      <TableCell align="center">{value.thoi_gian_thi}</TableCell>
+                      <TableCell align="center">
+                        {value.thoi_gian_thi}
+                      </TableCell>
                       <TableCell align="center">{value.ngay_thi}</TableCell>
                       <TableCell align="center">
                         {value.nguoi_tao_id.ten}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton size="small">
-                        <TestDetail
+                          <TestDetail
                             icon={<VisibilityIcon />}
                             id={value._id}
                             testList={TestListInfor}
-                            // getData={dataTestListInfor}
+                            data={dataTest}
                           />
                         </IconButton>
-                      
                       </TableCell>
                     </TableRow>
                   ))}

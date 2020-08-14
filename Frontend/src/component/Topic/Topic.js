@@ -93,7 +93,11 @@ const useStyles = makeStyles((theme) => ({
   },
   pagination: {
     marginRight: "70px",
-  },
+  },Hello:{
+    position:'absolute',
+    right:'15%',
+    marginTop:'2px'
+  }
 }));
 
 const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
@@ -230,8 +234,15 @@ const handleSort=(event)=>{
         <div className={classes.titleformInfo}> {title} </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
-          <FormControl className={classes.formControl}>
-            Hello
+          <FormControl className={classes.Hello}>
+            <InputLabel style={{ left: '10%'}}>Sort</InputLabel>
+              {/* <Select value={sort} onChange={handleSort}>
+                <MenuItem value=' '>None</MenuItem>
+                <MenuItem value='ho'>Họ</MenuItem>
+                <MenuItem value='ten'>Tên</MenuItem>
+                <MenuItem value='email'>Email</MenuItem>
+                <MenuItem value='ngay_sinh'>Ngày Sinh</MenuItem>
+              </Select> */}
           </FormControl>
           <AddTopic token={token} />
           <div className={classes.formInfo}>

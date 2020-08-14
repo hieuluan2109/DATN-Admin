@@ -10,6 +10,9 @@ import App from "./../../App";
 import TextField from "@material-ui/core/TextField";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import {
+  Link,
+} from "react-router-dom";
 const styles = (theme) => ({
   txtLogin: {
     margin: theme.spacing(1),
@@ -40,11 +43,12 @@ const styles = (theme) => ({
     marginLeft: "20%",
     height: "50px",
     color: "white",
+    cursor:'pointer'
   },
   forgot: {
     marginTop: "20px",
     marginLeft: "57%",
-  },
+  },link:{textDecoration:'none'}
  
 });
 
@@ -156,7 +160,7 @@ class LoginForm extends Component {
               className={classes.txtLogin}
               onChange={this.handleChange}
             />
-            <div className={classes.forgot}>Quên mật khẩu?</div>
+            <div className={classes.forgot}><Link to="forgotpassword" className={classes.link}>Quên mật khẩu?</Link></div>
             <div>
               <input
                 type="submit"

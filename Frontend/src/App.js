@@ -18,15 +18,14 @@ import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
 import Topic from "./view/Topic";
 import Cookies from "js-cookie";
-import ChangePassword from "./view/ChangPasswordAdmin";
 import LoginV from "./view/Login";
 import HomePage from "./view/HomePage";
 import "./css/appbar.css";
 import "./css/login.scss";
 import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
-import Routers from "./route";
 import TestList from './view/Test'
+import ForgotPassword from './view/ForgotPassword'
 
 class App extends Component {
   constructor(props) {
@@ -45,7 +44,8 @@ class App extends Component {
       return (
         <BrowserRouter>
           <Route exact path="/" render={() => <Redirect to="/admin" />} />
-
+          <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} />
+          <Route exact path="/*" render={() => <Redirect to="/admin" />} />
           <Switch>
             <Route exact path="/admin">
               <div className="admin">
@@ -114,12 +114,19 @@ class App extends Component {
     } else {
       return (
         <BrowserRouter>
-          <Route exact path="*" render={() => <Redirect to="/" />} />
+          <Route exact path="/*" render={() => <Redirect to="/" />} />
+          {/* <Switch> */}
           <Route exact path="/">
             <div className="Login">
               <LoginV />
             </div>
           </Route>
+          <Route exact path="/forgotpassword">
+            <div className="Login">
+              <ForgotPassword />
+            </div>
+          </Route>
+          {/* </Switch> */}
         </BrowserRouter>
       );
     }

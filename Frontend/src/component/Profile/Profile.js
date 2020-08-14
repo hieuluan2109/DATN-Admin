@@ -81,6 +81,9 @@ export default function Inforprofile(props) {
   const [item, setItem] = useState(false);
   const token = Cookies.get("token");
   const [titleRight, setTitleRight] = useState(1);
+  React.useEffect(()=>{
+    setTitleRight(props.view)
+  },[])
   const TitleValue =(title)=>{
     console.log(props)
     switch(title){

@@ -84,9 +84,14 @@ export default function MenuAppbar(props) {
           <Link to="/profile"  style={{textDecoration:'none',color:'black'}} >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
          </Link>
-          
+         <Link to="/profile/notification"  style={{textDecoration:'none',color:'black'}} >
+            <MenuItem onClick={handleMenuClose}>Xử lí thông báo</MenuItem>
+         </Link>
+         <Link to="/profile/changepassword"  style={{textDecoration:'none',color:'black'}} >
+            <MenuItem onClick={handleMenuClose}>Đổi mật khẩu</MenuItem>
+         </Link>
           <Link to='/logout'  style={{textDecoration:'none',color:'black'}}>
-          <MenuItem> Sign out </MenuItem>
+          <MenuItem> Đăng xuất </MenuItem>
           </Link>
           {/* <Link to="/changepassword"  style={{textDecoration:'none',color:'black'}}>
             <MenuItem onClick={handleMenuClose}>Change password</MenuItem>

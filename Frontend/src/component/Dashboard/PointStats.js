@@ -8,7 +8,7 @@ export default class PointStats extends Component {
 		super(props)
 		this.state = {
 			data: [
-				1,2,3,4,5,6,7,8,9,10
+				0,0,0,0,0,0,0,0,0,0,0
 			]
 		}
 	}
@@ -49,7 +49,6 @@ export default class PointStats extends Component {
 		return (
 		<div>
 			 <CanvasJSChart options = {options} />
-				/* onRef={ref => this.chart = ref} */
 		</div>
 		);
 	}

@@ -57,6 +57,16 @@ class App extends Component {
                 <Profile />
               </div>
             </Route>
+            <Route exact path="/profile/notification">
+              <div className="profile">
+                <Profile view={3} />
+              </div>
+            </Route>
+            <Route exact path="/profile/changepassword">
+              <div className="profile">
+                <Profile view={2} />
+              </div>
+            </Route>
             <Route exact path="/users">
               <div className="users">
                 <Users />

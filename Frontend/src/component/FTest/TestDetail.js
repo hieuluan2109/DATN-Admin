@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import TabTest from "./Tabs";
+import TextField from "@material-ui/core/TextField";
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
@@ -85,11 +86,26 @@ class ClassRoomDetail extends Component {
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
                 >
-                  Người tạo: {data.nguoi_tao.ho} {data.nguoi_tao.ten}
+                  <TextField label="Người tạo" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                   value= {data.nguoi_tao.ho+" "+ data.nguoi_tao.ten} />
+                <br />
+                <TextField label="Ngày tạo" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.ngay_tao} />
                   <br />
-                  Cập nhật: {data.updatedAt}
-                  <br />
-                  Ngày tạo: {data.ngay_tao}
+                <TextField label="Cập nhật" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.updatedAt} />
                 </Paper>
                 <Paper 
                   square
@@ -97,9 +113,20 @@ class ClassRoomDetail extends Component {
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
                 >
-                  Ngày Thi: {data.ngay_thi}
+                  <TextField label="Ngày thi" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.ngay_thi} />
                   <br />
-                  Thời gian thi: {data.thoi_gian_thi}
+                  <TextField label="Thời gian thi" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={data.thoi_gian_thi+' phút'} />
+                  <br />
                   
                 </Paper>
               </Grid>

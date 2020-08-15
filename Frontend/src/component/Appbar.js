@@ -111,7 +111,7 @@ class Appbarnav extends Component {
               >
             {" "}
             <ImportContactsIcon className={classes.iconMenu} />
-            BÀI KIỂM TRA
+            BÀI THI
             </Link>
           </li>
           <li className={classes.Menu}>

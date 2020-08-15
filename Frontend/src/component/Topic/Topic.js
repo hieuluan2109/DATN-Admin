@@ -21,6 +21,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import Loading from '../Loading';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -97,7 +98,12 @@ const useStyles = makeStyles((theme) => ({
     position:'absolute',
     right:'15%',
     marginTop:'2px'
-  }
+  },
+  loading: {
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  },
 }));
 
 const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
@@ -114,6 +120,7 @@ export default function Threadlist(props) {
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   useEffect(() => {
+    setLoading(false)
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
@@ -122,6 +129,7 @@ export default function Threadlist(props) {
         }
       )
       .then((res) => {
+        setLoading(true)
         setPage(res.data.pages);
         const { data } = res.data;
         setListTopic(data);
@@ -137,6 +145,8 @@ export default function Threadlist(props) {
   const [sort, setSort] = useState(' ');
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+
   const handleSearch = (e) => {
     const value = e.target.value;
     setParam(value);
@@ -226,23 +236,40 @@ const clearSuccess=()=>{
 }
 const handleSort=(event)=>{
   setSort(event.target.value)
+  setLoading(false)
+  axios
+    .get(
+      `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then((res) => {
+      setLoading(true)
+      setPage(res.data.pages);
+      const { data } = res.data;
+      setListTopic(data);
+    
+    })
+    .catch((error) => {
+      console.log("Lỗi", error);
+    });
 }
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> {title} </div>
+        <div hidden={loading} className={classes.loading}><Loading /></div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.Hello}>
             <InputLabel style={{ left: '10%'}}>Sort</InputLabel>
-              {/* <Select value={sort} onChange={handleSort}>
+              <Select value={sort} onChange={handleSort}>
                 <MenuItem value=' '>None</MenuItem>
-                <MenuItem value='ho'>Họ</MenuItem>
-                <MenuItem value='ten'>Tên</MenuItem>
-                <MenuItem value='email'>Email</MenuItem>
-                <MenuItem value='ngay_sinh'>Ngày Sinh</MenuItem>
-              </Select> */}
+                <MenuItem value='tieu_de'>Tên</MenuItem>
+                <MenuItem value='mo_ta'>Mô tả</MenuItem>
+              </Select>
           </FormControl>
           <AddTopic token={token} />
           <div className={classes.formInfo}>

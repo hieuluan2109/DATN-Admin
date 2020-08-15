@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import TabPanel from './Tab'
+import TextField from "@material-ui/core/TextField";
+
 const styles = (theme) => ({
   dialogPaper: {
     minHeight: "90vh",
@@ -92,10 +94,26 @@ class ClassRoomDetail extends Component {
                   elevation={3}
                   style={{ marginRight: "50px", padding: "5px" }}
                 >
-                  Người tạo: {getData.nguoi_tao_id.ho}{" "}
-                  {getData.nguoi_tao_id.ten}
+                <TextField label="Người tạo" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                 value= {getData.nguoi_tao_id.ho+" "+ getData.nguoi_tao_id.ten} />
+                <br />
+                <TextField label="Ngày tạo" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={getData.createdAt} />
                   <br />
-                  Cập nhật: {getData.updatedAt}
+                <TextField label="Cập nhật" 
+                  id="outlined-size-normal"
+                  defaultValue="Normal"
+                  variant="outlined"
+                  margin="normal"
+                  value={getData.updatedAt} />
                 </Paper>
               </Grid>
               <Grid item xs={9}>

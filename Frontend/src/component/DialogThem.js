@@ -289,10 +289,12 @@ class DialogThem extends Component {
         <Button
           name="icon-addCircle"
           className={classes.btnThem}
+          name="Add"
+          id="add"
           variant="outlined"
           onClick={this.handleClickOpen}
         >
-          <AddCircleIcon className={classes.iconbtnThem} />
+          <AddCircleIcon name="btnAdd" className={classes.iconbtnThem} />
           Thêm
         </Button>
 

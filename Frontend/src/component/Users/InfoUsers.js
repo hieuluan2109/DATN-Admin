@@ -81,11 +81,7 @@ export default function InfoUsers(props) {
   const [age, setAge] = useState(1);
   const [create, setCreate] = useState(true);
   const [display, setDisplay] = useState("none");
-  const { title, stt, firstname, lastname, email, DoB } = props;
-  const [selectedIndex, setSelectedIndex] = useState(1);
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
+  const { title } = props;
 
   const handleChangeFormCreateAccount = (event) => {
     setCreate(event.target.value);
@@ -95,9 +91,11 @@ export default function InfoUsers(props) {
   const handleChange = (event) => {
     setAge(event.target.value);
     setSort(' ')
+    setPageSV(1)
+    setPageGV(1)
   };
-  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'' });
-  const [name, setName] = useState("");
+  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'',createdAt:'',updatedAt:'' });
+  const [name, setName] = useState({fname:'',lname:''});
   const [getSuccess, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const onclickInfor = (id, age) => {
@@ -112,8 +110,10 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-          setName(res.data.data.nguoi_tao_id.ten);
-          console.log("GV", res.data);
+          setName({
+            fname:res.data.data.nguoi_tao_id.ho,
+            lname:res.data.data.nguoi_tao_id.ten});
+  
         })
         .catch((error) => {
           console.log("Lỗi", error);
@@ -131,7 +131,7 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-          console.log("SV", res.data);
+        
         })
         .catch((error) => {
           console.log("Lỗi", error);
@@ -145,7 +145,7 @@ export default function InfoUsers(props) {
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
-    const { _id, ho, ten, email, ngay_sinh,sdt } = dataUser;
+    const { _id, ho, ten, ngay_sinh,sdt } = dataUser;
     if (age == true) {
       axios
         .post(
@@ -157,6 +157,7 @@ export default function InfoUsers(props) {
         )
         .then((res) => {
           setSuccess(res.data.msg);
+          
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
@@ -182,14 +183,21 @@ export default function InfoUsers(props) {
 
   };
 
+  const handleDateChange = (date) => {
+    setDataUser({
+      ...dataUser,ngay_sinh: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(),
+    });
+  };
   const handleChangeInfoUser = (event, status) => {
     setDataUser({
       ...dataUser,
       [event.target.name]: event.target.value,
+      status:true
     });
+    
   };
 
-  // console.log("Get",dataUser)
+
   const [getListSV, setListSV] = useState([]);
   const [getList, setGetList] = useState([]);
   const [pageGV, setPageGV] = useState(1);
@@ -203,7 +211,7 @@ export default function InfoUsers(props) {
       setLoading(false)
       axios
         .get(
-          `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${event.target.value}`,
+          `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${event.target.value}&search=${param}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -222,7 +230,7 @@ export default function InfoUsers(props) {
         setLoading(false)
         axios
           .get(
-            `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${event.target.value}`,
+            `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${event.target.value}&search=${param}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -239,11 +247,12 @@ export default function InfoUsers(props) {
     }
     
   }
+ 
   useEffect(() => {
     setLoading(false)
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${sort}`,
+        `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${sort}&search=${param}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -259,11 +268,13 @@ export default function InfoUsers(props) {
         console.log("Lỗi", error);
       });
   }, [pageGV]);
-  useEffect(() => {
+
+
+  useEffect((e) => {
     setLoading(false)
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}`,
+        `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${sort}&search=${param}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -289,6 +300,7 @@ export default function InfoUsers(props) {
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
   const handleSearch = (e) => {
+    
     const value = e.target.value;
     setParam(value);
     if (typingTimeoutRef.current) {
@@ -299,8 +311,8 @@ export default function InfoUsers(props) {
         param: value,
       };
       const url = age
-        ? `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${params.param}`
-        : `https://navilearn.herokuapp.com/admin/user/list/student?search=${params.param}`;
+        ? `https://navilearn.herokuapp.com/admin/user/list/teacher?search=${params.param}&sort=${sort}&page=${pageGV}`
+        : `https://navilearn.herokuapp.com/admin/user/list/student?search=${params.param}&sort=${sort}&page=${pageSV}`;
       axios
         .get(url, {
           headers: { Authorization: `Bearer ${token}` },
@@ -317,6 +329,9 @@ export default function InfoUsers(props) {
         });
     }, 300);
   };
+
+  
+
   const info=['Họ','Tên','Email','Ngày sinh']
   return (
     <div className="row">
@@ -325,7 +340,7 @@ export default function InfoUsers(props) {
         <div className={classes.titleformInfo}> {title} </div>
         <div hidden={loading} className={classes.loading}><Loading /></div>
         <form>
-          <SearchButton onChange={handleSearch} />
+          <SearchButton onChange={handleSearch} value={param}/>
           <FormControl className={classes.formControl}>
           <Grid container spacing={2}>
             <Grid item style={{position: 'relative'}} >
@@ -376,20 +391,7 @@ export default function InfoUsers(props) {
                     <TableCell align="center" style={{ color: "#ffffff" }}>
                         {row}
                     </TableCell>
-                  ))}
-                    {/* <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {firstname}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {lastname}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {email}
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
-                      {DoB}
-                    </TableCell> */}
-
+                  ))} 
                     <TableCell align="center"></TableCell>
                   </TableRow>
                 </TableHead>
@@ -430,9 +432,11 @@ export default function InfoUsers(props) {
                             display={"none"}
                             onSubmit={onSubmitInforUser}
                             handleChange={handleChangeInfoUser}
+                            handleDateChange={handleDateChange}
                             type="submit"
                             success={getSuccess}
                             setError={setDFres}
+                            name={name}
                             // submitForm={onSubmitInforUser}
                           />
                         </IconButton>

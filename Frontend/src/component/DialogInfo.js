@@ -1,31 +1,18 @@
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Icon from "@material-ui/core/Icon";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import SelectSort from "./SelectSort";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import IconButton from "@material-ui/core/IconButton";
-import CreateIcon from "@material-ui/icons/Create";
-import {Card} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import React, { Component, Fragment } from "react";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@material-ui/core";
+import { DatePicker } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 const styles = (theme) => ({
-  btnThem: {
-    position: "absolute",
-    right: "7%",
-    marginTop: "15px",
-    borderRadius: "5px",
-    background: theme.palette.primary.main,
-    color: "white",
-    "&:hover": {
-      background: theme.palette.primary.light,
-    },
-  },
   selectsort: {
     position: "absolute",
     top: "10px",
@@ -63,15 +50,6 @@ const styles = (theme) => ({
       borderColor: "#3f51b5",
     },
   },
-  ngaysinh: {
-    position: "absolute",
-    marginTop: "30px",
-  },
-  contentNgaysinh: {
-    marginTop: "5px",
-    marginLeft: "100px",
-  },
- 
 });
 
 class DialogInfo extends Component {
@@ -79,9 +57,8 @@ class DialogInfo extends Component {
     super(props);
     this.state = {
       open: false,
-      errors:'',
-      status:true,
-
+      errors: "",
+      status: true,
     };
   }
 
@@ -90,12 +67,13 @@ class DialogInfo extends Component {
     this.props.onClickInfor(this.props.id, this.props.age);
   };
   handleClose = () => {
-    this.setState({ open: false,errors:'' });
-     this.props.setError()
+    this.setState({ open: false, errors: "",status:true });
+    this.props.setError();
+
   };
-  CheckValid=()=>{
+  CheckValid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
-    const regSDT=/((09|03|07|08|05)+([0-9]{8})\b)/g
+    const regSDT = /((09|03|07|08|05)+([0-9]{8})\b)/g;
     let today = new Date();
     let getdate = today.getDate();
     let getmonth = today.getMonth() + 1;
@@ -108,38 +86,32 @@ class DialogInfo extends Component {
     }
     // today=today()
     const getToday = getyear + "-" + getmonth + "-" + getdate;
-    if(this.props.Data.ho==''){
-    this.setState({errors:'Họ không được bỏ trống',status:true})
-  }else if(!regexp.test(this.props.Data.ho)){
-    this.setState({errors:'Họ không hợp lệ',status:true})
-  }else if (this.props.Data.sdt == "") {
-    this.setState({ errors: "Số điện thoại không được bỏ trống" });
-  } else if (!regSDT.test(this.props.Data.sdt)) {
-    this.setState({ errors: "Số điện thoại không hợp lệ" });
-  } 
-  else if(this.props.Data.ten==''){
-    this.setState({errors:'Tên không được bỏ trống',status:true})
-  }else if(!regexp.test(this.props.Data.ten)){
-    this.setState({errors:'Họ không hợp lệ',status:true})
-  }else if(this.props.Data.ngay_sinh>=getToday){
-    this.setState({errors:"Ngày sinh không hợp lệ",status:true})
-  }else{
-    this.setState({errors:'',
-            status:false,
-              })
-  }
-}
+    if (this.props.Data.ho == "") {
+      this.setState({ errors: "Họ không được bỏ trống", status: true });
+    } else if (!regexp.test(this.props.Data.ho)) {
+      this.setState({ errors: "Họ không hợp lệ", status: true });
+    } else if (this.props.Data.sdt == "") {
+      this.setState({ errors: "Số điện thoại không được bỏ trống" });
+    } else if (!regSDT.test(this.props.Data.sdt)) {
+      this.setState({ errors: "Số điện thoại không hợp lệ" });
+    } else if (this.props.Data.ten == "") {
+      this.setState({ errors: "Tên không được bỏ trống", status: true });
+    } else if (!regexp.test(this.props.Data.ten)) {
+      this.setState({ errors: "Họ không hợp lệ", status: true });
+    } else if (this.props.Data.ngay_sinh >= getToday) {
+      this.setState({ errors: "Ngày sinh không hợp lệ", status: true });
+    } else {
+      this.setState({ errors: "", status: false });
+    }
+  };
 
   render() {
-   
-    const { classes} = this.props;
-    const { open,errors,status} = this.state;
-   
-
+    const { classes } = this.props;
+    const { open, errors, status } = this.state;
     return (
       <div>
         <IconButton
-          name='icon'
+          name="icon"
           size="small"
           className={classes.eyes}
           variant="outlined"
@@ -147,40 +119,41 @@ class DialogInfo extends Component {
         >
           {this.props.icon}
         </IconButton>
-
-      
-       
         <Dialog
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Thông Tin {this.props.age?this.props.title:" Sinh Viên"} </DialogTitle>
-             <div style={{textAlign:'center',color:'red'}}> {errors}{this.props.success}</div>
+          <DialogTitle id="form-dialog-title">
+            Thông Tin {this.props.age ? this.props.title : " Sinh Viên"}
+          </DialogTitle>
+          <span style={{ textAlign: "center", color: "red" }}>
+            {errors}
+            {this.props.success}
+          </span>
           <DialogContent>
             <form onSubmit={this.props.onSubmit}>
-         
-            
-          
-                  <div className={classes.formControl}>
+              <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="ho"
-                  type="text"
+                  variant="outlined"
                   value={this.props.Data.ho}
-                  disabled={this.props.status}
                   onChange={this.props.handleChange}
+                  className={classes.contentFormControl}
+                  disabled={this.props.status}
                   onBlur={this.CheckValid}
                 />
               </div>
-      
+
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Tên</label>
-                <input
-                  className={classes.contentFormControl}
+                <TextField
+                  size="small"
                   name="ten"
-                  type="text"
+                  variant="outlined"
+                  className={classes.contentFormControl}
                   value={this.props.Data.ten}
                   disabled={this.props.status}
                   onChange={this.props.handleChange}
@@ -189,8 +162,10 @@ class DialogInfo extends Component {
               </div>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Email</label>
-                <input
+                <TextField
+                  size="small"
                   name="email"
+                  variant="outlined"
                   className={classes.contentFormControl}
                   type="text"
                   value={this.props.Data.email}
@@ -198,24 +173,31 @@ class DialogInfo extends Component {
                   onChange={this.props.handleChange}
                 />
               </div>
-              <span className={classes.ngaysinh}>Ngày sinh</span>
-              <TextField
-                name="ngay_sinh"
-                label="Birthday"
-                type="date"
-                value={this.props.Data.ngay_sinh}
-                className={classes.contentNgaysinh}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                disabled={this.props.status}
-                onChange={this.props.handleChange}
-                onBlur={this.CheckValid}
-              />
               <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Số điện thoại</label>
-                <input
+                <label className={classes.titleFormControl}>Ngày sinh</label>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Fragment>
+                    <DatePicker
+                      className={classes.contentFormControl}
+                      onBlur={this.CheckValid}
+                      format="yyyy/MM/dd"
+                      name="ngay_sinh"
+                      disabled={this.props.status}
+                      onChange={this.props.handleDateChange}
+                      value={this.props.Data.ngay_sinh}
+                    />
+                  </Fragment>
+                </MuiPickersUtilsProvider>
+              </div>
+
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>
+                  Số điện thoại
+                </label>
+                <TextField
+                  size="small"
                   name="sdt"
+                  variant="outlined"
                   className={classes.contentFormControl}
                   type="number"
                   value={this.props.Data.sdt}
@@ -227,43 +209,70 @@ class DialogInfo extends Component {
 
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Giới tính</label>
-                <input
+                <TextField
+                  size="small"
                   name="gioi_tinh"
+                  variant="outlined"
                   className={classes.contentFormControl}
                   type="text"
-                  value={this.props.Data.gioi_tinh?'Nam':'Nữ'}
+                  value={this.props.Data.gioi_tinh ? "Nam" : "Nữ"}
                   disabled={true}
                   onChange={this.props.handleChange}
                 />
               </div>
 
-              <div className={classes.formControl}  style={{  display:this.props.display}}>
+              <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Người tạo</label>
-                <input
+                <TextField
+                  size="small"
                   name="nguoi_tao_id"
+                  variant="outlined"
                   className={classes.contentFormControl}
                   type="text"
-                  value={this.props.name}
-                  disabled={this.props.status}
-                 
+                  value={this.props.name.fname + " " + this.props.name.lname}
+                  disabled={true}
                 />
               </div>
-
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Ngày tạo</label>
+                <TextField
+                  size="small"
+                  name="ngay_tao"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.props.Data.createdAt}
+                  disabled={true}
+                />
+              </div>
+              <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Cập nhật</label>
+                <TextField
+                  size="small"
+                  name="update"
+                  variant="outlined"
+                  className={classes.contentFormControl}
+                  type="text"
+                  value={this.props.Data.updatedAt}
+                  disabled={true}
+                />
+              </div>
               <DialogActions>
-
-              
-            {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
+                {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
               Hủy bỏ
             </Button> */}
-            <Button name='btnXacNhan' type={this.props.type} onClick={this.props.status?this.handleClose:''} color="primary" disabled={this.props.status?'':status}>
-              Xác nhận
-            </Button>
-          </DialogActions>
-    
+                <Button
+                  name="btnXacNhan"
+                  type={this.props.type}
+                  onClick={this.props.status ? this.handleClose : ""}
+                  color="primary"
+                  disabled={this.props.status ? "" : status}
+                >
+                  Xác nhận
+                </Button>
+              </DialogActions>
             </form>
           </DialogContent>
-
-        
         </Dialog>
       </div>
     );

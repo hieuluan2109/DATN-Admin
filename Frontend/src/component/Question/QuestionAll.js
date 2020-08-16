@@ -181,7 +181,7 @@ export default function QuestionAllList(props) {
             </Grid>
           </Grid>
           </FormControl>
-          {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>}
+          {/* {valueQuestion?<AddQuestions token={token} valueQuestion={true}/>:<AddQuestionsTL token={token} valueQuestion={false}/>} */}
      
           <div hidden={loading} className={classes.loading}><Loading /></div>
           <div className={classes.formInfo}>

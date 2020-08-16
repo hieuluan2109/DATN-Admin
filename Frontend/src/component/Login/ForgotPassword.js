@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-// import Status from './StatusRequest'
 import axios from "axios";
 import Popup from "reactjs-popup";
 import ForgotPassword from "./ForgotPassword";
 import { Redirect } from "react-router";
 import Cookies from "js-cookie";
+import Alert from '@material-ui/lab/Alert';
 import "../../css/login.scss";
 import App from "./../../App";
 import TextField from "@material-ui/core/TextField";
@@ -34,16 +34,11 @@ const styles = (theme) => ({
     fontWeight: "600",
   },
   btnLogin: {
-    // backgroundColor: "#0B0B61",
-    // outline: "none",
-    // padding: "10px",
-    // borderRadius: "25px",
     fontSize: "100%",
     width: "87%",
     marginTop: "20px",
     marginLeft: "2%",
     height: "50px",
-    // color: "white",
   },
   forgot: {
     marginTop: "20px",
@@ -71,19 +66,33 @@ class Forgot extends Component {
     this.state = {
       email: "",
       password: "",
-      Error: "",
+      error:false,
       loggedIn,
       cookie: null,
     }
     
   }
 
+  
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
-
+  handleSubmit=(event)=>{
+  
+    event.preventDefault();
+    const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
+    const {email}=this.state
+    // if(!email||!regexE.test(email)){
+    //   this.setState({error:true})
+    // }
+    axios.post('http://navilearn.herokuapp.com/admin/reset-password',{email}).then((res)=>{
+        console.log(res)
+    }).catch((error)=>{
+        console.log('Lỗi',error)
+    })
+  }
   render() {
     const { classes } = this.props;
 
@@ -108,7 +117,7 @@ class Forgot extends Component {
             />
 
             <div>
-              <Button variant="contained" className={classes.btnLogin} color="primary" type="submit">
+              <Button variant="contained" onsubmit={this.handleSubmit} className={classes.btnLogin} color="primary" type="submit">
                 Tiếp tục
               </Button>
               {/* <input

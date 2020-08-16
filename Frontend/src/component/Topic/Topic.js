@@ -195,6 +195,7 @@ export default function Threadlist(props) {
           mo_ta: data.mo_ta,
           nguoi_tao: data.nguoi_tao_id.ten,
           ngay_tao: data.createdAt,
+          update:data.updatedAt,
           _id: data._id,
         });
         console.log("GV", dataTopicInfor);

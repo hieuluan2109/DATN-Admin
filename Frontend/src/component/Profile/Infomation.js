@@ -5,10 +5,8 @@ import Cookies from "js-cookie";
 import Skeleton from '@material-ui/lab/Skeleton';
 import Paper from '@material-ui/core/Paper';
 import TextField from "@material-ui/core/TextField";
-import ButtonMenu from './../ButtonMenu'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';

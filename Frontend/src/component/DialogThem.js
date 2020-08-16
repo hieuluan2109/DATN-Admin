@@ -64,7 +64,7 @@ const styles = (theme) => ({
     },
   },
   contentNgaysinh: {
-    marginTop: "5px",
+    marginTop: "15px",
     marginLeft: "10px",
   },
   gioi_tinh: {
@@ -266,7 +266,6 @@ class DialogThem extends Component {
     this.setState({
       ngay_sinh: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(),
     });
-    console.log(new Date(date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()) < Date.now());
   };
 
   render() {
@@ -373,30 +372,9 @@ class DialogThem extends Component {
                       <label className={classes.titleFormControl}>
                         Ngày sinh
                       </label>
-                      {/* <TextField
-                  name="ngay_sinh"
-                  label="Birthday"
-                  type="date"
-                  value={this.state.ngay_sinh}
-                  className={classes.contentNgaysinh}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={this.handleChange}
-                  onBlur={this.checkvalid}
-                /> */}
-
+                     
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Fragment>
-                          {/* <KeyboardDatePicker
-                            className={classes.contentNgaysinh}
-                            name="ngay_sinh"
-                            value={this.state.ngay_sinh}
-                            onChange={this.handleDateChange}
-                            format="yyyy/MM/dd"
-                            onBlur={this.checkvalid}
-                          /> */}
-
                           <DatePicker
                             className={classes.contentNgaysinh}
                             onBlur={this.checkvalid}

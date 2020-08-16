@@ -214,10 +214,11 @@ class DialogThem extends Component {
         email,
         ma_sv,
         password,
-        ngay_sinh,
         sdt,
         gioi_tinh,
       } = this.state;
+      let {ngay_sinh}=this.state
+     ngay_sinh=moment(ngay_sinh).format("YYYY-MM-DD")
       console.log(this.props.token);
       var url = "";
       this.props.value == true
@@ -226,16 +227,7 @@ class DialogThem extends Component {
       var params;
       this.props.value == true
         ? (params = { ho, ten, email, ngay_sinh, password, sdt, gioi_tinh })
-        : (params = {
-            ho,
-            ten,
-            email,
-            ma_sv,
-            ngay_sinh,
-            password,
-            sdt,
-            gioi_tinh,
-          });
+        : (params = { ho,ten,email, ma_sv,ngay_sinh, password,sdt, gioi_tinh });
       console.log(params);
       axios
         .post(url, params, {
@@ -243,7 +235,7 @@ class DialogThem extends Component {
         })
         .then((res) => {
           console.log("AAA", res.data);
-          // if (res.data.success == true) {
+          if (res.data.success == true) {
             this.setState({
               ho: "",
               ten: "",
@@ -257,14 +249,15 @@ class DialogThem extends Component {
               isInputValid: false,
               errors: "Thêm thành công",
               gioi_tinh: true,
+              status:true
             });
-          // }
+          }
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
-          // this.setState({
-          //   errors: error.response.data,
-          // });
+          this.setState({
+            errors: error.response.data.errors
+          });
         });
       return true;
     } else return false;

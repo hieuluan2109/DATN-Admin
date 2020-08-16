@@ -8,8 +8,11 @@ import {
   TableHead,
   TableRow,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl
 } from "@material-ui/core";
-// import CreateIcon from "@material-ui/icons/Create";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import SearchButton from "../Search";
 import axios from "axios";
@@ -17,9 +20,6 @@ import Cookies from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import ClassDetail from "./ClassroomDetail";
 import Loading from '../Loading';
-
-// import TopicInfor from "./TopicInfor";
-
 const useStyles = makeStyles((theme) => ({
   containerForm: {
     marginTop: "50px",
@@ -36,52 +36,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   formControl: {
-    paddingTop: "30px",
-    paddingLeft: "30px",
-    maxwidth: "600px",
+   position:'absolute',
+   right:'120px',
+   top:'20%'
   },
   table: {
     minWidth: 600,
     maxwidth: 1200,
     width: 1161,
     marginTop: 70,
-  },
-  eyes: {
-    color: "bold",
-  },
-  containerNext: {
-    position: "absolute",
-    left: "90%",
-    top: "87%",
-  },
-  containerBack: {
-    position: "absolute",
-    left: "79%",
-    top: "87%",
-  },
-  next: {
-    fontSize: "1rem",
-  },
-  back: {
-    fontSize: "1rem",
-  },
-  buttonPageNumber: {
-    display: "inline",
-    padding: ".2rem .41rem",
-    borderRadius: "30px!important",
-    backgroundColor: "#5089de",
-    "&": {
-      color: "red",
-      margin: "0 3px",
-      color: "#fff",
-      borderColor: "#5089de",
-    },
-  },
-
-  page: {
-    position: "absolute",
-    left: "80%",
-    top: "85%",
   },
   pagination: {
     marginRight: "70px",
@@ -97,17 +60,12 @@ const ClassTitle = ["Tên Lớp", "Người tạo", "Chi tiết"];
 
 export default function ClassList(props) {
   const classes = useStyles();
-  const { title } = props;
-  const [selectedIndex, setSelectedIndex] = useState(1);
   const token = Cookies.get("token");
   const [loading, setLoading] = useState(false);
-
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
   const [getClassList, setClassList] = useState([]);
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
+  const [sort, setSort] = useState(' ');
 
   useEffect(() => {
     setLoading(false)
@@ -162,6 +120,7 @@ export default function ClassList(props) {
     }, 300);
   };
 
+  
   const [dataClassRoomInfor, setDataClassRoomInfor] = useState({
     ds_bai_tap: [],
     ds_bai_thi: [],
@@ -170,9 +129,8 @@ export default function ClassList(props) {
     tieu_de: "",
     updatedAt: "",
   });
-const [dsBaiTap,setDataBaiTap]=useState([])
-const [dsBaiThi,setDataBaiThi]=useState([])
-  // const [dataClassRoomInfor,setDataClassRoomInfor] = useState([])
+  const [dsBaiTap,setDataBaiTap]=useState([])
+  const [dsBaiThi,setDataBaiThi]=useState([])
   const [getSuccess, setSuccess] = useState("");
 
   const getClassRoomInfor = (id) => {
@@ -183,7 +141,6 @@ const [dsBaiThi,setDataBaiThi]=useState([])
       .then((res) => {
         const { data } = res.data;
         console.log(data);
-        // setDataClassRoomInfor(data)
         setDataClassRoomInfor({
           ds_bai_tap: data.ds_bai_tap,
           ds_bai_thi: data.ds_bai_thi,
@@ -231,6 +188,23 @@ const [dsBaiThi,setDataBaiThi]=useState([])
         console.log("Lỗi", error);
       });
   };
+  const handleSort=(event)=>{
+    // setSort(event.target.value)
+    //   setLoading(false)
+    //   axios
+    //     .get(`https://navilearn.herokuapp.com/admin/question/list/?loai=choice&page=${pageNumberTN}&sort=${event.target.value}`, 
+    //       { headers: { Authorization: `Bearer ${token}` } })
+    //     .then((res) => {
+    //       setLoading(true)
+    //       // const {data}=res.data
+    //       setGetListTN(res.data.data);
+    //       setPageTN(res.data.pages);
+    //     })
+    //     .catch((error) => {
+    //       console.log("Lỗi", error);
+    //     });
+      
+  }
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -239,7 +213,16 @@ const [dsBaiThi,setDataBaiThi]=useState([])
         <div hidden={loading} className={classes.loading}><Loading /></div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
+              <FormControl  className={classes.formControl}>
+              <InputLabel>Sort</InputLabel>
+              <Select value={sort} onChange={handleSort}>
+                <MenuItem value='# '>None</MenuItem>
+                <MenuItem value='#'>None</MenuItem>
+                <MenuItem value='#'>None</MenuItem>
+              </Select>
+              </FormControl>
           <div>
+
             <TableContainer>
               <Table
                 className={classes.table}

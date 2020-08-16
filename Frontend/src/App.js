@@ -45,7 +45,7 @@ class App extends Component {
         <BrowserRouter>
           <Route exact path="/" render={() => <Redirect to="/admin" />} />
           <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/*" render={() => <Redirect to="/admin" />} />
+          {/* <Route exact path="/*" render={() => <Redirect to="/admin" />} /> */}
           <Switch>
             <Route exact path="/admin">
               <div className="admin">

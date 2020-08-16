@@ -1,8 +1,6 @@
 import React from "react";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-// import Search from './Search'
-import BugReportIcon from "@material-ui/icons/BugReport";
 import {makeStyles,Typography,IconButton,Badge} from "@material-ui/core";
 import Menus from "../ButtonMenu";
 import Appbarnav from "../Appbar";
@@ -12,13 +10,7 @@ import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import {
-  // BrowserRouter as Router,
-  // Switch,
-  // Route,
   Link,
-  // NavLink,
-  // useRouteMatch,
-  // useParams
 } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({

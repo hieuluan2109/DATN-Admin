@@ -58,6 +58,15 @@ export default function Home() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const listNotifacation =()=>{
+    if (data.length == 0)
+      return <Typography style={{marginLeft: "20px", marginTop: '5px',marginBottom: '5px'}} >(Trống)</Typography>
+    else return data.map( function(data, index){
+      if(index < 5)
+        return <Typography style={{marginLeft: "20px", marginTop: '5px'}}><b>.</b> {data.thong_tin_sua.ho + ' ' + data.thong_tin_sua.ten}</Typography>
+    }.bind(this))
+
+  }
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   return (
@@ -90,11 +99,7 @@ export default function Home() {
       <div style={{margin: "20px"}}>
         <b>Yêu cầu sửa thông tin</b>
         <Divider />
-        {data ? data.map( function(data, index){
-          if(index < 5)
-            return <Typography style={{marginLeft: "20px"}}><b>.</b> {data.thong_tin_sua.ho + ' ' + data.thong_tin_sua.ten}</Typography>
-        }.bind(this))
-        : '...' }
+        {data ? listNotifacation() : null }
       </div>
       <Button onClick={handleClose} style={{left: '65%'}} color="primary" size="small" >
         <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p></Button>

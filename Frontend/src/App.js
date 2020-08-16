@@ -26,7 +26,7 @@ import Logout from "./component/Login/Logout";
 import ClassRoom from './view/ClassRoom'
 import TestList from './view/Test'
 import ForgotPassword from './view/ForgotPassword'
-
+import ResetPW from './view/ResetPassword'
 class App extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,7 @@ class App extends Component {
         <BrowserRouter>
           <Route exact path="/" render={() => <Redirect to="/admin" />} />
           <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/*" render={() => <Redirect to="/admin" />} />
+          {/* <Route exact path="/*" render={() => <Redirect to="/admin" />} /> */}
           <Switch>
             <Route exact path="/admin">
               <div className="admin">
@@ -124,6 +124,11 @@ class App extends Component {
           <Route exact path="/forgotpassword">
             <div className="Login">
               <ForgotPassword />
+            </div>
+          </Route>
+          <Route exact path="/reset">
+            <div className="Login">
+              <ResetPW />
             </div>
           </Route>
           {/* </Switch> */}

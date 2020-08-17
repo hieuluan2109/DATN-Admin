@@ -87,7 +87,7 @@ class Forgot extends Component {
     // if(!email||!regexE.test(email)){
     //   this.setState({error:true})
     // }
-    axios.post('http://navilearn.herokuapp.com/admin/reset-password',{email}).then((res)=>{
+    axios.post('https://navilearn.herokuapp.com/admin/forgot-password',{email}).then((res)=>{
         console.log(res)
     }).catch((error)=>{
         console.log('Lỗi',error)

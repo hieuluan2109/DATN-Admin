@@ -43,8 +43,7 @@ class App extends Component {
     if (token != null) {
       return (
         <BrowserRouter>
-          <Route exact path="/" render={() => <Redirect to="/admin" />} />
-          <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} />
+          
           {/* <Route exact path="/*" render={() => <Redirect to="/admin" />} /> */}
           <Switch>
             <Route exact path="/admin">
@@ -107,6 +106,8 @@ class App extends Component {
                 <TestList />
               </div>
             </Route>
+            <Route exact path="*" render={() => <Redirect to="/admin" />} />
+            {/* <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} /> */}
           </Switch>
           
         </BrowserRouter>
@@ -114,8 +115,9 @@ class App extends Component {
     } else {
       return (
         <BrowserRouter>
-          <Route exact path="/*" render={() => <Redirect to="/" />} />
-          {/* <Switch> */}
+         <Switch>
+        
+         
           <Route exact path="/">
             <div className="Login">
               <LoginV />
@@ -131,7 +133,8 @@ class App extends Component {
               <ResetPW />
             </div>
           </Route>
-          {/* </Switch> */}
+          <Route exact path="*" render={() => <Redirect to="/" />} />
+          </Switch>
         </BrowserRouter>
       );
     }

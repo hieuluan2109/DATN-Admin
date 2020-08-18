@@ -1,4 +1,5 @@
 const Schema = require('../model/index.schema');
+const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_dashboard: async function (req, res) {
         let choseTime = req.query.time;
@@ -27,8 +28,11 @@ module.exports = {
         .catch(err =>  res.status(400).json({success: false, error: err}))
     },
     admin_stats_point: async (req, res) => {
-        Schema.DiemSchema.find({},'diem -_id')
+        let {id} = req.query;
+        id = id ? {sinh_vien_id: id} : {};
+        Schema.DiemSchema.find(id,'diem -_id')
         .then((data)=>{
+            console.log(data)
             let result = {
                 0 : 0,
                 1 : 0,
@@ -52,32 +56,50 @@ module.exports = {
             res.json({err})
         })
     },
-    admin_get_stats_top_student: async function(req, res) {
-        // Schema.DiemSchema.find({},'diem sinh_vien_id -_id')
-        //     .populate('sinh_vien_id', 'ma_sv -_id ho ten')
-        //     .then(result =>{
-        //         let data = [];
-        //         result.map((row, index)=>{
-        //             index == 0
-        //             ? data.push(row.sinh_vien_id.ma_sv)
-        //             : data.
-        //         })
-        //         res.status(200).json({success: true, data});
-        //     })
-        //     .catch(err =>  res.status(400).json({success: false, error: err}))
+    admin_get_stats_top_student: async function(req, res, next) {
         Schema.DiemSchema.aggregate([
             {
                 $group : {
                     _id : '$sinh_vien_id',
-                    count: { $avg: "$diem"} 
-                },
-                $limit : 3
-            }
-        ], function(err, data) {
-            if ( err || !data )
-                res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
-            else 
-                res.status(200).json({'success': true, data})
+                    avg: { $avg: '$diem'} 
+                }
+            },
+            {$limit : 3}
+        ])
+        // .then(data=>{
+        .exec((err, data)=>{
+           Promise.all([
+               data[0] ? Schema.SinhvienSchema.findById(data[0]._id,'ho ten') : next,
+               data[1] ? Schema.SinhvienSchema.findById(data[1]._id,'ho ten') : next,
+               data[2] ? Schema.SinhvienSchema.findById(data[2]._id,'ho ten') : next,
+           ]).then(re=>{
+               let result = {data, info};
+               res.json({result})
+           })
         })
+            // res.status(200).json({'success': true, data})
+        // }).catch((error)=>{
+        //     res.status(400).json({'success': false, 'errors': 'Lỗi không tìm thấy'})
+        // })
+
     },
+    amdin_get_class_belong_a_teacher: async function (req, res) {
+        let {id} = req.query;
+        Schema.LopHocSchema.find({nguoi_tao_id: id}, 'tieu_de _id createdAt updatedAt')
+        .then(async data=>{
+            let result = [];
+            data.map((value, index)=>{
+                result.push({
+                    _id: value._id,
+                    tieu_de: value.tieu_de,
+                    createdAt: customDatetime(value.createdAt, 1),
+                    updatedAt: customDatetime(value.updatedAt, 1),
+                })
+            })
+            let bai_thi = await Schema.BaiThiSchema.countDocuments({nguoi_tao_id: id}).then(exam=>exam);
+            let bai_tap = await Schema.BaiTapSchema.countDocuments({nguoi_tao_id: id}).then(exam=>exam);
+        res.status(200).json({count: result.length, bai_thi, bai_tap, data: result})
+        })
+        .catch( err =>  res.status(400).json({err}))
+    }
 };

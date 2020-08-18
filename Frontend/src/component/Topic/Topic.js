@@ -22,6 +22,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Loading from '../Loading';
+import CheckedStatus from '../Status'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -106,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", ""];
+const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", "Chi tiết", 'Cập nhật', 'Trạng thái'];
 
 export default function Threadlist(props) {
   const classes = useStyles();
@@ -302,7 +303,7 @@ const handleSort=(event)=>{
                         {value.nguoi_tao_id.ten}
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" className={classes.eyes}>
+                        <IconButton size="small">
                           <TopicInfor
                             id={value._id}
                             getInfor={getTopicInfor}
@@ -313,7 +314,9 @@ const handleSort=(event)=>{
                             clearForm={clearSuccess}
                           />
                         </IconButton>
-                        <IconButton size="small" className={classes.eyes}>
+                        </TableCell>
+                        <TableCell align="center">
+                        <IconButton size="small">
                           <TopicInfor
                             id={value._id}
                             getInfor={getTopicInfor}
@@ -330,6 +333,7 @@ const handleSort=(event)=>{
                           />
                         </IconButton>
                       </TableCell>
+                      <TableCell align="center" ><CheckedStatus /> </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

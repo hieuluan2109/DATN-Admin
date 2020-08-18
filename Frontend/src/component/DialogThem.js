@@ -273,7 +273,6 @@ class DialogThem extends Component {
     // const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     const { classes, children } = this.props;
     const { open, errors, success, status } = this.state;
-    console.log(this.state.ngay_sinh);
     // const { ho, ten, email, password,ngaysinh } = this.state;
 
     return (

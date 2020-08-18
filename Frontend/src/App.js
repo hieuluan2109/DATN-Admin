@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import "./App.css";
 import {
   BrowserRouter,
@@ -36,6 +36,7 @@ class App extends Component {
     };
   }
   render() {
+
     let token = Cookies.get("token");
     if (this.props.token == false) {
       token = Cookies.remove("token");
@@ -46,7 +47,8 @@ class App extends Component {
           
           {/* <Route exact path="/*" render={() => <Redirect to="/admin" />} /> */}
           <Switch>
-            <Route exact path="/admin">
+          {/* <Fragment> */}
+            <Route exact path="/admin" >
               <div className="admin">
                 <HomePage />
               </div>
@@ -108,6 +110,7 @@ class App extends Component {
             </Route>
             <Route exact path="*" render={() => <Redirect to="/admin" />} />
             {/* <Route exact path="/forgotpassword" render={() => <Redirect to="/admin" />} /> */}
+            {/* </Fragment> */}
           </Switch>
           
         </BrowserRouter>

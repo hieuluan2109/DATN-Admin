@@ -117,7 +117,7 @@ class Forgot extends Component {
             />
 
             <div>
-              <Button variant="contained" onsubmit={this.handleSubmit} className={classes.btnLogin} color="primary" type="submit">
+              <Button variant="contained"  className={classes.btnLogin} color="primary" type="submit">
                 Tiếp tục
               </Button>
               {/* <input

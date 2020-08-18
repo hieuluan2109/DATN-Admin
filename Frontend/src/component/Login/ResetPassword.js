@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // import Status from './StatusRequest'
 import axios from "axios";
 import Popup from "reactjs-popup";
@@ -11,10 +11,9 @@ import TextField from "@material-ui/core/TextField";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import {
-    Link,
-  } from "react-router-dom";
-const styles = (theme) => ({
+import queryString from 'query-string'
+import { BrowserRouter as Router,useLocation,useHistory } from 'react-router-dom'
+const useStyles = makeStyles((theme) => ({
   txtLogin: {
     margin: theme.spacing(1),
     width: "40ch",
@@ -61,32 +60,23 @@ const styles = (theme) => ({
     marginLeft: "2%",
     height: "50px",
   },link:{textDecoration:'none'}
-});
+}));
 
-class ResetPassword extends Component {
-  constructor(props) {
-    super(props);
 
-    let loggedIn = false;
-    this.state = {
-      email: "",
-      password: "",
-      Error: "",
-      loggedIn,
-      cookie: null,
-    }
-    
-  }
+function ResetPassword (props){
 
-  handleChange = (event) => {
-    this.setState({
+  const classes = useStyles();
+  const location = useLocation();
+  const [email,setEmail]=useState('')
+ const handleChange = (event) => {
+  setEmail({
       [event.target.name]: event.target.value,
     });
   };
-
-  render() {
-    const { classes } = this.props;
-
+  console.log(location.search)
+  let params = queryString.parse(location.search);
+  console.log(params)
+     
     return (
       <div>
         <Paper variant="outlined" className="form">
@@ -94,8 +84,8 @@ class ResetPassword extends Component {
           <div className={classes.please}>
             Xin chào, Nguyễn Hiếu Luân <br/>Vui lòng điền đầy đủ thông tin bên dưới để reset mật khẩu
           </div>
-          <div id="error">{this.state.Error}</div>
-          <form onSubmit={this.handleSubmit} className={classes.form}>
+          {/* <div id="error">{this.state.Error}</div> */}
+          <form onSubmit={props.handleSubmit} className={classes.form}>
             <TextField
               id="outlined-basic"
               label="Mật khẩu mới"
@@ -104,7 +94,7 @@ class ResetPassword extends Component {
             //   value={this.state.name}
               variant="outlined"
               className={classes.txtLogin}
-              onChange={this.handleChange}
+              onChange={props.handleChange}
             />
             <TextField
               id="outlined-basic"
@@ -114,7 +104,7 @@ class ResetPassword extends Component {
             //   value={this.state.name}
               variant="outlined"
               className={classes.txtLogin}
-              onChange={this.handleChange}
+              onChange={props.handleChange}
             />
 
             <div>
@@ -130,5 +120,4 @@ class ResetPassword extends Component {
       </div>
     );
   }
-}
-export default withStyles(styles, { withTheme: true })(ResetPassword);
+export default withStyles(useStyles, { withTheme: true })(ResetPassword);

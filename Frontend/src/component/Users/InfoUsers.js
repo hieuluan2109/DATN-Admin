@@ -22,6 +22,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
 import Loading from '../Loading';
 import Grid from '@material-ui/core/Grid';
+import CheckedStatus from '../Status'
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
@@ -54,10 +55,6 @@ const useStyles = makeStyles((theme) => ({
     maxwidth: 1200,
     width: 1161,
     marginTop: 70,
-  },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
   },
   formControl: {
     position: "absolute",
@@ -332,7 +329,7 @@ export default function InfoUsers(props) {
 
   
 
-  const info=['Họ','Tên','Email','Ngày sinh']
+  const info=['Họ','Tên','Email','Ngày sinh','Chi tiết','Cập nhật','Trạng thái']
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -405,7 +402,7 @@ export default function InfoUsers(props) {
                       <TableCell align="center">{row.email}</TableCell>
                       <TableCell align="center">{row.ngay_sinh}</TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" name='icon-eye' className={classes.eyes}>
+                        <IconButton size="small" name='icon-eye'>
                           <DialogInfor
                             title="Giáo Viên"
                             id={row._id}
@@ -419,8 +416,9 @@ export default function InfoUsers(props) {
                             display={"none"}
                           />
                         </IconButton>
-
-                        <IconButton size="small" name='icon-eye' className={classes.eyes}>
+                        </TableCell>
+                        <TableCell  align="center">
+                        <IconButton size="small" name='icon-eye'>
                           <DialogInfor
                             title="Giáo viên"
                             id={row._id}
@@ -441,6 +439,7 @@ export default function InfoUsers(props) {
                           />
                         </IconButton>
                       </TableCell>
+                      <TableCell align="center"><CheckedStatus/> </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

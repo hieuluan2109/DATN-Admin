@@ -12,6 +12,7 @@ import {
 import { DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import Loading from './Loading';
 const styles = (theme) => ({
   selectsort: {
     position: "absolute",
@@ -59,6 +60,7 @@ class DialogInfo extends Component {
       open: false,
       errors: "",
       status: true,
+      loading: true,
     };
   }
 
@@ -69,7 +71,7 @@ class DialogInfo extends Component {
   handleClose = () => {
     this.setState({ open: false, errors: "",status:true });
     this.props.setError();
-
+    this.props.handleClose();
   };
   CheckValid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
@@ -132,6 +134,7 @@ class DialogInfo extends Component {
             {this.props.success}
           </span>
           <DialogContent>
+            {/* <div ><Loading /></div> */}
             <form onSubmit={this.props.onSubmit}>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>

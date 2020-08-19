@@ -91,6 +91,9 @@ export default function InfoUsers(props) {
     setPageSV(1)
     setPageGV(1)
   };
+  const handleClose = () => {
+    setDataUser({ ho: "", ten: "", ngay_sinh: "",sdt:'',createdAt:'',updatedAt:'' });
+  };
   const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'',createdAt:'',updatedAt:'' });
   const [name, setName] = useState({fname:'',lname:''});
   const [getSuccess, setSuccess] = useState(false);
@@ -327,8 +330,6 @@ export default function InfoUsers(props) {
     }, 300);
   };
 
-  
-
   const info=['Họ','Tên','Email','Ngày sinh','Chi tiết','Cập nhật','Trạng thái']
   return (
     <div className="row">
@@ -407,6 +408,7 @@ export default function InfoUsers(props) {
                             title="Giáo Viên"
                             id={row._id}
                             onClickInfor={onclickInfor}
+                            handleClose={handleClose}
                             Data={dataUser}
                             icon={<VisibilityIcon />}
                             age={age}

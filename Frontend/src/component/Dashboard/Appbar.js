@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [notification, setNotification] = React.useState('1'); 
+  const [notification, setNotification] = React.useState('0'); 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -101,8 +101,15 @@ export default function Home() {
         <Divider />
         {data ? listNotifacation() : null }
       </div>
+      {/* <Button color="primary" size="small" >
+        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Xử lí thông báo</p>
+      </Button> */}
+      <Button onClick={handleClose} style={{position: 'absolute'}} color="primary" size="small" >
+        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p>
+      </Button>
       <Button onClick={handleClose} style={{left: '65%'}} color="primary" size="small" >
-        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p></Button>
+        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p>
+      </Button>
       </Popover>
     </div>
   );

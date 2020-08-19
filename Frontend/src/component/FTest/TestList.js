@@ -72,7 +72,6 @@ export default function Threadlist(props) {
   const [pageIndex, setPageIndex] = useState(1);
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState(" ");
-
   useEffect(() => {
     setLoading(false);
     axios
@@ -169,7 +168,26 @@ export default function Threadlist(props) {
         console.log("Lỗi", error);
       });
   };
-  const handleSort = (event) => {};
+  const handleSort = (event) => {
+    setSort(event.target.value)
+    setLoading(false);
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/test/list?page=${pageIndex}&sort=${event.target.value}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setLoading(true);
+        setPage(res.data.pages);
+        const { data } = res.data;
+        setListTest(data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -183,9 +201,11 @@ export default function Threadlist(props) {
           <FormControl className={classes.formControl}>
             <InputLabel>Sort</InputLabel>
             <Select value={sort} onChange={handleSort}>
-              <MenuItem value="# ">None</MenuItem>
-              <MenuItem value="#">None</MenuItem>
-              <MenuItem value="#">None</MenuItem>
+              <MenuItem value=" ">None</MenuItem>
+              <MenuItem value="tieu_de">Tên bài thi</MenuItem>
+              <MenuItem value="thoi_gian_thi">Thời gian thi</MenuItem>
+              <MenuItem value="ngay_thi">Ngày thi</MenuItem>
+              <MenuItem value="nguoi_tao_id">Người tạo</MenuItem>
             </Select>
           </FormControl>
           <div className={classes.formInfo}>

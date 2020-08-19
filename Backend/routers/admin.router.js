@@ -3,6 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const {validate} = require('../controllers/admin_validator');
 const {AdminController} = require('../controllers/index.controller');
+const example = require('../controllers/example');
+// router.get('/get/image', 
+//     example.listFiles
+// );
 router.get('/notification',
     AdminController.admin_get_notification)
 router.post(

@@ -433,6 +433,7 @@ export default function InfoUsers(props) {
                             onSubmit={onSubmitInforUser}
                             handleChange={handleChangeInfoUser}
                             handleDateChange={handleDateChange}
+                            handleClose={handleClose}
                             type="submit"
                             success={getSuccess}
                             setError={setDFres}

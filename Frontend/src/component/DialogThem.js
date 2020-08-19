@@ -75,7 +75,6 @@ const styles = (theme) => ({
     // maxWidth: "170vh",
   },
   paper: { marginLeft: "20px" },
-  grid5: { marginLeft: "150px" },
   radioSex: { marginLeft: "10px" },
   btnHuy: {
     // borderRadius:'20px',backgroundColor:'rgb(253, 216, 53)'

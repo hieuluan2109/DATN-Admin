@@ -9,47 +9,63 @@ import {
   DialogTitle,
   IconButton,
 } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import { DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 const styles = (theme) => ({
-  selectsort: {
+  btnThem: {
     position: "absolute",
-    top: "10px",
-    right: "25px",
+    right: "7%",
+    marginTop: "15px",
+    borderRadius: "5px",
+    background: theme.palette.primary.main,
+    color: "white",
+    "&:hover": {
+      background: theme.palette.primary.light,
+    },
   },
-  formInfo: {
-    marginTop: "107px",
-    marginRight: "6%",
-    marginLeft: "6%",
-    height: "100%",
-    background: "white",
-  },
-  titleformInfo: {
-    position: "absolute",
-    marginTop: "65px",
-    marginLeft: 60,
-    fontSize: 17,
-  },
+
   formControl: {
-    maxwidth: "700px",
+    maxwidth: "400px",
+    padding: "10px",
   },
   titleFormControl: {
-    width: "100px",
+    width: "120px",
     float: "left",
     paddingTop: "32px",
   },
   contentFormControl: {
-    width: "400px",
+    width: "300px",
     borderRadius: "5px",
     height: "30px",
     paddingLeft: "10px",
-    marginTop: "25px",
+    marginTop: "15px",
     outline: "none",
     "&:focus": {
       borderColor: "#3f51b5",
     },
   },
+  contentNgaysinh: {
+    marginTop: "15px",
+    marginLeft: "10px",
+  },
+  gioi_tinh: {
+    margin: "20px 10px",
+  },
+  dialogPaper: {
+    minHeight: "90vh",
+    maxHeight: "90vh",
+    minWidth: "170vh",
+    // maxWidth: "170vh",
+  },
+  paper: { marginLeft: "20px" },
+  grid5: { marginLeft: "150px" },
+  radioSex: { marginLeft: "10px" },
+  btnHuy: {
+    // borderRadius:'20px',backgroundColor:'rgb(253, 216, 53)'
+  },
+  btn: { paddingTop: "30px", paddingRight: "217px" },
 });
 
 class DialogInfo extends Component {
@@ -67,9 +83,8 @@ class DialogInfo extends Component {
     this.props.onClickInfor(this.props.id, this.props.age);
   };
   handleClose = () => {
-    this.setState({ open: false, errors: "",status:true });
+    this.setState({ open: false, errors: "", status: true });
     this.props.setError();
-
   };
   CheckValid = () => {
     const regexp = /[\sa-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
@@ -120,6 +135,7 @@ class DialogInfo extends Component {
           {this.props.icon}
         </IconButton>
         <Dialog
+          classes={{ paper: classes.dialogPaper }}
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -133,17 +149,20 @@ class DialogInfo extends Component {
           </span>
           <DialogContent>
             <form onSubmit={this.props.onSubmit}>
+            <Grid container>
+                <Grid item xs={6} className={classes.grid1}>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
                 <TextField
                   size="small"
-                  name="ho"
                   variant="outlined"
-                  value={this.props.Data.ho}
-                  onChange={this.props.handleChange}
                   className={classes.contentFormControl}
+                  name="ho"
+                  value={this.props.Data.ho}
+                  type="text"
+                  onChange={this.props.handleChange}
+                  onKeyUp={this.checkvalid}
                   disabled={this.props.status}
-                  onBlur={this.CheckValid}
                 />
               </div>
 
@@ -151,15 +170,17 @@ class DialogInfo extends Component {
                 <label className={classes.titleFormControl}>Tên</label>
                 <TextField
                   size="small"
-                  name="ten"
                   variant="outlined"
                   className={classes.contentFormControl}
+                  name="ho"
+                  type="text"
                   value={this.props.Data.ten}
                   disabled={this.props.status}
                   onChange={this.props.handleChange}
-                  onBlur={this.CheckValid}
+                  onKeyUp={this.checkvalid}
                 />
               </div>
+
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Email</label>
                 <TextField
@@ -179,7 +200,7 @@ class DialogInfo extends Component {
                   <Fragment>
                     <DatePicker
                       className={classes.contentFormControl}
-                      onBlur={this.CheckValid}
+                      onKeyUp={this.CheckValid}
                       format="yyyy/MM/dd"
                       name="ngay_sinh"
                       disabled={this.props.status}
@@ -220,7 +241,8 @@ class DialogInfo extends Component {
                   onChange={this.props.handleChange}
                 />
               </div>
-
+            </Grid>
+            <Grid item xs={6} className={classes.grid2}>
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Người tạo</label>
                 <TextField
@@ -233,6 +255,7 @@ class DialogInfo extends Component {
                   disabled={true}
                 />
               </div>
+             
               <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Ngày tạo</label>
                 <TextField
@@ -245,7 +268,7 @@ class DialogInfo extends Component {
                   disabled={true}
                 />
               </div>
-              <div className={classes.formControl}>
+                <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Cập nhật</label>
                 <TextField
                   size="small"
@@ -257,12 +280,15 @@ class DialogInfo extends Component {
                   disabled={true}
                 />
               </div>
+              
               <DialogActions>
                 {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
               Hủy bỏ
             </Button> */}
+            
                 <Button
                   name="btnXacNhan"
+                  style={{position:'absolute',marginRight:'25%',marginTop:'30px'}}
                   type={this.props.type}
                   onClick={this.props.status ? this.handleClose : ""}
                   color="primary"
@@ -271,7 +297,10 @@ class DialogInfo extends Component {
                   Xác nhận
                 </Button>
               </DialogActions>
+              </Grid>
+              </Grid>
             </form>
+           
           </DialogContent>
         </Dialog>
       </div>

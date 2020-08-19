@@ -83,7 +83,7 @@ export default function QuestionAllList(props) {
       .catch((error) => {
         console.log("Lỗi", error);
       });
-  }, [pageNumberTN]||[getListTN]);
+  }, [pageNumberTN]);
   useEffect(() => {
     axios
       .get(url[1], { headers: { Authorization: `Bearer ${token}` } })

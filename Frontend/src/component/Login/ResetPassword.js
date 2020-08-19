@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "translate(-45%, -50%)",
     width: "400px",
     marginRight: "10%",
+    color:'red'
   },
   login: {
     position: "relative",
@@ -75,7 +76,27 @@ function ResetPassword (props){
   };
   console.log(location.search)
   let params = queryString.parse(location.search);
-  console.log(params)
+  console.log(params.code)
+
+  const handleSubmit=(e)=>{
+    // axios
+    // .post("https://navilearn.herokuapp.com/admin/forgot-password", { email })
+    // .then((res) => {
+    //   console.log(res);
+    //   if (res.data.success === true) {
+    //     this.setState({ success: true });
+    //   }
+    //   else{
+    //     this.setState({success:false})
+    //   }
+    // })
+    // .catch((err) => {
+    //   if(!err.success){
+    //   this.setState({err:true,message:err.msg})
+    //   console.log("Lỗi", err.success);
+    //   }
+    // });
+  }
      
     return (
       <div>
@@ -85,7 +106,7 @@ function ResetPassword (props){
             Xin chào, Nguyễn Hiếu Luân <br/>Vui lòng điền đầy đủ thông tin bên dưới để reset mật khẩu
           </div>
           {/* <div id="error">{this.state.Error}</div> */}
-          <form onSubmit={props.handleSubmit} className={classes.form}>
+          <form className={classes.form}>
             <TextField
               id="outlined-basic"
               label="Mật khẩu mới"
@@ -108,11 +129,9 @@ function ResetPassword (props){
             />
 
             <div>
-              {/* <Link to='/' className={classes.link}>  */}
-              <Button variant="contained" className={classes.btnHuybo} color="primary">
+              <Button variant="contained" type='submit' className={classes.btnHuybo} color="primary">
                 Xác nhận
               </Button>
-              {/* </Link> */}
             
             </div>
           </form>

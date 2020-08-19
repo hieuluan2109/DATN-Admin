@@ -4,16 +4,16 @@ import Popup from "reactjs-popup";
 import ForgotPassword from "./ForgotPassword";
 import { Redirect } from "react-router";
 import Cookies from "js-cookie";
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 import "../../css/login.scss";
 import App from "./../../App";
 import TextField from "@material-ui/core/TextField";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import {
-    Link,
-  } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Sentmail from './SentMail'
+import Snackbar from '@material-ui/core/Snackbar';
 const styles = (theme) => ({
   txtLogin: {
     margin: theme.spacing(1),
@@ -55,7 +55,8 @@ const styles = (theme) => ({
     marginTop: "20px",
     marginLeft: "2%",
     height: "50px",
-  },link:{textDecoration:'none'}
+  },
+  link: { textDecoration: "none" },
 });
 
 class Forgot extends Component {
@@ -66,44 +67,67 @@ class Forgot extends Component {
     this.state = {
       email: "",
       password: "",
-      error:false,
+      error: false,
       loggedIn,
       cookie: null,
-    }
-    
+      success: false,
+    };
   }
 
-  
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
-  handleSubmit=(event)=>{
-  
+  handleClose=()=>{
+    this.setState({error:false})
+  }
+  handleSubmit = (event) => {
     event.preventDefault();
     const regexE = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
-    const {email}=this.state
-    // if(!email||!regexE.test(email)){
-    //   this.setState({error:true})
-    // }
-    axios.post('https://navilearn.herokuapp.com/admin/forgot-password',{email}).then((res)=>{
-        console.log(res)
-    }).catch((error)=>{
-        console.log('Lỗi',error)
+    const { email } = this.state;
+    if(!email){
+      this.setState({error:true,message:'Email không được để trống'})
+    }else if(!regexE.test(email)){
+      this.setState({error:false,message:'Email không hợp lệ'})
+    }
+    else {axios
+      .post("https://navilearn.herokuapp.com/admin/forgot-password", { email })
+      .then((res) => {
+        console.log(res);
+        if (res.data.success === true) {
+          this.setState({ success: true });
+        }
+        else{
+          this.setState({success:false})
+        }
+      })
+      .catch((err) => {
+        if(!err.success){
+        this.setState({err:true,message:err.msg})
+        console.log("Lỗi", err.success);
+        }
+      });
+    }
+  };
+
+  resentPassword=()=>{
+    this.setState({
+      success:false
     })
   }
   render() {
     const { classes } = this.props;
-
+    const { success } = this.state;
+   
     return (
       <div>
+        {!success ? 
         <Paper variant="outlined" className="form">
           <div className={classes.login}>Quên mật khẩu?</div>
           <div className={classes.please}>
             Vui lòng nhập email đã đăng ký và kiểm tra hộp thư
           </div>
-          <div id="error">{this.state.Error}</div>
           <form onSubmit={this.handleSubmit} className={classes.form}>
             <TextField
               id="outlined-basic"
@@ -117,29 +141,39 @@ class Forgot extends Component {
             />
 
             <div>
-              <Button variant="contained"  className={classes.btnLogin} color="primary" type="submit">
+              <Button
+                variant="contained"
+                className={classes.btnLogin}
+                color="primary"
+                type="submit"
+              >
                 Tiếp tục
               </Button>
-              {/* <input
-                type="submit"
-                className={classes.btnLogin}
-                onChange={this.handleChange}
-                value="Tiếp tục"
-              /> */}
-              <Link to='/' className={classes.link}> <Button variant="contained" className={classes.btnHuybo} color="primary">
-                Hủy bỏ
-              </Button></Link>
-              {/* <input
-                type="text"
-                className={classes.btnHuybo}
-                onChange={this.handleChange}
-                value="Hủy bỏ"
-              /> */}
+              <Link to="/" className={classes.link}>
+                {" "}
+                <Button
+                  variant="contained"
+                  className={classes.btnHuybo}
+                  color="primary"
+                >
+                  Hủy bỏ
+                </Button>
+              </Link>
             </div>
           </form>
-        </Paper>
+        </Paper>:<Sentmail resentMail={this.resentPassword}/>}
+        <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+        autoHideDuration={6000}
+        onClose={this.handleClose}
+        open={this.state.error}>
+      <Alert onClose={this.handleClose} severity="error">
+        {this.state.message}
+      </Alert>
+      </Snackbar>
       </div>
     );
   }
 }
 export default withStyles(styles, { withTheme: true })(Forgot);
+

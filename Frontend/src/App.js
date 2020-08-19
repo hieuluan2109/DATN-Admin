@@ -14,7 +14,6 @@ import LoginForm from "./component/Login/Login_Form";
 import Header from "./view/Home";
 import Profile from "./view/Profile";
 import Users from "./view/Users";
-import StudentList from "./view/Students";
 import QuestionsList from "./view/Question";
 import Topic from "./view/Topic";
 import Cookies from "js-cookie";
@@ -73,11 +72,7 @@ class App extends Component {
                 <Users />
               </div>
             </Route>
-            <Route exact path="/students">
-              <div className="students">
-                <StudentList />
-              </div>
-            </Route>
+           
             <Route exact path="/questions">
               <div className="questions">
                 <QuestionsList />

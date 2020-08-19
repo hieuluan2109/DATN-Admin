@@ -82,7 +82,7 @@ class LoginForm extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { email, password } = this.state;
-
+    
     axios({
       method: "post",
       url: "https://navilearn.herokuapp.com/login",
@@ -170,40 +170,6 @@ class LoginForm extends Component {
                 value="Đăng Nhập"
               />
             </div>
-            {/* <h2 className="login"> Login </h2>
-          <div id="error">{this.state.Error}</div>
-          <div>
-            <i id="user" className="fas fa-user"></i>
-          </div>
-          <div>
-            <input
-              className="iput"
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={this.state.name}
-              onChange={this.handleChange}
-
-            ></input>
-          </div>
-          <div>
-            <i id="lock" className="fa fa-lock">
-              {" "}
-            </i>{" "}
-          </div>
-          <div>
-            <input
-              className="iput"
-              type="password"
-              placeholder="********"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            ></input>
-          </div> 
-          <div>
-            <input type="submit" className="btn" value="Login" />
-          </div> */}
           </form>
         </Paper>
       </div>

@@ -154,7 +154,7 @@ export default function QuestionAllList(props) {
     <div className='row'>
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách câu hỏi </div>
+        <div className={classes.titleformInfo}> DANH SÁCH CÂU HỎI </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.formControl}>

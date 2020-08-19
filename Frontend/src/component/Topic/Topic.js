@@ -55,44 +55,7 @@ const useStyles = makeStyles((theme) => ({
     width: 1161,
     marginTop: 70,
   },
-  eyes: {
-    marginRight: 20,
-    color: "bold",
-  },
-  containerNext: {
-    position: "absolute",
-    left: "90%",
-    top: "87%",
-  },
-  containerBack: {
-    position: "absolute",
-    left: "79%",
-    top: "87%",
-  },
-  next: {
-    fontSize: "1rem",
-  },
-  back: {
-    fontSize: "1rem",
-  },
-  buttonPageNumber: {
-    display: "inline",
-    padding: ".2rem .41rem",
-    borderRadius: "30px!important",
-    backgroundColor: "#5089de",
-    "&": {
-      color: "red",
-      margin: "0 3px",
-      color: "#fff",
-      borderColor: "#5089de",
-    },
-  },
-
-  page: {
-    position: "absolute",
-    left: "80%",
-    top: "85%",
-  },
+ 
   pagination: {
     marginRight: "70px",
   },Hello:{
@@ -261,7 +224,7 @@ const handleSort=(event)=>{
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> {title} </div>
+        <div className={classes.titleformInfo}> DANH SÁCH CHỦ ĐỀ </div>
         <div hidden={loading} className={classes.loading}><Loading /></div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />

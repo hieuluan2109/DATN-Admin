@@ -334,7 +334,7 @@ export default function InfoUsers(props) {
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> {title} </div>
+        <div className={classes.titleformInfo}> DANH SÁCH NGƯỜI DÙNG </div>
         <div hidden={loading} className={classes.loading}><Loading /></div>
         <form>
           <SearchButton onChange={handleSearch} value={param}/>

@@ -174,7 +174,7 @@ export default function Threadlist(props) {
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
-        <div className={classes.titleformInfo}> Danh sách bài thi </div>
+        <div className={classes.titleformInfo}> DANH SÁCH BÀI THI </div>
         <div hidden={loading} className={classes.loading}>
           <Loading />
         </div>

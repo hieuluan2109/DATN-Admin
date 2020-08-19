@@ -1,18 +1,16 @@
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles} from "@material-ui/core/styles";
 import React, { Component, Fragment } from "react";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import SelectSort from "./SelectSort";
 import axios from "axios";
-import Cookies from "js-cookie";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import { KeyboardDatePicker, DatePicker } from "@material-ui/pickers";
-import FormLabel from "@material-ui/core/FormLabel";
+import {  DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 import moment from "moment";
 import {
   MuiPickersUtilsProvider,
@@ -99,10 +97,11 @@ class DialogThem extends Component {
       errors: "",
       ma_sv: "",
       isInputValid: false,
-      success: "",
+      success: false,
       status: true,
       gioi_tinh: true,
       sdt: "",
+      error1:''
     };
   }
 
@@ -121,8 +120,10 @@ class DialogThem extends Component {
       errors: "",
       ma_sv: "",
       isInputValid: false,
-      success: "",
+      success: false,
       gioi_tinh: true,
+      error: false,
+      error1:'',
       sdt: "",
     });
   };
@@ -144,41 +145,54 @@ class DialogThem extends Component {
     const regMSSV = /^\d{10}$/;
     const regSDT = /((09|03|07|08|05)+([0-9]{8})\b)/g;
     const regpassword = /^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/;
-   
 
-    if (this.state.ho == "") {
+    const {
+      ho,
+      ten,
+      ma_sv,
+      ngay_sinh,
+      email,
+      sdt,
+      password,
+      confirmpassword,
+    } = this.state;
+    const { value } = this.props;
+    if (!ho) {
       this.setState({ errors: "Vui lòng nhập họ" });
-    } else if (!regexp.test(this.state.ho)) {
+    } else if (!regexp.test(ho)) {
       this.setState({ errors: "Họ không hợp lệ" });
-    } else if (this.state.ten == "") {
+    } else if (!ten) {
       this.setState({ errors: "Vui lòng nhập tên" });
-    } else if (!regexp.test(this.state.ten)) {
+    } else if (!regexp.test(ten)) {
       this.setState({ errors: "Tên không hợp lệ" });
-    } else if (this.props.value == false && this.state.ma_sv == "") {
+    } else if (value == false && !ma_sv) {
       this.setState({ errors: "Vui lòng nhập MSSV" });
-    } else if (this.props.value == false && !regMSSV.test(this.state.ma_sv)) {
+    } else if (value == false && !regMSSV.test(ma_sv)) {
       this.setState({ errors: "Mã số SV phải = 10 kí tự số" });
-    } else if (this.state.email == "") {
+    } else if (!email) {
       this.setState({ errors: "Vui lòng nhập Email" });
     } else if (!regexE.test(this.state.email)) {
       this.setState({ errors: "Email không hợp lệ" });
     } else if (this.state.ngay_sinh == "") {
       this.setState({ errors: "Vui lòng chọn ngày sinh" });
-    } else if ( moment(this.state.ngay_sinh).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD') ) {
+    } else if (
+      moment(ngay_sinh).format("YYYY-MM-DD") >=
+      moment(new Date()).format("YYYY-MM-DD")
+    ) {
       this.setState({ errors: "Ngày sinh không hợp lệ" });
-    } else if (this.state.sdt == "") {
+    } else if (!sdt) {
       this.setState({ errors: "Vui lòng nhập số điện thoại" });
-    } else if (!regSDT.test(this.state.sdt)) {
+    } else if (!regSDT.test(sdt)) {
       this.setState({ errors: "Số điện thoại không hợp lệ" });
     } else if (this.state.password == "") {
       this.setState({ errors: "Vui lòng nhập mật khẩu" });
-    } else if (regpassword.test(this.state.password) == false) {
+    } else if (!regpassword.test(password)) {
       this.setState({
         errors: "Password phải từ 6-24 kí tự và có ít nhất 1 chữ in hoa",
       });
-    } else if (this.state.confirmpassword == "") {
+    } else if (!confirmpassword) {
       this.setState({ errors: "Vui lòng xác nhận mật khẩu" });
-    } else if (this.state.password != this.state.confirmpassword) {
+    } else if (password !== confirmpassword) {
       this.setState({ errors: "Password không khớp" });
     } else {
       this.setState({
@@ -208,17 +222,9 @@ class DialogThem extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.isInputValid) {
-      const {
-        ho,
-        ten,
-        email,
-        ma_sv,
-        password,
-        sdt,
-        gioi_tinh,
-      } = this.state;
-      let {ngay_sinh}=this.state
-     ngay_sinh=moment(ngay_sinh).format("YYYY-MM-DD")
+      const { ho, ten, email, ma_sv, password, sdt, gioi_tinh } = this.state;
+      let { ngay_sinh } = this.state;
+      ngay_sinh = moment(ngay_sinh).format("YYYY-MM-DD");
       console.log(this.props.token);
       var url = "";
       this.props.value == true
@@ -227,14 +233,22 @@ class DialogThem extends Component {
       var params;
       this.props.value == true
         ? (params = { ho, ten, email, ngay_sinh, password, sdt, gioi_tinh })
-        : (params = { ho,ten,email, ma_sv,ngay_sinh, password,sdt, gioi_tinh });
-      console.log(params);
+        : (params = {
+            ho,
+            ten,
+            email,
+            ma_sv,
+            ngay_sinh,
+            password,
+            sdt,
+            gioi_tinh,
+          });
+
       axios
         .post(url, params, {
           headers: { Authorization: `Bearer ${this.props.token}` },
         })
         .then((res) => {
-          console.log("AAA", res.data);
           if (res.data.success == true) {
             this.setState({
               ho: "",
@@ -247,16 +261,21 @@ class DialogThem extends Component {
               // errors: "",
               ma_sv: "",
               isInputValid: false,
-              errors: "Thêm thành công",
+              error1: "Thêm thành công",
               gioi_tinh: true,
-              status:true
+              status: true,
+              success: true,
             });
-          }
+          } 
+          // else {
+          //   this.setState({ error: true });
+          // }
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
           this.setState({
-            errors: error.response.data.errors
+            error: true,
+            error1: error.response.data.errors,
           });
         });
       return true;
@@ -264,16 +283,14 @@ class DialogThem extends Component {
   };
   handleDateChange = (date) => {
     this.setState({
-      ngay_sinh: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(),
+      ngay_sinh:
+        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
     });
   };
 
   render() {
-    // const regpassword=/^(?=.*[0-9])(?=.*[a-z]).{6,24}$/
-    // const regpassword=/^(?=.*[0-9])(?=.*[A-Z]).{6,24}$/
     const { classes, children } = this.props;
-    const { open, errors, success, status } = this.state;
-    // const { ho, ten, email, password,ngaysinh } = this.state;
+    const { open, errors, success, status,error } = this.state;
 
     return (
       <div>
@@ -306,11 +323,11 @@ class DialogThem extends Component {
             <form onSubmit={this.handleSubmit}>
               <Paper elevation={3}>
                 <div style={{ textAlign: "center", color: "red" }}>
-                  {errors}
+                  {errors}{" "}
                 </div>
+
                 <Grid container>
                   <Grid item xs={6} className={classes.grid1}>
-                    {/* <Paper  elevation={3} className={classes.paper}> */}
                     <div className={classes.formControl}>
                       <label className={classes.titleFormControl}>Họ</label>
                       <TextField
@@ -321,7 +338,7 @@ class DialogThem extends Component {
                         value={this.state.ho}
                         type="text"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
                     <div className={classes.formControl}>
@@ -334,7 +351,7 @@ class DialogThem extends Component {
                         value={this.state.ten}
                         type="text"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
                     <div
@@ -350,7 +367,7 @@ class DialogThem extends Component {
                         value={this.state.ma_sv}
                         type="text"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
                     <div className={classes.formControl}>
@@ -363,7 +380,7 @@ class DialogThem extends Component {
                         value={this.state.email}
                         type="text"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
 
@@ -371,7 +388,7 @@ class DialogThem extends Component {
                       <label className={classes.titleFormControl}>
                         Ngày sinh
                       </label>
-                     
+
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Fragment>
                           <DatePicker
@@ -425,7 +442,7 @@ class DialogThem extends Component {
                         value={this.state.sdt}
                         type="number"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
                     <div className={classes.formControl}>
@@ -440,7 +457,7 @@ class DialogThem extends Component {
                         value={this.state.password}
                         type="password"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
                     <div className={classes.formControl}>
@@ -455,7 +472,7 @@ class DialogThem extends Component {
                         value={this.state.confirmpassword}
                         type="password"
                         onChange={this.handleChange}
-                        onBlur={this.checkvalid}
+                        onKeyUp={this.checkvalid}
                       />
                     </div>
 
@@ -485,6 +502,26 @@ class DialogThem extends Component {
             </form>
           </DialogContent>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          open={success}
+        >
+          <Alert onClose={this.handleClose} severity="success">
+            {this.state.error1}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          open={error}
+        >
+          <Alert onClose={this.handleClose} severity="error">
+          {this.state.error1}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

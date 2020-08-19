@@ -144,7 +144,6 @@ class AddTopic extends Component {
   render() {
     const { classes, children } = this.props;
     const { open, errors, success, status,tieu_de,mo_ta } = this.state;
-    // const { ho, ten, email, password,ngaysinh } = this.state;
     return (
       <div>
         <Button

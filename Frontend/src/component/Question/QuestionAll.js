@@ -85,9 +85,11 @@ export default function QuestionAllList(props) {
       });
   }, [pageNumberTN]);
   useEffect(() => {
+    setLoading(false)
     axios
       .get(url[1], { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
+        setLoading(true)
         setGetListTL(res.data.data);
         setPageTL(res.data.pages);
       })
@@ -148,6 +150,19 @@ export default function QuestionAllList(props) {
         .catch((error) => {
           console.log("Lỗi", error);
         });
+      } else {
+        setLoading(false)
+    axios
+      .get(`https://navilearn.herokuapp.com/admin/question/list/?loai=assay&page=${pageNumberTL}&sort=${event.target.value}`
+        , { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        setLoading(true)
+        setGetListTL(res.data.data);
+        setPageTL(res.data.pages);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
       }
   }
   return (

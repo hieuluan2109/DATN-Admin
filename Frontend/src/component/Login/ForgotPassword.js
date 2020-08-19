@@ -89,7 +89,7 @@ class Forgot extends Component {
     if(!email){
       this.setState({error:true,message:'Email không được để trống'})
     }else if(!regexE.test(email)){
-      this.setState({error:false,message:'Email không hợp lệ'})
+      this.setState({error:true,message:'Email không hợp lệ'})
     }
     else {axios
       .post("https://navilearn.herokuapp.com/admin/forgot-password", { email })
@@ -103,9 +103,10 @@ class Forgot extends Component {
         }
       })
       .catch((err) => {
+        console.log(err.response.data.msg)
         if(!err.success){
-        this.setState({err:true,message:err.msg})
-        console.log("Lỗi", err.success);
+        this.setState({error:true,message:err.response.data.msg})
+        console.log("Lỗi", err.response.data.msg);
         }
       });
     }
@@ -134,7 +135,6 @@ class Forgot extends Component {
               label="Email"
               type="Email"
               name="email"
-              value={this.state.name}
               variant="outlined"
               className={classes.txtLogin}
               onChange={this.handleChange}

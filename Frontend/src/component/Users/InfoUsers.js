@@ -131,7 +131,9 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
-        
+          setName({
+            fname:res.data.data.nguoi_tao_id.ho,
+            lname:res.data.data.nguoi_tao_id.ten});
         })
         .catch((error) => {
           console.log("Lỗi", error);

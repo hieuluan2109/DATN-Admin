@@ -14,6 +14,8 @@ import { DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Loading from './Loading';
+import StudentCharts from './Users/DetailInfoStudent';
+import moment from "moment";
 const styles = (theme) => ({
   btnThem: {
     position: "absolute",
@@ -122,7 +124,48 @@ class DialogInfo extends Component {
       this.setState({ errors: "", status: false });
     }
   };
-
+  creater =(classes)=>{
+    return (
+      <div>
+      <div className={classes.formControl}>
+        <label className={classes.titleFormControl}>Người tạo</label>
+        <TextField
+          size="small"
+          name="nguoi_tao_id"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.props.name.fname + " " + this.props.name.lname}
+          disabled={true}
+        />
+      </div>
+      <div className={classes.formControl}>
+        <label className={classes.titleFormControl}>Ngày tạo</label>
+        <TextField
+          size="small"
+          name="ngay_tao"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.props.Data.createdAt}
+          disabled={true}
+        />
+      </div>
+        <div className={classes.formControl}>
+        <label className={classes.titleFormControl}>Cập nhật</label>
+        <TextField
+          size="small"
+          name="update"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.props.Data.updatedAt}
+          disabled={true}
+        />
+      </div>
+      </div>
+    )
+  }
   render() {
     const { classes } = this.props;
     const { open, errors, status } = this.state;
@@ -209,7 +252,7 @@ class DialogInfo extends Component {
                       name="ngay_sinh"
                       disabled={this.props.status}
                       onChange={this.props.handleDateChange}
-                      value={this.props.Data.ngay_sinh}
+                      value={this.props.Data.ngay_sinh || moment(new Date()).subtract('1','days')}
                     />
                   </Fragment>
                 </MuiPickersUtilsProvider>
@@ -245,45 +288,15 @@ class DialogInfo extends Component {
                   onChange={this.props.handleChange}
                 />
               </div>
+              { this.props.age == true ? '' : (
+                  this.props.status==true ?
+                  this.creater(classes) : '') }
             </Grid>
             <Grid item xs={6} className={classes.grid2}>
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Người tạo</label>
-                <TextField
-                  size="small"
-                  name="nguoi_tao_id"
-                  variant="outlined"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.props.name.fname + " " + this.props.name.lname}
-                  disabled={true}
-                />
-              </div>
-             
-              <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Ngày tạo</label>
-                <TextField
-                  size="small"
-                  name="ngay_tao"
-                  variant="outlined"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.props.Data.createdAt}
-                  disabled={true}
-                />
-              </div>
-                <div className={classes.formControl}>
-                <label className={classes.titleFormControl}>Cập nhật</label>
-                <TextField
-                  size="small"
-                  name="update"
-                  variant="outlined"
-                  className={classes.contentFormControl}
-                  type="text"
-                  value={this.props.Data.updatedAt}
-                  disabled={true}
-                />
-              </div>
+              { this.props.age == true ? this.creater(classes) : (
+                  this.props.status==true ?
+                  <StudentCharts id={this.props.id} /> : this.creater(classes)) }
+              
               
               <DialogActions>
                 {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>

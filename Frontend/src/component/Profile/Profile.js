@@ -156,24 +156,30 @@ export default function Inforprofile(props) {
           </div>
           <Paper elevation={3}>
             <div className={classes.root2}>
+            <Link to='/profile' style={{textDecoration:'none',color:'black'}}>
               <ListItem button onClick={(e) => HandleTitle(1)}>
                 <ListItemIcon>
                   <PersonIcon />
                 </ListItemIcon>
                 <ListItemText primary="Thông tin tài khoản" />
               </ListItem>
+              </Link>
+              <Link to='/profile/notification' style={{textDecoration:'none',color:'black'}}>
               <ListItem button onClick={(e) => HandleTitle(3)}>
                 <ListItemIcon>
                   <NotificationsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Thông báo của tôi" />
               </ListItem>
+              </Link>
+              <Link to='/profile/changepassword' style={{textDecoration:'none',color:'black'}}>
               <ListItem button onClick={(e) => HandleTitle(2)}>
                 <ListItemIcon>
                   <LockIcon />
                 </ListItemIcon>
                 <ListItemText primary="Đổi mật khẩu" />
               </ListItem>
+              </Link>
               <ListItem button>
                 <ListItemIcon>
                   <DeleteIcon />

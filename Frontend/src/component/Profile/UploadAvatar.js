@@ -1,10 +1,10 @@
-import { withStyles,  } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import IconButton from "@material-ui/core/IconButton";
 // import AvatarEditor from 'react-avatar-editor'
-import Avatar from '@material-ui/core/Avatar';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import Avatar from "@material-ui/core/Avatar";
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 import Slider from "@material-ui/core/Slider";
 import {
   MuiPickersUtilsProvider,
@@ -69,6 +69,14 @@ const styles = (theme) => ({
     minWidth: "90vh",
     // maxWidth: "170vh",
   },
+  btnXacnhan: {
+    borderRadius: "5px",
+    background: "rgb(253, 216, 53)",
+    width: "120px",
+    height: "40px",
+    marginLeft: "150px",
+    cursor: "pointer",
+  },
   paper: { marginLeft: "20px" },
   grid5: { marginLeft: "150px" },
   radioSex: { marginLeft: "10px" },
@@ -81,8 +89,7 @@ const styles = (theme) => ({
 class UploadAvatar extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-    };
+    this.state = {};
   }
 
   handleClickOpen = () => {
@@ -94,27 +101,23 @@ class UploadAvatar extends Component {
     });
   };
 
-
   render() {
     const { classes } = this.props;
     const { open, errors, status } = this.state;
 
     return (
       <div>
-          <input
-            accept="image/*"
-            style={{ display: "none" }}
-            id="icon-button-file"
-            type="file"
+        <input
+          accept="image/*"
+          style={{ display: "none" }}
+          id="icon-button-file"
+          type="file"
         />
         <label htmlFor="icon-button-file">
-        <IconButton
-            onClick={this.handleClickOpen}
-            color="primary"
-        >
-          <PhotoCamera />
-        </IconButton>
-      </label>
+          <IconButton onClick={this.handleClickOpen} color="primary">
+            <PhotoCamera />
+          </IconButton>
+        </label>
 
         <Dialog
           classes={{ paper: classes.dialogPaper }}
@@ -123,16 +126,15 @@ class UploadAvatar extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-                Cập nhật hình ảnh
+            Cập nhật hình ảnh
             <div className={classes.selectsort}></div>
           </DialogTitle>
 
           <DialogContent>
-          
-          <div className="App">
-        <div className="mw400 center" style={{ textAlign: "left" }}>
-          Chọn hình ảnh - <UploadPreview />
-        </div>
+            <div className="App">
+              <div className="mw400 center" style={{ textAlign: "left" }}>
+                Chọn hình ảnh - <UploadPreview />
+              </div>
             </div>
           </DialogContent>
         </Dialog>
@@ -141,35 +143,40 @@ class UploadAvatar extends Component {
   }
 }
 class UploadPreview extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { file: null };
-      this.onChange = this.onChange.bind(this);
-      this.resetFile = this.resetFile.bind(this);
-    }
-    onChange(event) {
-      this.setState({
-        file: URL.createObjectURL(event.target.files[0])
-      });
-    }
-  
-    resetFile(event) {
-      event.preventDefault();
-      this.setState({ file: null });
-    }
-    render() {
-      return (
-        <div>
-          <input type="file" onChange={this.onChange} />
-          {this.state.file && (
-            <div style={{ textAlign: "center" }}>
-              <button onClick={this.resetFile}>Remove File</button>
-            </div>
-          )}
-          <img style={{ width: "40%" }} src={this.state.file} />
-          <button style={{marginTop:'200px',float:'right'}}>Cập nhật</button>
-        </div>
-      );
-    }
+  constructor(props) {
+    super(props);
+    this.state = { file: null };
+    this.onChange = this.onChange.bind(this);
+    this.resetFile = this.resetFile.bind(this);
   }
+  onChange(event) {
+    this.setState({
+      file: URL.createObjectURL(event.target.files[0]),
+    });
+  }
+
+  resetFile(event) {
+    event.preventDefault();
+    this.setState({ file: null });
+  }
+  render() {
+    const { classes } = this.props;
+    return (
+      <div>
+        <input type="file" onChange={this.onChange} />
+        {this.state.file && (
+          <div style={{ textAlign: "center" }}>
+            <button onClick={this.resetFile}>Remove File</button>
+          </div>
+        )}
+        <img style={{ width: "40%" }} src={this.state.file} />
+
+        <input className={classes.btnXacnhan} type="submit" value="Lưu" />
+        <div className={classes.formControl} style={{ marginTop: "5px" }}>
+          <button style={{ marginTop: "200px", float: "right" }}>Lưu</button>
+        </div>
+      </div>
+    );
+  }
+}
 export default withStyles(styles, { withTheme: true })(UploadAvatar);

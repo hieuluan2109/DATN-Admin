@@ -269,7 +269,7 @@ const onSubmitInfo = (event) => {
             }}
             /> ) : ( <Skeleton animation="wave" className={classes.contentFormControl} variant="text" /> ) }
         </div>
-        <div className={classes.formControl}>
+        <div className={classes.formControl} style={{marginTop:'5px'}}>
             <input
               className={classes.btnXacnhan}
               type="submit"

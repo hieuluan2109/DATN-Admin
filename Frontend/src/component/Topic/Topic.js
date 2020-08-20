@@ -21,8 +21,9 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import Loading from '../Loading';
-import CheckedStatus from '../Status'
+import Loading from "../Loading";
+import CheckedStatus from "../Status";
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -55,22 +56,30 @@ const useStyles = makeStyles((theme) => ({
     width: 1161,
     marginTop: 70,
   },
- 
+
   pagination: {
     marginRight: "70px",
-  },Hello:{
-    position:'absolute',
-    right:'15%',
-    marginTop:'2px'
+  },
+  Hello: {
+    position: "absolute",
+    right: "15%",
+    marginTop: "2px",
   },
   loading: {
     position: "fixed",
     top: "50%",
-    left: "50%"
+    left: "50%",
   },
 }));
 
-const topicTitle = ["Tên chủ đề", "Mô tả", "Người tạo", "Chi tiết", 'Cập nhật', 'Trạng thái'];
+const topicTitle = [
+  "Tên chủ đề",
+  "Mô tả",
+  "Người tạo",
+  "Chi tiết",
+  "Cập nhật",
+  "Trạng thái",
+];
 
 export default function Threadlist(props) {
   const classes = useStyles();
@@ -84,7 +93,7 @@ export default function Threadlist(props) {
   const [page, setPage] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
@@ -93,11 +102,11 @@ export default function Threadlist(props) {
         }
       )
       .then((res) => {
-        setLoading(true)
+        setLoading(true);
         setPage(res.data.pages);
         const { data } = res.data;
         setListTopic(data);
-       
+        console.log(res.data);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -106,7 +115,7 @@ export default function Threadlist(props) {
   const handleChangePage = (e, value) => {
     setPageIndex(value);
   };
-  const [sort, setSort] = useState(' ');
+  const [sort, setSort] = useState(" ");
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -144,6 +153,7 @@ export default function Threadlist(props) {
     mo_ta: "",
     nguoi_tao: "",
     ngay_tao: "",
+    trang_thai: false,
   });
   const [getSuccess, setSuccess] = useState("");
   const getTopicInfor = (id) => {
@@ -159,8 +169,9 @@ export default function Threadlist(props) {
           mo_ta: data.mo_ta,
           nguoi_tao: data.nguoi_tao_id.ten,
           ngay_tao: data.createdAt,
-          update:data.updatedAt,
+          update: data.updatedAt,
           _id: data._id,
+          trang_thai: data.trang_thai,
         });
         console.log("GV", dataTopicInfor);
       })
@@ -196,45 +207,67 @@ export default function Threadlist(props) {
         console.log("Lỗi", error.response);
       });
   };
-const clearSuccess=()=>{
-  setSuccess('')
-}
-const handleSort=(event)=>{
-  setSort(event.target.value)
-  setLoading(false)
-  axios
-    .get(
-      `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
-    .then((res) => {
-      setLoading(true)
-      setPage(res.data.pages);
-      const { data } = res.data;
-      setListTopic(data);
-    
-    })
-    .catch((error) => {
-      console.log("Lỗi", error);
-    });
-}
+  const clearSuccess = () => {
+    setSuccess("");
+  };
+  const handleSort = (event) => {
+    setSort(event.target.value);
+    setLoading(false);
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setLoading(true);
+        setPage(res.data.pages);
+        const { data } = res.data;
+        setListTopic(data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
+  };
+
+  const onSubmitChangeStatus = (id,trangthai) => {
+    // event.preventDefault();
+    const { trang_thai } = dataTopicInfor;
+    // const {_id}=getListTopic
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/category/update/status?id=${id}&trang_thai=${trangthai}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setSuccess(res.data.msg);
+        console.log(res.data);
+        // setSuccess(res.data.msg);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error.response);
+      });
+  };
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> DANH SÁCH CHỦ ĐỀ </div>
-        <div hidden={loading} className={classes.loading}><Loading /></div>
+        <div hidden={loading} className={classes.loading}>
+          <Loading />
+        </div>
         <form className={classes.containerForm}>
           <SearchButton onChange={handleSearch} />
           <FormControl className={classes.Hello}>
-            <InputLabel style={{ left: '10%'}}>Sort</InputLabel>
-              <Select value={sort} onChange={handleSort}>
-                <MenuItem value=' '>None</MenuItem>
-                <MenuItem value='tieu_de'>Tên</MenuItem>
-                <MenuItem value='mo_ta'>Mô tả</MenuItem>
-              </Select>
+            <InputLabel style={{ left: "10%" }}>Sort</InputLabel>
+            <Select value={sort} onChange={handleSort}>
+              <MenuItem value=" ">None</MenuItem>
+              <MenuItem value="tieu_de">Tên</MenuItem>
+              <MenuItem value="mo_ta">Mô tả</MenuItem>
+            </Select>
           </FormControl>
           <AddTopic token={token} />
           <div className={classes.formInfo}>
@@ -273,12 +306,12 @@ const handleSort=(event)=>{
                             data={dataTopicInfor}
                             icon={<VisibilityIcon />}
                             disable={true}
-                            status={true} 
+                            status={true}
                             clearForm={clearSuccess}
                           />
                         </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         <IconButton size="small">
                           <TopicInfor
                             id={value._id}
@@ -296,7 +329,22 @@ const handleSort=(event)=>{
                           />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="center" ><CheckedStatus /> </TableCell>
+                      <TableCell align="center">
+                        <CheckedStatus 
+                         id={value._id}
+                        change={onSubmitChangeStatus}
+                      trang_thai={value.trang_thai}
+                      />
+{/*                       
+                        <Switch
+                          checked={check}
+                          onChange={handleChange}
+                          // checked={check}
+                          // value={props.trang_thai}
+                          name="checked"
+                          inputProps={{ "aria-label": "secondary checkbox" }}
+                        /> */}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

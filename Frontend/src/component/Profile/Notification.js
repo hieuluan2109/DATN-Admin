@@ -171,7 +171,7 @@ export default function Notification() {
               </Typography>
             </React.Fragment> }/>
             <ListItemSecondaryAction name="button">
-              <Grid name={index} style={{marginTop: "25px"}} container direction="column" justify="center">
+              <Grid name={index} style={{marginTop: "35px"}} container direction="column" justify="center">
                 <Button disabled={status[index]} onClick={ () => handleGetUpdateRequest(index) } color="primary"> View </Button>
                 <Button disabled={status[index]} onClick={() => OpenDialog(1,index) } color="primary"> Xác nhận </Button>
                 <Button disabled={status[index]} onClick={() => OpenDialog(2,index) } color="primary"> Hủy </Button>

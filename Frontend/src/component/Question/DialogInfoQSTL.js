@@ -21,14 +21,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const styles = (theme) => ({
-  textField: {
-    // marginLeft: "100px",
-    // position: "relative",
-    // marginTop: "-28px",
-  },
+
   
   formControl: {
-    // maxwidth: "700px",
     marginTop:'20px'
   },
   titleFormControlND: {
@@ -40,18 +35,9 @@ const styles = (theme) => ({
     width: "100px",
     float: "left",
     paddingTop: "20px"
-    // paddingTop: "35px",
   },
   contentFormControl: {
     width: "350px",
-    // borderRadius: "5px",
-    // height: "30px",
-    // paddingLeft: "10px",
-    // marginTop: "25px",
-    // outline: "none",
-    // "&:focus": {
-    //   borderColor: "#3f51b5",
-    // },
   },
   formControl: {
     margin: "20px",

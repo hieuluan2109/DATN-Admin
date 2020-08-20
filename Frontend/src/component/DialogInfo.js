@@ -16,6 +16,9 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Loading from './Loading';
 import StudentCharts from './Users/DetailInfoStudent';
 import moment from "moment";
+import Avatar from '@material-ui/core/Avatar';
+import axios from 'axios';
+
 const styles = (theme) => ({
   btnThem: {
     position: "absolute",
@@ -79,9 +82,15 @@ class DialogInfo extends Component {
       errors: "",
       status: true,
       loading: true,
+      stats: {
+        count: 0,
+        bai_thi: 0,
+        bai_tap: 0,
+        data: [],
+      },
+      showStats: false
     };
   }
-
   handleClickOpen = () => {
     this.setState({ open: true });
     this.props.onClickInfor(this.props.id, this.props.age);
@@ -124,6 +133,20 @@ class DialogInfo extends Component {
       this.setState({ errors: "", status: false });
     }
   };
+  teacherStats =(classes)=>{
+    this.setState({
+      showStats: !this.state.showStats,
+    })
+    let result;
+    axios.get(
+      `https://navilearn.herokuapp.com/admin/stats/class-belong-teacher?id=${this.props.id}`
+    ).then(res=>{
+      result = res.data;
+      this.setState({
+        stats: res.data
+      })
+    })
+  }
   creater =(classes)=>{
     return (
       <div>
@@ -151,7 +174,7 @@ class DialogInfo extends Component {
           disabled={true}
         />
       </div>
-        <div className={classes.formControl}>
+      <div className={classes.formControl}>
         <label className={classes.titleFormControl}>Cập nhật</label>
         <TextField
           size="small"
@@ -163,8 +186,53 @@ class DialogInfo extends Component {
           disabled={true}
         />
       </div>
+      <div hidden={!this.state.showStats} className={classes.formControl}>
+        <label className={classes.titleFormControl}>Số bài lớp:</label>
+        <TextField
+          size="small"
+          name="update"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.state.stats.count}
+          disabled={true}
+        />
+      </div>
+      <div hidden={!this.state.showStats} className={classes.formControl}>
+        <label className={classes.titleFormControl}>Số bài thi:</label>
+        <TextField
+          size="small"
+          name="update"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.state.stats.bai_thi}
+          disabled={true}
+        />
+      </div>
+      <div hidden={!this.state.showStats} className={classes.formControl}>
+        <label className={classes.titleFormControl}>Số bài tập:</label>
+        <TextField
+          size="small"
+          name="update"
+          variant="outlined"
+          className={classes.contentFormControl}
+          type="text"
+          value={this.state.stats.bai_tap}
+          disabled={true}
+        />
+      </div>
       </div>
     )
+  }
+  renderAvatar=()=>{
+    const uri =[
+      'http://anstudying.herokuapp.com/api/file/avatar/', 
+      'http://navilearn-student-b.herokuapp.com/api/v1/lay-anh-dai-dien/'
+    ];
+    if (this.props.age)
+      return <Avatar src={uri[0]+this.props.Data.anh_dai_dien} style={{marginTop: "2.5vh", marginLeft: '18vh', width:'10vh', height:'10vh'}} alt={this.props.Data.ho+' '+this.props.Data.ten}/>
+    else return <Avatar src={uri[1]+this.props.id} style={{marginTop: "2.5vh", marginLeft: '18vh', width:'10vh', height:'10vh'}} alt={this.props.Data.ho+' '+this.props.Data.ten} />
   }
   render() {
     const { classes } = this.props;
@@ -198,7 +266,11 @@ class DialogInfo extends Component {
             <form onSubmit={this.props.onSubmit}>
             <Grid container>
                 <Grid item xs={6} className={classes.grid1}>
-              <div className={classes.formControl}>
+                <div className={classes.formControl}>
+                  <label className={classes.titleFormControl}>Ảnh đại diện</label>
+                  {this.renderAvatar()}
+                </div>
+                <div className={classes.formControl}>
                 <label className={classes.titleFormControl}>Họ</label>
                 <TextField
                   size="small"
@@ -296,16 +368,35 @@ class DialogInfo extends Component {
               { this.props.age == true ? this.creater(classes) : (
                   this.props.status==true ?
                   <StudentCharts id={this.props.id} /> : this.creater(classes)) }
-              
-              
+              {/* { this.props.age == true ? ( this.props.status==true ?
+                  <div className={classes.formControl}>
+                    <label className={classes.titleFormControl}></label>
+                    <Button
+                      style={{}}
+                      variant="outlined"
+                      color="primary"
+                      onClick={()=>this.teacherStats(classes)}>
+                        Xem thống kê
+                    </Button>
+                </div> : '')
+               : ''} */}
               <DialogActions>
                 {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
               Hủy bỏ
             </Button> */}
-            
+            { this.props.age == true ? ( this.props.status==true ?
+                    <Button
+                      style={{position:'relative',marginRight:'25%',marginTop:'30px'}}
+                      color="primary"
+                      size="small"
+                      onClick={()=>this.teacherStats(classes)}>
+                        Xem thống kê
+                    </Button>: '')
+               : ''}
                 <Button
                   name="btnXacNhan"
-                  style={{position:'absolute',marginRight:'25%',marginTop:'30px'}}
+                  size="small"
+                  style={{position:'relative',marginRight:'25%',marginTop:'30px'}}
                   type={this.props.type}
                   onClick={this.props.status ? this.handleClose : ""}
                   color="primary"

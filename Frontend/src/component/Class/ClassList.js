@@ -73,7 +73,7 @@ export default function ClassList(props) {
     setLoading(false)
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/class/list?page=${pageIndex}`,
+        `https://navilearn.herokuapp.com/admin/class/list?page=${pageIndex}&sort=${sort}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -191,21 +191,24 @@ export default function ClassList(props) {
       });
   };
   const handleSort=(event)=>{
-    // setSort(event.target.value)
-    //   setLoading(false)
-    //   axios
-    //     .get(`https://navilearn.herokuapp.com/admin/question/list/?loai=choice&page=${pageNumberTN}&sort=${event.target.value}`, 
-    //       { headers: { Authorization: `Bearer ${token}` } })
-    //     .then((res) => {
-    //       setLoading(true)
-    //       // const {data}=res.data
-    //       setGetListTN(res.data.data);
-    //       setPageTN(res.data.pages);
-    //     })
-    //     .catch((error) => {
-    //       console.log("Lỗi", error);
-    //     });
-      
+    setSort(event.target.value)
+    setLoading(false)
+    axios
+      .get(
+        `https://navilearn.herokuapp.com/admin/class/list?page=${pageIndex}&sort=${event.target.value}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setLoading(true)
+        setPage(res.data.pages);
+        const { data } = res.data;
+        setClassList(data);
+      })
+      .catch((error) => {
+        console.log("Lỗi", error);
+      });
   }
   return (
     <div className="row">
@@ -218,9 +221,9 @@ export default function ClassList(props) {
               <FormControl  className={classes.formControl}>
               <InputLabel>Sort</InputLabel>
               <Select value={sort} onChange={handleSort}>
-                <MenuItem value='# '>None</MenuItem>
-                <MenuItem value='#'>None</MenuItem>
-                <MenuItem value='#'>None</MenuItem>
+                <MenuItem value=' '>None</MenuItem>
+                <MenuItem value='tieu_de'>Tên lớp</MenuItem>
+                <MenuItem value='nguoi_tao_id'>Người tạo</MenuItem>
               </Select>
               </FormControl>
           <div>

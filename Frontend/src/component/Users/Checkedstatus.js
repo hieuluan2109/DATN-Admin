@@ -6,7 +6,7 @@ export default function CheckedStatus(props) {
 
   const handleChange = (event) => {
     setCheck({ ...check, [event.target.name]: event.target.checked });
-    props.change(props.id, event.target.checked);
+    props.change( event.target.checked,props.id);
   };
 
   return (

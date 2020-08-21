@@ -99,7 +99,7 @@ const styles = (theme) => ({
   btnHuy: {
   
   },
-  btn: { paddingTop: "30px", paddingRight: "217px" },
+  btn: { paddingTop: "30px", paddingRight: "200px" },
 });
 
 class DialogThem extends Component {

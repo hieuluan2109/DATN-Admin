@@ -18,6 +18,10 @@ import StudentCharts from './Users/DetailInfoStudent';
 import moment from "moment";
 import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const styles = (theme) => ({
   btnThem: {
@@ -67,6 +71,7 @@ const styles = (theme) => ({
   },
   paper: { marginLeft: "20px" },
   grid5: { marginLeft: "150px" },
+  grid1:{marginBottom:'20px'},
   radioSex: { marginLeft: "10px" },
   btnHuy: {
     // borderRadius:'20px',backgroundColor:'rgb(253, 216, 53)'
@@ -80,7 +85,7 @@ class DialogInfo extends Component {
     this.state = {
       open: false,
       errors: "",
-      status: true,
+      status: false,
       loading: true,
       stats: {
         count: 0,
@@ -96,7 +101,7 @@ class DialogInfo extends Component {
     this.props.onClickInfor(this.props.id, this.props.age);
   };
   handleClose = () => {
-    this.setState({ open: false, errors: "", status: true });
+    this.setState({ open: false, errors: "", status: false });
     this.props.setError();
     this.props.handleClose();
   };
@@ -147,6 +152,7 @@ class DialogInfo extends Component {
       })
     })
   }
+ 
   creater =(classes)=>{
     return (
       <div>
@@ -174,7 +180,8 @@ class DialogInfo extends Component {
           disabled={true}
         />
       </div>
-      <div className={classes.formControl}>
+     
+            <div className={classes.formControl}>
         <label className={classes.titleFormControl}>Cập nhật</label>
         <TextField
           size="small"
@@ -186,6 +193,42 @@ class DialogInfo extends Component {
           disabled={true}
         />
       </div>
+      {/* <div className={classes.formControl}>
+        <label className={classes.titleFormControl}>Trạng thái</label>
+      <FormControl >
+     
+        <Select className={classes.formControl}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.props.Data.trang_thai}
+          onChange={this.props.handleChange}
+          disabled={this.props.status}
+        >
+          <MenuItem value={true}>Enable</MenuItem>
+          <MenuItem value={false}>Disable</MenuItem>
+        </Select>
+      </FormControl>
+      </div> */}
+      {/* <div className={classes.formControl}>
+                <label className={classes.titleFormControl}>Ngày sinh</label>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Fragment>
+                    <DatePicker
+                      className={classes.contentFormControl}
+                      onBlur={this.CheckValid}
+                      format="yyyy/MM/dd"
+                      name="ngay_sinh"
+                      disabled={this.props.status}
+                      onChange={this.props.handleDateChange}
+                      value={this.props.Data.ngay_sinh || moment(new Date()).subtract('1','days')}
+                    />
+                  </Fragment>
+                </MuiPickersUtilsProvider>
+              </div> */}
+
+
+
+
       <div hidden={!this.state.showStats} className={classes.formControl}>
         <label className={classes.titleFormControl}>Số bài lớp:</label>
         <TextField
@@ -237,6 +280,7 @@ class DialogInfo extends Component {
   render() {
     const { classes } = this.props;
     const { open, errors, status } = this.state;
+    console.log(this.props.Data)
     return (
       <div>
         <IconButton
@@ -280,7 +324,7 @@ class DialogInfo extends Component {
                   value={this.props.Data.ho}
                   type="text"
                   onChange={this.props.handleChange}
-                  onKeyUp={this.checkvalid}
+                  onKeyUp={this.CheckValid}
                   disabled={this.props.status}
                 />
               </div>
@@ -296,7 +340,7 @@ class DialogInfo extends Component {
                   value={this.props.Data.ten}
                   disabled={this.props.status}
                   onChange={this.props.handleChange}
-                  onKeyUp={this.checkvalid}
+                  onKeyUp={this.CheckValid}
                 />
               </div>
 
@@ -319,7 +363,7 @@ class DialogInfo extends Component {
                   <Fragment>
                     <DatePicker
                       className={classes.contentFormControl}
-                      onKeyUp={this.CheckValid}
+                      onBlur={this.CheckValid}
                       format="yyyy/MM/dd"
                       name="ngay_sinh"
                       disabled={this.props.status}
@@ -343,7 +387,7 @@ class DialogInfo extends Component {
                   value={this.props.Data.sdt}
                   disabled={this.props.status}
                   onChange={this.props.handleChange}
-                  onBlur={this.CheckValid}
+                  onKeyUp={this.CheckValid}
                 />
               </div>
 
@@ -360,6 +404,7 @@ class DialogInfo extends Component {
                   onChange={this.props.handleChange}
                 />
               </div>
+
               { this.props.age == true ? '' : (
                   this.props.status==true ?
                   this.creater(classes) : '') }
@@ -384,7 +429,7 @@ class DialogInfo extends Component {
                 {/* <Button onClick={this.handleClose} color="primary"    style={{ display: this.props.age == true ? "block" : "none"}}>
               Hủy bỏ
             </Button> */}
-            { this.props.age == true ? ( this.props.status==true ?
+            { this.props.age == 1 ? ( this.props.status==true ?
                     <Button
                       style={{position:'relative',marginRight:'25%',marginTop:'30px'}}
                       color="primary"
@@ -402,7 +447,7 @@ class DialogInfo extends Component {
                   color="primary"
                   disabled={this.props.status ? "" : status}
                 >
-                  Xác nhận
+                {this.props.status?  'Đóng':'Cập nhật'}
                 </Button>
               </DialogActions>
               </Grid>

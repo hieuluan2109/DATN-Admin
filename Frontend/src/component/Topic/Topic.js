@@ -23,7 +23,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Loading from "../Loading";
 import CheckedStatus from "../Status";
-import Switch from '@material-ui/core/Switch';
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -96,7 +97,7 @@ export default function Threadlist(props) {
     setLoading(false);
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}`,
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${sort}&search=${param}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -153,7 +154,7 @@ export default function Threadlist(props) {
     mo_ta: "",
     nguoi_tao: "",
     ngay_tao: "",
-    trang_thai: false,
+    trang_thai: true,
   });
   const [getSuccess, setSuccess] = useState("");
   const getTopicInfor = (id) => {
@@ -173,7 +174,6 @@ export default function Threadlist(props) {
           _id: data._id,
           trang_thai: data.trang_thai,
         });
-        console.log("GV", dataTopicInfor);
       })
       .catch((error) => {
         console.log("Lỗi", error);
@@ -215,7 +215,7 @@ export default function Threadlist(props) {
     setLoading(false);
     axios
       .get(
-        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}`,
+        `https://navilearn.herokuapp.com/admin/category/list?page=${pageIndex}&sort=${event.target.value}&search=${param}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -231,9 +231,8 @@ export default function Threadlist(props) {
       });
   };
 
-  const onSubmitChangeStatus = (id,trangthai) => {
+  const onSubmitChangeStatus = (id, trangthai) => {
     // event.preventDefault();
-    const { trang_thai } = dataTopicInfor;
     // const {_id}=getListTopic
     axios
       .get(
@@ -251,6 +250,19 @@ export default function Threadlist(props) {
         console.log("Lỗi", error.response);
       });
   };
+
+  const [checked, setchecked] = useState([]);
+
+  // {Object.keys(getListTopic).map((item,index)=>{
+  //     const list=getListTopic[item]
+  //     // setchecked(item.trang_thai)
+  //     let trang_thai=checked[item]
+  //     if(typeof trang_thai === 'undefined') {
+  //       trang_thai = list.trang_thai;
+  //   }
+  //   console.log(list,'l')
+  //   console.log(trang_thai,'tt')
+  //   })}
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
@@ -333,17 +345,44 @@ export default function Threadlist(props) {
                         <CheckedStatus 
                          id={value._id}
                         change={onSubmitChangeStatus}
-                      trang_thai={value.trang_thai}
+                        trang_thai={value.trang_thai}
                       />
-{/*                       
-                        <Switch
-                          checked={check}
-                          onChange={handleChange}
-                          // checked={check}
-                          // value={props.trang_thai}
-                          name="checked"
-                          inputProps={{ "aria-label": "secondary checkbox" }}
+{/*                        
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              // onChange={()=>{
+                              //   setchecked({[item]:!trang_thai})
+                              // }}
+                              // onChange={(event) => {
+                              //   onSubmitChangeStatus(
+                              //     value._id,
+                              //     event.target.checked
+                              //   );
+                              // }}
+                              // checked={trang_thai}
+                              // value={trang_thai}
+                              // name="trang_thai"
+                            />
+                          }
                         /> */}
+              
+                        {/* <FormControl className={classes.formControl}>
+                         
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={value.trang_thai}
+                            onChange={(event) => {
+                               
+                               event.target.value=!value.trang_thai
+                              }}
+                          >
+                            <MenuItem value={true}>Enable</MenuItem>
+                            <MenuItem value={false}>Disable</MenuItem>
+              
+                          </Select>
+                        </FormControl> */}
                       </TableCell>
                     </TableRow>
                   ))}

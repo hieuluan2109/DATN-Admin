@@ -104,11 +104,8 @@ export default function Home() {
       {/* <Button color="primary" size="small" >
         <p style={{fontSize: "12px", textDecoration: 'underline'}}>Xử lí thông báo</p>
       </Button> */}
-      <Button onClick={handleClose} style={{position: 'absolute'}} color="primary" size="small" >
-        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p>
-      </Button>
-      <Button onClick={handleClose} style={{left: '65%'}} color="primary" size="small" >
-        <p style={{fontSize: "12px", textDecoration: 'underline'}}>Đóng</p>
+      <Button onClick={handleClose}  color="primary" size="small" style={{float:'right'}}>
+       Đóng
       </Button>
       </Popover>
     </div>

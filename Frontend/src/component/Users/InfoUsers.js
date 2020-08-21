@@ -17,23 +17,24 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import DialogInfor from "../DialogInfo";
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies, { set } from "js-cookie";
 import Pagination from "@material-ui/lab/Pagination";
 import Sear from "./Search";
-import Loading from '../Loading';
-import Grid from '@material-ui/core/Grid';
-import CheckedStatus from '../Status'
+import Loading from "../Loading";
+import Grid from "@material-ui/core/Grid";
+import StatusUser from './Checkedstatus';
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({
   loading: {
     position: "fixed",
     top: "50%",
-    left: "50%"
+    left: "50%",
   },
   formInfo: {
     marginTop: "50px",
     marginRight: "6%",
 
-   
     background: "white",
     borderRadius: 10,
   },
@@ -64,12 +65,12 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     marginRight: "70px",
   },
-  containerForm:{
+  containerForm: {
     marginTop: "50px",
     marginRight: "6%",
     background: "white",
     borderRadius: 10,
-  }
+  },
 }));
 
 export default function InfoUsers(props) {
@@ -87,19 +88,36 @@ export default function InfoUsers(props) {
 
   const handleChange = (event) => {
     setAge(event.target.value);
-    setSort(' ')
-    setPageSV(1)
-    setPageGV(1)
+    setSort(" ");
+    setPageSV(1);
+    setPageGV(1);
+
   };
   const handleClose = () => {
-    setDataUser({ ho: "", ten: "", ngay_sinh: "",sdt:'',createdAt:'',updatedAt:'' });
+    setDataUser({
+      ho: "",
+      ten: "",
+      ngay_sinh: "",
+      sdt: "",
+      createdAt: "",
+      updatedAt: "",
+      trang_thai:true
+    });
   };
-  const [dataUser, setDataUser] = useState({ ho: "", ten: "", ngay_sinh: "",sdt:'',createdAt:'',updatedAt:'' });
-  const [name, setName] = useState({fname:'',lname:''});
+  const [dataUser, setDataUser] = useState({
+    ho: "",
+    ten: "",
+    ngay_sinh: "",
+    sdt: "",
+    createdAt: "",
+    updatedAt: "",
+    trang_thai:true
+  });
+  const [name, setName] = useState({ fname: "", lname: "" });
   const [getSuccess, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const onclickInfor = (id, age) => {
-    if (age === 1) {
+    if (age == 1) {
       axios
         .get(
           `https://navilearn.herokuapp.com/admin/user/detail/teacher&${id}`,
@@ -110,17 +128,18 @@ export default function InfoUsers(props) {
         .then((res) => {
           const { data } = res.data;
           setDataUser(data);
+        
           setName({
-            fname:res.data.data.nguoi_tao_id.ho,
-            lname:res.data.data.nguoi_tao_id.ten});
-  
+            fname: res.data.data.nguoi_tao_id.ho,
+            lname: res.data.data.nguoi_tao_id.ten,
+          });
         })
         .catch((error) => {
           console.log("Lỗi", error);
         });
     }
 
-    if (age === 0) {
+    if (age == 0) {
       axios
         .get(
           `https://navilearn.herokuapp.com/admin/user/detail/student&${id}`,
@@ -132,8 +151,9 @@ export default function InfoUsers(props) {
           const { data } = res.data;
           setDataUser(data);
           setName({
-            fname:res.data.data.nguoi_tao_id.ho,
-            lname:res.data.data.nguoi_tao_id.ten});
+            fname: res.data.data.nguoi_tao_id.ho,
+            lname: res.data.data.nguoi_tao_id.ten,
+          });
         })
         .catch((error) => {
           console.log("Lỗi", error);
@@ -147,19 +167,18 @@ export default function InfoUsers(props) {
   // Chỉnh sửa thông tin user
   const onSubmitInforUser = (event) => {
     event.preventDefault();
-    const { _id, ho, ten, ngay_sinh,sdt } = dataUser;
+    const { _id, ho, ten, ngay_sinh, sdt } = dataUser;
     if (age == true) {
       axios
         .post(
           `https://navilearn.herokuapp.com/admin/user/update?loai=teacher&id=${_id}`,
-          { ho, ten, ngay_sinh,sdt },
+          { ho, ten, ngay_sinh, sdt },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         .then((res) => {
           setSuccess(res.data.msg);
-          
         })
         .catch((error) => {
           console.log("Lỗi", error.response.data);
@@ -169,7 +188,7 @@ export default function InfoUsers(props) {
       axios
         .post(
           `https://navilearn.herokuapp.com/admin/user/update?loai=student&id=${_id}`,
-          { ho, ten, ngay_sinh,sdt },
+          { ho, ten, ngay_sinh, sdt },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -181,24 +200,22 @@ export default function InfoUsers(props) {
           console.log("Lỗi", error.response.data);
         });
     }
-
-
   };
 
   const handleDateChange = (date) => {
     setDataUser({
-      ...dataUser,ngay_sinh: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(),
+      ...dataUser,
+      ngay_sinh:
+        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
     });
   };
   const handleChangeInfoUser = (event, status) => {
     setDataUser({
       ...dataUser,
       [event.target.name]: event.target.value,
-      status:true
+      status: true,
     });
-    
   };
-
 
   const [getListSV, setListSV] = useState([]);
   const [getList, setGetList] = useState([]);
@@ -206,11 +223,11 @@ export default function InfoUsers(props) {
   const [pageSV, setPageSV] = useState(1);
   const [pageNumbberGV, setPageNumberGV] = useState(1);
   const [pageNumbberSV, setPageNumberSV] = useState(1);
-  const [sort, setSort] = useState(' ');
-  const handleSort=(event)=>{
-    setSort(event.target.value)
-    if (age == 1){
-      setLoading(false)
+  const [sort, setSort] = useState(" ");
+  const handleSort = (event) => {
+    setSort(event.target.value);
+    if (age == 1) {
+      setLoading(false);
       axios
         .get(
           `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${event.target.value}&search=${param}`,
@@ -219,39 +236,41 @@ export default function InfoUsers(props) {
           }
         )
         .then((res) => {
-          setLoading(true)
+          setLoading(true);
           const { data } = res.data;
           setGetList(data);
           setPageNumberGV(res.data.pages);
+          console.log("ListGV", getList);
         })
         .catch((error) => {
           console.log("Lỗi", error);
         });
-      }
-      else {
-        setLoading(false)
-        axios
-          .get(
-            `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${event.target.value}&search=${param}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            setLoading(true)
-            const { data } = res.data;
-            setListSV(data);
-            setPageNumberSV(res.data.pages);
-          })
-          .catch((error) => {
-            console.log("Lỗi", error);
-          });
+    } else {
+      setLoading(false);
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${event.target.value}&search=${param}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          setLoading(true);
+          const { data } = res.data;
+          setListSV(data);
+          setPageNumberSV(res.data.pages);
+          console.log("listGV", getListSV);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
     }
-    
-  }
- 
+  };
+
+
   useEffect(() => {
-    setLoading(false)
+    
+    setLoading(false);
     axios
       .get(
         `https://navilearn.herokuapp.com/admin/user/list/teacher?page=${pageGV}&sort=${sort}&search=${param}`,
@@ -260,7 +279,7 @@ export default function InfoUsers(props) {
         }
       )
       .then((res) => {
-        setLoading(true)
+        setLoading(true);
         console.log(res.data);
         const { data } = res.data;
         setGetList(data);
@@ -271,26 +290,28 @@ export default function InfoUsers(props) {
       });
   }, [pageGV]);
 
-
-  useEffect((e) => {
-    setLoading(false)
-    axios
-      .get(
-        `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${sort}&search=${param}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        setLoading(true)
-        const { data } = res.data;
-        setListSV(data);
-        setPageNumberSV(res.data.pages);
-      })
-      .catch((error) => {
-        console.log("Lỗi", error);
-      });
-  }, [pageSV]);
+  useEffect(() => {
+      setLoading(false);
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/user/list/student?page=${pageSV}&sort=${sort}&search=${param}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          setLoading(true);
+          const { data } = res.data;
+          setListSV(data);
+          setPageNumberSV(res.data.pages);
+        
+          console.log("SV", res.data);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error);
+        });
+    },[pageSV]
+  );
 
   const handleChangePage1 = (event, value) => {
     setPageGV(value);
@@ -298,11 +319,11 @@ export default function InfoUsers(props) {
   const handleChangePage2 = (event, value) => {
     setPageSV(value);
   };
+ 
 
   const [param, setParam] = useState("");
   const typingTimeoutRef = useRef(null);
   const handleSearch = (e) => {
-    
     const value = e.target.value;
     setParam(value);
     if (typingTimeoutRef.current) {
@@ -332,35 +353,89 @@ export default function InfoUsers(props) {
     }, 300);
   };
 
-  const info=['Họ','Tên','Email','Ngày sinh','Chi tiết','Cập nhật','Trạng thái']
+  const ChangeStatus = (trangthai, id) => {
+    if (age == 1) {
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/user/teacher/status?trang_thai=${trangthai}&id=${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response);
+        });
+    } else {
+      axios
+        .get(
+          `https://navilearn.herokuapp.com/admin/user/student/status?trang_thai=${trangthai}&id=${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log("Lỗi", error.response);
+        });
+    }
+  };
+ 
+  
+  const HandelChangeStatus = (event) => {
+    setCheck({ ...check, [event.target.name]: event.target.checked });
+    // ChangeStatus( event.target.checked,id);
+  };
+  const[check,setCheck]=useState(true)
+
+  
+  const info = [
+    "Họ",
+    "Tên",
+    "Email",
+    "Ngày sinh",
+    "Chi tiết",
+    "Cập nhật",
+    "Trạng thái",
+  ];
   return (
     <div className="row">
       <div className="col span-1-of-12"></div>
       <div className="col span-11-of-12">
         <div className={classes.titleformInfo}> DANH SÁCH NGƯỜI DÙNG </div>
-        <div hidden={loading} className={classes.loading}><Loading /></div>
+        <div hidden={loading} className={classes.loading}>
+          <Loading />
+        </div>
         <form>
-          <SearchButton onChange={handleSearch} value={param}/>
+          <SearchButton onChange={handleSearch} value={param} />
           <FormControl className={classes.formControl}>
-          <Grid container spacing={2}>
-            <Grid item style={{position: 'relative'}} >
-              <InputLabel style={{top:'20%', left: '10%'}}>Sort</InputLabel>
-              <Select value={sort} onChange={handleSort}>
-                <MenuItem value=' '>None</MenuItem>
-                <MenuItem value='ho'>Họ</MenuItem>
-                <MenuItem value='ten'>Tên</MenuItem>
-                <MenuItem value='email'>Email</MenuItem>
-                <MenuItem value='ngay_sinh'>Ngày Sinh</MenuItem>
-              </Select>
+            <Grid container spacing={2}>
+              <Grid item style={{ position: "relative" }}>
+                <InputLabel style={{ top: "20%", left: "10%" }}>
+                  Sort
+                </InputLabel>
+                <Select value={sort} onChange={handleSort}>
+                  <MenuItem value=" ">None</MenuItem>
+                  <MenuItem value="ho">Họ</MenuItem>
+                  <MenuItem value="ten">Tên</MenuItem>
+                  <MenuItem value="email">Email</MenuItem>
+                  <MenuItem value="ngay_sinh">Ngày Sinh</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item style={{ position: "relative" }}>
+                <InputLabel style={{ top: "20%", left: "10%" }}>
+                  Loại
+                </InputLabel>
+                <Select value={age} onChange={handleChange}>
+                  <MenuItem value={1}>Giáo viên</MenuItem>
+                  <MenuItem value={0}>Sinh viên</MenuItem>
+                </Select>
+              </Grid>
             </Grid>
-            <Grid item style={{position: 'relative'}}>
-              <InputLabel style={{top:'20%', left: '10%'}}>Loại</InputLabel>
-              <Select value={age} onChange={handleChange}>
-                <MenuItem value={1}>Giáo viên</MenuItem>
-                <MenuItem value={0}>Sinh viên</MenuItem>
-              </Select>
-            </Grid>
-          </Grid>
           </FormControl>
 
           <DialogThem value={create} token={token} display={display}>
@@ -387,11 +462,11 @@ export default function InfoUsers(props) {
               >
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#3f8cb5", height: 50 }}>
-                  {info.map((row,index)=>(
-                    <TableCell align="center" style={{ color: "#ffffff" }}>
+                    {info.map((row, index) => (
+                      <TableCell align="center" style={{ color: "#ffffff" }}>
                         {row}
-                    </TableCell>
-                  ))} 
+                      </TableCell>
+                    ))}
                     <TableCell align="center"></TableCell>
                   </TableRow>
                 </TableHead>
@@ -405,7 +480,7 @@ export default function InfoUsers(props) {
                       <TableCell align="center">{row.email}</TableCell>
                       <TableCell align="center">{row.ngay_sinh}</TableCell>
                       <TableCell align="center">
-                        <IconButton size="small" name='icon-eye'>
+                        <IconButton size="small" name="icon-eye">
                           <DialogInfor
                             title="Giáo Viên"
                             id={row._id}
@@ -420,9 +495,9 @@ export default function InfoUsers(props) {
                             display={"none"}
                           />
                         </IconButton>
-                        </TableCell>
-                        <TableCell  align="center">
-                        <IconButton size="small" name='icon-eye'>
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton size="small" name="icon-eye">
                           <DialogInfor
                             title="Giáo viên"
                             id={row._id}
@@ -440,11 +515,33 @@ export default function InfoUsers(props) {
                             success={getSuccess}
                             setError={setDFres}
                             name={name}
-                            // submitForm={onSubmitInforUser}
+         
                           />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="center"><CheckedStatus/> </TableCell>
+                      <TableCell align="center">
+                        <StatusUser 
+                        // age={age}
+                         id={row._id}
+                        change={ChangeStatus}
+                        trang_thai={row.trang_thai}/>
+
+
+{/* 
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              // setCheck({row.trang_thai})
+                              checked={row.trang_thai}
+                              // onChange={(event)=>{
+                              //   // setCheck({checked:!val});
+                              //   ChangeStatus( event.target.checked,row._id);
+                              // }}
+                              name="switchState"
+                            />
+                          }
+                        /> */}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

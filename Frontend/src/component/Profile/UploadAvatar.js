@@ -69,6 +69,14 @@ const styles = (theme) => ({
     minWidth: "90vh",
     // maxWidth: "170vh",
   },
+  btnXacnhan: {
+    borderRadius: "5px",
+    background: "rgb(253, 216, 53)",
+    width: "120px",
+    height: "40px",
+    marginLeft: "150px",
+    cursor: "pointer",
+  },
   paper: { marginLeft: "20px" },
   grid5: { marginLeft: "150px" },
   radioSex: { marginLeft: "10px" },
@@ -158,6 +166,7 @@ class UploadPreview extends React.Component {
       this.setState({ file: null });
     }
     render() {
+ 
       return (
         <div>
           <input type="file" onChange={this.onChange} />
@@ -166,8 +175,20 @@ class UploadPreview extends React.Component {
               <button onClick={this.resetFile}>Remove File</button>
             </div>
           )}
-          <img style={{ width: "40%" }} src={this.state.file} />
-          <button style={{marginTop:'200px',float:'right'}}>Cập nhật</button>
+          <img style={{ width: "40%" }} src={this.state.file}/>
+
+          <input
+            style={{ borderRadius: "5px",
+    background: "rgb(253, 216, 53)",
+    width: "80px",
+    height: "30px",
+    marginLeft: "150px",
+    cursor: "pointer",
+    float:'right',marrginBottom:'10px',
+    marginTop:'200px '}}
+              type="submit"
+              value="Lưu"
+            />
         </div>
       );
     }

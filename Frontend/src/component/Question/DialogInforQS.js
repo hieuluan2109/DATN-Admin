@@ -122,7 +122,7 @@ class DialogInfo extends Component {
                 className={classes.btn}
                 // disabled={status}
               >
-                Xác nhận
+                Đóng
               </Button>
             
           </DialogTitle>

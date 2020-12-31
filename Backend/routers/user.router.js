@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const {validate} = require('../controllers/admin_validator');
+const {validate} = require('../controllers/validation/admin.validator');
 const {UserController} = require('../controllers/index.controller');
 router.get('/teacher/status', 
     passport.authenticate('jwt', {session: false}),

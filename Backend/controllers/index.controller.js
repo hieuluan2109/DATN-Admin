@@ -7,6 +7,9 @@ const ClassController = require('./lop.controller');
 const Stats = require('./stats.controller');
 const Test = require('./baithi.controller');
 const Exercise = require('./baitap.controller');
+require('../model/index.schema');
+require('./helper/function.helper');
+
 module.exports = {
     LoginController,
     AdminController,

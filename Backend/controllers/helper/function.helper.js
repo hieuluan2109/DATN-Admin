@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
-const Mail = require('../config/nodemailer');
+const Mail = require('../../config/nodemailer');
 const nodemailer = require('nodemailer');
-const {resetPasswordContent} = require('../config/message');
+const {resetPasswordContent} = require('../../config/mail.message');
 module.exports = {
     capitalizeFirstLetter: function (string) {
         return string

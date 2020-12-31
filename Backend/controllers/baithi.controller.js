@@ -1,5 +1,3 @@
-const {BaiThiSchema} = require('../model/index.schema');
-const {customDatetime, capitalizeFirstLetter} = require('./admin_function');
 module.exports = {
     admin_get_test_list: async function (req, res) {
         let perPage = req.query.limit || 10;

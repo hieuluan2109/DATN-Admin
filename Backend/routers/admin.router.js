@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const {validate} = require('../controllers/admin_validator');
+const {validate} = require('../controllers/validation/admin.validator');
 const {AdminController} = require('../controllers/index.controller');
-const example = require('../controllers/example');
-// router.get('/get/image', 
-//     example.listFiles
-// );
 router.get('/update123',
     AdminController.update_123
 );
@@ -14,6 +10,7 @@ router.get('/notification',
     AdminController.admin_get_notification)
 router.post(
     '/reset-password',
+    validate.validateChangePassword(),
     AdminController.admin_change_password_with_code
 );
 router.post('/forgot-password',

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const {validate} = require('../controllers/admin_validator');
 const {ClassController} = require('../controllers/index.controller');
 router.get(
     '/list',

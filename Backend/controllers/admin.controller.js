@@ -1,8 +1,5 @@
-const {hashPassWord, checkPassword, customDatetime, sendForgotPasswordMail, makeCode} = require('./admin_function');
-const {NguoidungSchema, QuenMatKhau, SuaThongTin} = require('../model/index.schema');
 const {validationResult} = require('express-validator');
-const moment = require('moment');
-const { db } = require('../model/diem.schema');
+
 module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
@@ -79,7 +76,7 @@ module.exports = {
     admin_change_password_with_code: async function (req, res) {
         const [{code, password, password1}, option ] = [ req.body, { new: true, useFindAndModify: false }] ;
         const update = {mat_khau: await hashPassWord(password)}
-        await QuenMatKhau.findOne({code: code, expire: {$gt: Date.now()}})
+        await Schema.QuenMatKhau.findOne({code: code, expire: {$gt: Date.now()}})
         .then(user => {
             console.log(user)
             QuenMatKhau.findOneAndUpdate({'code': code}, {'expire': -user.expire}, option)

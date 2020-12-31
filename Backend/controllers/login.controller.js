@@ -1,6 +1,7 @@
 const {validationResult} = require('express-validator');
-const {sign_token} = require('./admin_function');
 const passport = require('passport');
+const {sign_token} = require('./helper/function.helper');
+
 module.exports = {
     admin_login: async function (req, res, next) {
         const errors = await validationResult(req);

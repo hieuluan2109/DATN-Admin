@@ -1,6 +1,4 @@
 const {validationResult} = require('express-validator');
-const {DanhMucSchema} = require('../model/index.schema');
-const {customDatetime, capitalizeFirstLetter} = require('./admin_function');
 module.exports = {
     admin_create_category: async function (req, res) {
         const errors = await validationResult(req);

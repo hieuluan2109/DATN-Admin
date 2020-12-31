@@ -1,6 +1,4 @@
 const {validationResult} = require('express-validator');
-const {SinhvienSchema, NguoidungSchema, SuaThongTin} = require('../model/index.schema');
-const {capitalizeFirstLetter, hashPassWord, customDatetime} = require('./admin_function');
 const moment = require('moment');
 module.exports = {
     admin_add_teacher: async function (req, res) {

@@ -1,5 +1,4 @@
 const Schema = require('../model/index.schema');
-const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_dashboard: async function (req, res) {
         let choseTime = req.query.time;

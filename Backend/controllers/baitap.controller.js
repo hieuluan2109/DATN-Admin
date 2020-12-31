@@ -1,5 +1,3 @@
-const {BaiTapSchema} = require('../model/index.schema');
-const {customDatetime} = require('./admin_function');
 module.exports = {
     admin_get_exercise_list: async function (req, res) {
         let perPage = req.query.limit || 10;

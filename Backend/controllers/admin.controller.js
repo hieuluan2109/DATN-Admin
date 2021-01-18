@@ -1,5 +1,5 @@
 const {validationResult} = require('express-validator');
-
+const Admin = require('../model/Admin');
 module.exports = {
     admin_change_password: async function (req, res) {
         const errors = await validationResult(req);
@@ -7,19 +7,8 @@ module.exports = {
             return res.status(400).json({'success': false, 'errors': errors.array()})
         };
         const [_id,{password, password1 }, option ] = [ req.user ,req.body, { new: true, useFindAndModify: false }]
-        await NguoidungSchema
-            .findOne({_id: _id})
-            .exec( async (err, data) =>{
-                if( !checkPassword(password, data.mat_khau) ) { 
-                    res.status(400).json({'success': false, 'errors': 'Mật khẩu cũ không đúng'}) } 
-                else {
-                const update = { mat_khau: await hashPassWord(password1) };
-                NguoidungSchema.findByIdAndUpdate(_id, { $set: update }, option, function (err, updated) { // need some attention
-                    if(err || !updated)
-                        res.status(400).json({'success': false, 'errors': 'Lỗi không xác định'}) 
-                    else res.status(200).json({'success': true, 'msg': 'Chỉnh sửa mật khẩu thành công', 'data': updated}) 
-                })}
-            })
+        const result = Admin.changePassword(_id,password, password1, option);
+        result.success ? res.status(200).json(result) : res.status(400).json(result);
     },
     admin_update_profile: async function (req, res) {
         const errors = await validationResult(req);
@@ -32,26 +21,12 @@ module.exports = {
         const update = !anh_dai_dien 
                         ? { 'ho': ho, 'ten': ten, 'ngay_sinh': ngay_sinh, 'gioi_tinh': !(Boolean(gioi_tinh)), 'sdt': sdt }
                         : {'anh_dai_dien': anh_dai_dien};
-        await NguoidungSchema.findByIdAndUpdate(req.user._id, {
-            $set: update
-        }, option, function (err, updated) {
-            err ? res.status(400).json({'success': err, 'errors': 'Lỗi không xác định'}) : res.status(200).json({'success': true, 'msg': 'Cập nhật thành công', 'data':updated})
-        })
+        const result = Admin.updateProfile(req.user._id, update);
+        result.success ? res.status(200).json(result) : res.status(400).json(result);
     },
     admin_get_profile: async function (req, res) {
-        await NguoidungSchema
-            .findOne({_id: req.user._id},['-mat_khau'])
-            .exec((err, user) => {
-                if (err) 
-                    return res.status(200).json({'success': false, 'errors': err})
-                else {
-                    let data = user.toObject();
-                    data.createdAt = customDatetime(user.createdAt);
-                    data.updatedAt = customDatetime(user.updatedAt);
-                    data.ngay_sinh = customDatetime(user.ngay_sinh);
-                    return res.status(200).json({'success': true, 'data': data})
-                }
-            });
+        const result = Admin.getProfile(req.user._id);
+        result.success ? res.status(200).json(result) : res.status(400).json(result);
     },
     admin_forgot_password: async function(req, res, next) {
         const {email} = req.body;

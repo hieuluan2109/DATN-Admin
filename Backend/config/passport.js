@@ -1,5 +1,5 @@
 const localStategy = require('passport-local').Strategy;
-const NguoidungSchema = require('../model/nguoidung.schema');
+const NguoidungSchema = require('../schema/nguoidung.schema');
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;

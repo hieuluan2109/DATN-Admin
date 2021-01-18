@@ -1,4 +1,4 @@
-const Schema = require('../model/index.schema');
+const Schema = require('../schema/index.schema');
 module.exports = {
     admin_dashboard: async function (req, res) {
         let choseTime = req.query.time;
